@@ -607,6 +607,50 @@ textarea {
   .header__sm-menu-link-last {
     border-bottom: 0; }
 
+    /* Search box style */
+    .header__search {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    
+    .header__search-box {
+      position: relative;
+    }
+    
+    .header__search-input {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 2rem;
+      background-color: #f8f8f8;
+      width: 200px;
+      outline: none;
+      transition: width 0.3s ease-in-out;
+      font-size: inherit;
+    }
+    
+    .header__search-input:focus {
+      width: 250px;
+    }
+    
+    .header__search-button {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 0.5rem;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      outline: none;
+    }
+    
+    .header__search-icon {
+      width: 20px; /* Adjust the size of the icon as needed */
+      height: 20px; /* Adjust the size of the icon as needed */
+    }
+       
+/* footer */
 .main-footer {
   background: #000;
   color: #fff; }

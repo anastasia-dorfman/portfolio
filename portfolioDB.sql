@@ -29,7 +29,7 @@ CREATE TABLE `blogs` (
   `name` varchar(255) NOT NULL,
   `url` varchar(255) NOT NULL,
   PRIMARY KEY (`blog_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,6 +38,7 @@ CREATE TABLE `blogs` (
 
 LOCK TABLES `blogs` WRITE;
 /*!40000 ALTER TABLE `blogs` DISABLE KEYS */;
+INSERT INTO `blogs` VALUES (1,'MY main blog','http://localhost/blog.php');
 /*!40000 ALTER TABLE `blogs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -108,7 +109,7 @@ CREATE TABLE `posts` (
   PRIMARY KEY (`post_id`),
   KEY `FK_posts_idx` (`blog_id`),
   CONSTRAINT `FK_posts` FOREIGN KEY (`blog_id`) REFERENCES `blogs` (`blog_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -117,6 +118,7 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
+INSERT INTO `posts` VALUES (1,'My First Post','content','2023-04-19 19:17:36',1);
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -139,6 +141,7 @@ CREATE TABLE `skills` (
 
 LOCK TABLES `skills` WRITE;
 /*!40000 ALTER TABLE `skills` DISABLE KEYS */;
+INSERT INTO `skills` VALUES ('Angular'),('ASP.Net MVC 5'),('C#'),('CSS'),('Flutter'),('HTML'),('Java'),('JavaScript'),('MySQL'),('PHP'),('React'),('SQL Server'),('T-SQL'),('TypeScript');
 /*!40000 ALTER TABLE `skills` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -162,6 +165,7 @@ CREATE TABLE `tags` (
 
 LOCK TABLES `tags` WRITE;
 /*!40000 ALTER TABLE `tags` DISABLE KEYS */;
+INSERT INTO `tags` VALUES ('ASP.Net',_binary ''),('Boot Spring',_binary ''),('Bootstrap',_binary ''),('C#',_binary ''),('CSS',_binary ''),('Entity Framework',_binary ''),('HTML',_binary ''),('Java',_binary ''),('JavaScript',_binary ''),('Mobile',_binary ''),('PHP',_binary ''),('SQL',_binary ''),('Web',_binary '');
 /*!40000 ALTER TABLE `tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -183,7 +187,7 @@ CREATE TABLE `users` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `user_type` varchar(45) NOT NULL DEFAULT 'User',
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -192,6 +196,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (3,'Anastasia','Dorfman','anastasia.dorfman1@gmail.com','$2y$10$FEqajPyD0VsK5W/U.xBjneugnp/MbcOlYjTBjGnBMe9hTekm0.9F2','@AD',NULL,'2023-04-19 19:13:11','admin'),(4,'Delon','Van de Venter','delon.vandeventer@nbcc.ca','$2y$10$wkC99kKjSr/mJ3ILH1vlxe2oMtSrZfa3hN0B22.8piuwtXA19Pug.','@Delon',NULL,'2023-04-19 19:13:11','user');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -207,7 +212,7 @@ CREATE TABLE `works` (
   `name` varchar(100) NOT NULL,
   `description` longtext,
   PRIMARY KEY (`work_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -216,6 +221,7 @@ CREATE TABLE `works` (
 
 LOCK TABLES `works` WRITE;
 /*!40000 ALTER TABLE `works` DISABLE KEYS */;
+INSERT INTO `works` VALUES (1,'Restraunt',NULL),(2,'Hotel Reservation System',NULL),(3,'Card Game',NULL),(4,'Mobile App',NULL),(5,'Realtor Agency',NULL),(6,'Social Media',NULL);
 /*!40000 ALTER TABLE `works` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -228,4 +234,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-16 18:31:56
+-- Dump completed on 2023-04-19 16:20:27

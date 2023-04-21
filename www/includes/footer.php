@@ -6,10 +6,10 @@
             <span>Social</span>
           </h2>
           <div class="main-footer__social-cont">
-            <a target="_blank" rel="noreferrer" href="#">
+            <a target="_blank" rel="noreferrer" href="https://www.linkedin.com/in/anastasiadorfman/">
               <img class="main-footer__icon" src="./assets/icons/linkedin-ico.png" alt="icon" />
             </a>
-            <a target="_blank" rel="noreferrer" href="#">
+            <a target="_blank" rel="noreferrer" href="https://github.com/anastasia-dorfman">
               <img class="main-footer__icon" src="./assets/icons/github-ico.png" alt="icon" />
             </a>
           </div>
@@ -22,7 +22,6 @@
           </p>
         </div>
       </div>
-
       <!-- If you give me some credit or shoutout here by linking to my website, then it will be a big thing for me and will help me a lot :) -->
       <div class="main-footer__lower">
         &copy; Copyright 2021. Made by
