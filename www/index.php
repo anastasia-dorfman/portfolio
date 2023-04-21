@@ -112,7 +112,7 @@
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic facilis tempora, explicabo quae quod deserunt eius
               sapiente praesentium.
             </p>
-            <a href="./project-1.html" class="btn btn--med btn--theme dynamicBgClr" target="_blank">Case Study</a>
+            <a href="./project-1.php" class="btn btn--med btn--theme dynamicBgClr" target="_blank">Case Study</a>
           </div>
         </div>
         <div class="projects__row">
@@ -126,7 +126,7 @@
               facilis tempora, explicabo quae quod deserunt eius sapiente
               praesentium.
             </p>
-            <a href="./project-2.html" class="btn btn--med btn--theme dynamicBgClr" target="_blank">Case Study</a>
+            <a href="./project-2.php" class="btn btn--med btn--theme dynamicBgClr" target="_blank">Case Study</a>
           </div>
         </div>
         <div class="projects__row">
@@ -140,7 +140,7 @@
               facilis tempora, explicabo quae quod deserunt eius sapiente
               praesentium.
             </p>
-            <a href="./project-3.html" class="btn btn--med btn--theme dynamicBgClr" target="_blank">Case Study</a>
+            <a href="./project-3.php" class="btn btn--med btn--theme dynamicBgClr" target="_blank">Case Study</a>
           </div>
         </div>
       </div>
