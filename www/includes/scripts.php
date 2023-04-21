@@ -18,7 +18,6 @@ if (isset($_SESSION['STATUS']) && $_SESSION['STATUS'] != '') {
             });
         });
     </script>
-
 <?php
     // <!--  Destroying SweetAlert message -->
     unset($_SESSION['STATUS']);
