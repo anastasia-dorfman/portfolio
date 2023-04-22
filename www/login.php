@@ -5,8 +5,7 @@ session_start();
 $referer = isset($_SESSION["REFERER"]) ? $_SESSION["REFERER"] : "index.php";
 
 // Check if the user is already logged in
-if (isset($_SESSION['USER_ID'])) {
-    // Redirect to protected page
+if (isset($_SESSION['USERNAME'])) {
     header("Location: $referer");
     exit();
 }
@@ -37,7 +36,7 @@ if (isset($_SESSION['USER_ID'])) {
             </span>
         </h2>
         <div class="login__form-container">
-            <form action="#" class="contact__form">
+            <form action="login_proc.php" class="contact__form">
                 <div class="contact__form-field">
                     <label class="contact__form-label" for="username">Username</label>
                     <input required placeholder="Enter Your Username" type="text" class="contact__form-input" name="username" id="username" />
@@ -55,19 +54,18 @@ if (isset($_SESSION['USER_ID'])) {
     <?php
     // Check if the login form was submitted
     if (isset($_POST['submit'])) {
-        // Get the username and password from the form
-        $username = $_POST['username'];
-        $password = $_POST['password'];
+        try{    
+            if (!empty($_POST["username"]) && !empty($_POST["password"])) {
+                $username = $_POST['username'];
+                $_SESSION["USERNAME"] = $username;
+                $formPassword = $_POST['password'];
 
-        // Check if the username and password are valid
-        if ($username == 'admin' && $password == 'password') {
-            // Authentication successful, set session variables and redirect to protected page
-            $_SESSION['username'] = $username;
-            header("Location: protected.php");
-            exit();
-        } else {
-            // Authentication failed, display error message
-            $error = "Invalid username or password";
+                login($username, $formPassword);
+            } else {
+                setFeedbackAndRedirect("Fields cannot be empty", "error", "Login.php");
+            }
+        } catch(Exception $ex){
+            setFeedbackAndRedirect("Something went wrong:\n".$ex->getMessage(), "error", "Login.php");
         }
     }
     ?>
