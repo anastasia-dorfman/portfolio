@@ -164,8 +164,10 @@ textarea {
     box-shadow: none;
     padding: calc(1.5rem - 2px) calc(5rem - 2px); }
 
+    /* manual */
 .sec-pad {
-  padding: 12rem 0; }
+  /* padding: 12rem 0; } */
+  padding: 10rem 0 6rem 0; }
   @media only screen and (max-width: 56.25em) {
     .sec-pad {
       padding: 8rem 0; } }
@@ -607,50 +609,6 @@ textarea {
   .header__sm-menu-link-last {
     border-bottom: 0; }
 
-    /* Search box style */
-    .header__search {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-    
-    .header__search-box {
-      position: relative;
-    }
-    
-    .header__search-input {
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 2rem;
-      background-color: #f8f8f8;
-      width: 200px;
-      outline: none;
-      transition: width 0.3s ease-in-out;
-      font-size: inherit;
-    }
-    
-    .header__search-input:focus {
-      width: 250px;
-    }
-    
-    .header__search-button {
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      padding: 0.5rem;
-      background-color: transparent;
-      border: none;
-      cursor: pointer;
-      outline: none;
-    }
-    
-    .header__search-icon {
-      width: 20px; /* Adjust the size of the icon as needed */
-      height: 20px; /* Adjust the size of the icon as needed */
-    }
-       
-/* footer */
 .main-footer {
   background: #000;
   color: #fff; }
@@ -746,3 +704,163 @@ textarea {
   to {
     opacity: 0;
     top: 27px; } }
+
+
+/*#region Login*/
+.login {
+  background: linear-gradient(to right, rgba(0, 98, 185, 0.8), rgba(0, 98, 185, 0.8)), url(../../assets/svg/common-bg.svg);
+  background-size: cover;
+  background-position: center;
+}
+
+.login__form-container {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background: white;
+  padding: 3rem;
+  max-width: 60rem;
+  text-align: right;
+  border-radius: 5px;
+  margin: 0 auto 0 auto;
+}
+
+.heading-sec__login {
+  margin-bottom: 2rem; }
+  @media only screen and (max-width: 56.25em) {
+    .heading-sec__login {
+      margin-bottom: 1rem; } }
+
+/*#endregion*/
+
+/*#region Search box style */
+.header__search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.header__search-box {
+  position: relative;
+}
+
+.header__search-input {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 2rem;
+  background-color: #f8f8f8;
+  width: 200px;
+  outline: none;
+  transition: width 0.3s ease-in-out;
+  font-size: inherit;
+}
+
+.header__search-input:focus {
+  width: 250px;
+}
+
+.header__search-button {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0.5rem;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.header__search-icon {
+  width: 20px;
+  /* Adjust the size of the icon as needed */
+  height: 20px;
+  /* Adjust the size of the icon as needed */
+}
+/*#endregion*/
+
+/*#region footer */
+.main-footer {
+  background: #000;
+  color: #fff;
+}
+
+.main-footer__upper {
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem 0;
+}
+
+@media only screen and (max-width: 56.25em) {
+  .main-footer__upper {
+    padding: 1rem 0;
+  }
+}
+
+@media only screen and (max-width: 37.5em) {
+  .main-footer__upper {
+    display: block;
+  }
+}
+
+.main-footer__row-1 {
+  order: 2;
+}
+
+@media only screen and (max-width: 56.25em) {
+  .main-footer__row-1 {
+    margin-bottom: 5rem;
+  }
+}
+
+.main-footer__row-2 {
+  width: 40%;
+  order: 1;
+  max-width: 50rem;
+}
+
+@media only screen and (max-width: 56.25em) {
+  .main-footer__row-2 {
+    width: 100%;
+  }
+}
+
+.main-footer__short-desc {
+  margin-top: 2rem;
+  color: #eee;
+  font-size: 1.5rem;
+  line-height: 1.7;
+}
+
+.main-footer__social-cont {
+  margin-top: 2rem;
+}
+
+.main-footer__icon {
+  margin-right: 1rem;
+  width: 2.5rem;
+}
+
+.main-footer__icon--mr-none {
+  margin-right: 0;
+}
+
+.main-footer__lower {
+  padding: 2rem 0;
+  border-top: 1px solid #444;
+  color: #eee;
+  font-size: 1.2rem;
+  text-align: left;
+  text-align: center;
+}
+
+.main-footer__lower a {
+  text-decoration: underline;
+  font-weight: bold;
+  margin-left: 2px;
+}
+
+@media only screen and (max-width: 56.25em) {
+  .main-footer__lower {
+    padding: 3.5rem 0;
+  }
+}
+/*#endregion*/
