@@ -95,3 +95,59 @@ function validateLogin($username, $password)
 		exit;
 	}
 }
+
+function createTags($postId, $tags)
+{
+	try {
+		$con = $GLOBALS['con'];
+		$sql = "INSERT INTO post_tags (post_id, tag_name) VALUES (?,?)";
+		$sql2 = "INSERT INTO tags (name, is_post_tag) VALUES (?,?)";
+		$stmt = $con->prepare($sql);
+		$stmt2 = $con->prepare($sql2);
+
+		foreach ($tags as $t) {
+
+			if ($stmt) {
+				$stmt->bind_param('is', $postId, $t);
+				$stmt->execute();
+
+				if ($stmt2) {
+					$stmt->bind_param('si', $postId, 1);
+					$stmt->execute();
+				} else {
+					setFeedbackAndRedirect("An error occured", "error");
+				}
+			} else {
+				setFeedbackAndRedirect("An error occured", "error");
+			}
+		}
+
+		$stmt->close();
+		$stmt2->close();
+		$con->close();
+	} catch (Exception $ex) {
+		setFeedbackAndRedirect($ex->getMessage(), "error");
+	}
+}
+
+function createPostImage($postId, $image, $imageType)
+{
+	try {
+		$names = []; // TODO extract names from links
+		// $i = '';
+		$con = $GLOBALS['con'];
+		$sql = "INSERT INTO images (post_id, link, type) VALUES ($postId, $image, $imageType)";
+
+		// foreach ($images as $i) {
+		//     $result = $con->query($sql);
+			// $imageId = $con->insert_id;
+		// }
+
+		$result = $con->query($sql);
+
+		$result->close();
+		$con->close();
+	} catch (Exception $ex) {
+		setFeedbackAndRedirect($ex->getMessage(), "error");
+	}
+}

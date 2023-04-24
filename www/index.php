@@ -22,6 +22,9 @@
   <?php
   include "includes/header.php";
   include "includes/functions.php";
+
+  $_SESSION["REFERER"] = "index.php";
+
   ?>
   <section class="home-hero">
     <div class="home-hero__content">

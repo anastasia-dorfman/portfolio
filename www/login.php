@@ -62,10 +62,10 @@ if (isset($_SESSION['USERNAME'])) {
 
                 login($username, $formPassword);
             } else {
-                setFeedbackAndRedirect("Fields cannot be empty", "error", "Login.php");
+                setFeedbackAndRedirect("Fields cannot be empty", "error", "login.php");
             }
         } catch(Exception $ex){
-            setFeedbackAndRedirect("Something went wrong:\n".$ex->getMessage(), "error", "Login.php");
+            setFeedbackAndRedirect("Something went wrong:\n".$ex->getMessage(), "error", "login.php");
         }
     }
     ?>

@@ -1,3 +1,26 @@
+<?php
+//displays all the details for a particular Bitter user
+
+session_start();
+
+if (!(isset($_SESSION["USERNAME"]))) {
+    //TODO check type of user...
+    // header('Location:login.php');
+    exit;
+}
+
+if (!(isset($_GET['post_id'])) || empty($_GET['post_id'])) {
+    setFeedbackAndRedirect("Choose a post to show", "error");
+}
+
+include "includes/functions.php";
+include_once "includes/Post.php";
+
+$postId = $_GET['post_id'];
+// $_SESSION["REFERER"] = "post.php?post_id=".$userToSeeId;
+$referer = $_SESSION["SESS_REFERER"];
+$post = Post::getUserById($userToSeeId);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +28,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Case Study of Project 3</title>
+  <title>Case Study of Project 1</title>
   <meta name="description" content="Case study page of Project" />
 
   <link rel="stylesheet" href="includes/css/style.css" />
@@ -20,19 +43,9 @@
   include "includes/header.php";
   include "includes/functions.php";
   ?>
-  <section class="project-cs-hero">
-    <div class="project-cs-hero__content">
-      <h1 class="heading-primary">Project 3</h1>
-      <div class="project-cs-hero__info">
-        <p class="text-primary">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos
-          in numquam incidunt earum quaerat cum fuga, atque similique natus
-          nobis sit.
-        </p>
-      </div>
-      <div class="project-cs-hero__cta">
-        <a href="#" class="btn btn--bg" target="_blank">Live Link</a>
-      </div>
+  <section class="post">
+    <div class="post__content">
+      <h1 class="heading-sec__main">Project 1</h1>
     </div>
   </section>
   <section class="project-details">
