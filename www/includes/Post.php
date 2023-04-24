@@ -1,6 +1,6 @@
 <?php
 include "includes/dbConnection.php";
-include "includes/functions.php";
+include_once "includes/functions.php";
 
 /**
  * Post class
@@ -117,10 +117,11 @@ class Post
     #region Public methods
     public static function getPostById(int $postId)
     {
-        try {
+        try {            
             $tags = self::getTagsByPostId($postId);
             $images = self::getImagesByPostId($postId);
             $avatar = self::getAvatarByPostId($postId);
+
             $con = $GLOBALS['con'];
             $sql = "SELECT title, content, created_at, blog_id, user_id FROM posts WHERE post_id = ?";
             $stmt = $con->prepare($sql);
@@ -261,10 +262,9 @@ class Post
             $numRows = $result->num_rows;
             $tags = [];
             while ($row = $result->fetch_assoc()) {
-                $tags = $row['tag_name'];
+                array_push($tags, $row['tag_name']);
             }
             $result->close();
-            $con->close();
 
             return $tags;
         } catch (Exception $ex) {
@@ -276,7 +276,7 @@ class Post
     {
         try {
             $con = $GLOBALS['con'];
-            $sql = "SELECT link FROM images WHERE post_id = $postId AND type = `avatar`";
+            $sql = "SELECT link FROM images WHERE post_id = $postId AND type = 'avatar'";
             $result = $con->query($sql);
             $numRows = $result->num_rows;
             $avatar = '';
@@ -287,7 +287,6 @@ class Post
             }
 
             $result->close();
-            $con->close();
 
             return $avatar;
         } catch (Exception $ex) {
@@ -299,72 +298,16 @@ class Post
     {
         try {
             $con = $GLOBALS['con'];
-            $sql = "SELECT link FROM images WHERE post_id = $postId";
+            $sql = "SELECT link FROM images WHERE post_id = $postId AND type = 'image'";
             $result = $con->query($sql);
             // $numRows = $result->num_rows;
             $images = [];
             while ($row = $result->fetch_assoc()) {
-                $images = $row['link'];
+                array_push($images, $row['link']);
             }
             $result->close();
-            $con->close();
 
             return $images;
-        } catch (Exception $ex) {
-            setFeedbackAndRedirect($ex->getMessage(), "error");
-        }
-    }
-
-    private static function createTags($postId, $tags)
-    {
-        try {
-            $con = $GLOBALS['con'];
-            $sql = "INSERT INTO post_tags (post_id, tag_name) VALUES (?,?)";
-            $sql2 = "INSERT INTO tags (name, is_post_tag) VALUES (?,?)";
-            $stmt = $con->prepare($sql);
-            $stmt2 = $con->prepare($sql2);
-
-            foreach ($tags as $t) {
-
-                if ($stmt) {
-                    $stmt->bind_param('is', $postId, $t);
-                    $stmt->execute();
-
-                    if ($stmt2) {
-                        $stmt->bind_param('si', $postId, 1);
-                        $stmt->execute();
-                    } else {
-                        setFeedbackAndRedirect("An error occured", "error");
-                    }
-                } else {
-                    setFeedbackAndRedirect("An error occured", "error");
-                }
-            }
-
-            $stmt->close();
-            $stmt2->close();
-            $con->close();
-        } catch (Exception $ex) {
-            setFeedbackAndRedirect($ex->getMessage(), "error");
-        }
-    }
-    private static function createPostImage($postId, $image, $imageType)
-    {
-        try {
-            $names = []; // TODO extract names from links
-            // $i = '';
-            $con = $GLOBALS['con'];
-            $sql = "INSERT INTO images (post_id, link, type) VALUES ($postId, $image, $imageType)";
-
-            // foreach ($images as $i) {
-            //     $result = $con->query($sql);
-                // $imageId = $con->insert_id;
-            // }
-
-            $result = $con->query($sql);
-
-            $result->close();
-            $con->close();
         } catch (Exception $ex) {
             setFeedbackAndRedirect($ex->getMessage(), "error");
         }

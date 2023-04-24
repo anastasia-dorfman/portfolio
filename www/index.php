@@ -60,8 +60,7 @@
       <h2 class="heading heading-sec heading-sec__mb-med">
         <span class="heading-sec__main">About Me</span>
         <span class="heading-sec__sub">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic facilis
-          tempora explicabo quae quod deserunt eius sapiente
+          Passionate senior IT student with a diverse skill set in web development and a constant drive for learning and innovation
         </span>
       </h2>
       <div class="about__content">
@@ -69,15 +68,9 @@
           <h3 class="about__content-title">Get to know me!</h3>
           <div class="about__content-details">
             <p class="about__content-details-para">
-              Hey! I'm <strong>Anastasia Dorfman</strong> , a <strong> Full Stack Developer </strong> located in
-              Moncton, NB, Canada, but I am open to relocation for the right opportunity.
+              Hey! I'm <strong>Anastasia Dorfman</strong> , a senior IT student with a passion for <strong> web development </strong>. I am 
+              located in Moncton, NB, Canada, but open to relocation for the right opportunity.
               I always seek to expand my knowledge and stay up-to-date with industry trends and best practices.
-              <!-- I've done
-              <strong> remote </strong>
-              projects for agencies, consulted for startups, and collaborated
-              with talented people to create
-              <strong>digital products </strong>
-              for both business and consumer use. -->
             </p>
             <p class="about__content-details-para">
               I'm excited to connect with potential employers and create efficient and secure web solutions that meet their needs.
@@ -104,7 +97,7 @@
         </span>
       </h2>
 
-      <div class="projects__content">
+      <div class="post__content">
         <div class="projects__row">
           <div class="projects__row-img-cont">
             <img src="./assets/images/project-mockup-example.jpeg" alt="Software Screenshot" class="projects__row-img" loading="lazy" />

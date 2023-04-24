@@ -43,7 +43,7 @@
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic facilis tempora, explicabo quae quod deserunt eius
               sapiente praesentium.
             </p>
-            <a href="./project-1.php" class="btn btn--med btn--theme dynamicBgClr" target="_blank">Read more</a>
+            <a href="./post.php?post_id=.php" class="btn btn--med btn--theme dynamicBgClr" target="_blank">Read more</a>
           </div>
         </div>
       </div>

@@ -51,11 +51,17 @@ DROP TABLE IF EXISTS `images`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `images` (
   `image_id` int(11) NOT NULL AUTO_INCREMENT,
-  `type` varchar(45) NOT NULL,
+  `type` varchar(45) NOT NULL DEFAULT 'image',
   `name` varchar(45) DEFAULT NULL,
   `link` varchar(255) NOT NULL,
-  PRIMARY KEY (`image_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `work_id` int(11) DEFAULT NULL,
+  `post_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`image_id`),
+  KEY `FK_images_works_idx` (`work_id`),
+  KEY `FK_images_posts_idx` (`post_id`),
+  CONSTRAINT `FK_images_posts` FOREIGN KEY (`post_id`) REFERENCES `posts` (`post_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_images_works` FOREIGN KEY (`work_id`) REFERENCES `works` (`work_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -64,6 +70,7 @@ CREATE TABLE `images` (
 
 LOCK TABLES `images` WRITE;
 /*!40000 ALTER TABLE `images` DISABLE KEYS */;
+INSERT INTO `images` VALUES (1,'avatar','post1_portfolio.png','./assets/images/post1_portfolio.png',NULL,1),(2,'image','post1_code.png','./assets/images/post1_code.png',NULL,1),(3,'image','post1_mysql.png','./assets/images/post1_mysql.png',NULL,1);
 /*!40000 ALTER TABLE `images` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -106,9 +113,12 @@ CREATE TABLE `posts` (
   `content` longtext NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `blog_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
   PRIMARY KEY (`post_id`),
   KEY `FK_posts_idx` (`blog_id`),
-  CONSTRAINT `FK_posts` FOREIGN KEY (`blog_id`) REFERENCES `blogs` (`blog_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `FK_posts_users_idx` (`user_id`),
+  CONSTRAINT `FK_posts` FOREIGN KEY (`blog_id`) REFERENCES `blogs` (`blog_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_posts_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -118,7 +128,7 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-INSERT INTO `posts` VALUES (1,'My First Post','content','2023-04-19 19:17:36',1);
+INSERT INTO `posts` VALUES (1,'Creating a Winning Portfolio Website: Challenges and Technologies for IT Students','As an IT student, I understood the importance of creating a portfolio website to showcase my skills and experience to potential employers. It was important to me to create a website that would differentiate me from other candidates and effectively showcase my technical abilities.','2023-04-19 19:17:36',1,3);
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -196,7 +206,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (3,'Anastasia','Dorfman','anastasia.dorfman1@gmail.com','$2y$10$FEqajPyD0VsK5W/U.xBjneugnp/MbcOlYjTBjGnBMe9hTekm0.9F2','@AD',NULL,'2023-04-19 19:13:11','admin'),(4,'Delon','Van de Venter','delon.vandeventer@nbcc.ca','$2y$10$wkC99kKjSr/mJ3ILH1vlxe2oMtSrZfa3hN0B22.8piuwtXA19Pug.','@Delon',NULL,'2023-04-19 19:13:11','user');
+INSERT INTO `users` VALUES (3,'Anastasia','Dorfman','anastasia.dorfman1@gmail.com','$2y$10$FEqajPyD0VsK5W/U.xBjneugnp/MbcOlYjTBjGnBMe9hTekm0.9F2','@AD',NULL,'2023-04-19 19:13:11','admin'),(4,'Delon','Van de Venter','delon.vandeventer@nbcc.ca','$2y$10$wkC99kKjSr/mJ3ILH1vlxe2oMtSrZfa3hN0B22.8piuwtXA19Pug.','@Delon',NULL,'2023-04-20 19:13:11','user');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -234,4 +244,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-19 16:20:27
+-- Dump completed on 2023-04-24  9:59:26
