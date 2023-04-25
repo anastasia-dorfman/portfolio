@@ -262,49 +262,24 @@ class Post
     }
 
     #region Private Methods
-    // private static function getTagsByPostId($postId): array
-    // {
-    //     try {
-    //         $con = $GLOBALS['con'];
-    //         $sql = "SELECT tag_name FROM post_tags WHERE post_id = $postId";
-    //         $result = $con->query($sql);
-    //         $numRows = $result->num_rows;
-    //         $tags = [];
-    //         while ($row = $result->fetch_assoc()) {
-    //             array_push($tags, $row['tag_name']);
-    //         }
-    //         $result->close();
-
-    //         return $tags;
-    //     } catch (Exception $ex) {
-    //         setFeedbackAndRedirect($ex->getMessage(), "error");
-    //     }
-    // }
-
     private static function getTagsByPostId($postId): array
-{
-    try {
-        $tagName = '';
-        $con = $GLOBALS['con'];
-        $sql = "SELECT tag_name FROM post_tags WHERE post_id = ?";
-        $stmt = $con->prepare($sql);
-        $stmt->bind_param('i', $postId);
-        $stmt->execute();
-        $stmt->bind_result($tagName);
+    {
+        try {
+            $con = $GLOBALS['con'];
+            $sql = "SELECT tag_name FROM post_tags WHERE post_id = $postId";
+            $result = $con->query($sql);
+            $numRows = $result->num_rows;
+            $tags = [];
+            while ($row = $result->fetch_assoc()) {
+                array_push($tags, $row['tag_name']);
+            }
+            $result->close();
 
-        $tags = [];
-        while ($stmt->fetch()) {
-            array_push($tags, $tagName);
+            return $tags;
+        } catch (Exception $ex) {
+            setFeedbackAndRedirect($ex->getMessage(), "error");
         }
-
-        $stmt->close();
-
-        return $tags;
-    } catch (Exception $ex) {
-        setFeedbackAndRedirect($ex->getMessage(), "error");
     }
-}
-
 
     private static function getAvatarByPostId($postId): string
     {

@@ -1,8 +1,11 @@
+<?php
+// session_start();
+?>
 <header class="header">
   <div class="header__content">
     <div class="header__logo-container">
       <div class="header__logo-img-cont">
-        <img src="./assets/icons/anastasia-dorfman.png" alt="Ram Maheshwari Logo Image" class="header__logo-img" />
+        <img src="./assets/icons/anastasia-dorfman.png" alt="Anastasia Dorfman Logo Image" class="header__logo-img" />
       </div>
       <span class="header__logo-sub">Anastasia Dorfman</span>
     </div>
@@ -23,14 +26,34 @@
         <li class="header__link-wrapper">
           <a href="./index.php#contact" class="header__link"> Contact </a>
         </li>
+        <?php
+        if (!isset($_SESSION['USERNAME'])) {
+        ?>
+          <div class="header__search">
+            <a href="./login.php" class="header__link">
+              <img src="assets/svg/login.svg" alt="Login" class="header__search-icon" />
+            </a>
+          </div>
+        <?php
+        } else {
+        ?>
+          <div class="header__search">
+            <a href="./logout_proc.php" class="header__link">
+              <img src="assets/svg/logout.svg" alt="Logout" class="header__search-icon" />
+            </a>
+          </div>
+        <?php
+        }
+        ?>
+
         <div class="header__search">
-        <form action="search.php" method="POST" class="header__search-box" role="search">
-          <input type="search" name="q" placeholder="Search..." class="header__search-input" />
-          <button type="submit" class="header__search-button" aria-label="Search">
-            <img src="assets/svg/search.svg" alt="Search" class="header__search-icon" />
-          </button>
-        </form>
-      </div>
+          <form action="search.php" method="POST" class="header__search-box" role="search">
+            <input type="search" name="q" placeholder="Search..." class="header__search-input" />
+            <button type="submit" class="header__search-button" aria-label="Search">
+              <img src="assets/svg/search.svg" alt="Search" class="header__search-icon" />
+            </button>
+          </form>
+        </div>
       </ul>
 
 

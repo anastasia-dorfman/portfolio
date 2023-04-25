@@ -1,4 +1,7 @@
 <?php
+
+include_once "includes/dbConnection.php";
+
 function setFeedbackAndRedirect(string $message, string $icon, string $redirectTo = null)
 {
 	$_SESSION['STATUS'] = $message;
@@ -10,7 +13,6 @@ function setFeedbackAndRedirect(string $message, string $icon, string $redirectT
 		header("Refresh:0");
 }
 
-// include_once "User.php";
 /**
  * Getting scalar value from SELECT query
  *
@@ -32,7 +34,7 @@ function getSkills()
 		if ($result->num_rows > 0) {
 			echo '<div class="skills">';
 			while ($row = $result->fetch_assoc()) {
-				echo '<div class="skills__skill">'.$row['name'].'</div>';
+				echo '<div class="skills__skill">' . $row['name'] . '</div>';
 			}
 			echo '</div>';
 		}
@@ -62,26 +64,33 @@ function login($username, $password)
 
 		$sql = "SELECT user_id, password, f_name, l_name, user_type, u_name FROM users where LOWER(u_name) = ?";
 		$stmt = $con->prepare($sql);
-		$stmt->bind_param('s', strtolower($username));
+		$username = strtolower($username);
+		$stmt->bind_param('s', $username);
 		$stmt->execute();
 		$stmt->bind_result($userId, $dbPassword, $firstName, $lastName, $userType, $username);
-		$stmt->fetch();
-		$stmt->close();
 
-		if (password_verify($password, $dbPassword)) {
+		if ($stmt->fetch()) {
 			$_SESSION["FIRST_NAME"] = $firstName;
-			$_SESSION["LAST_NAME"] = $lastName;
-			$_SESSION["USER_ID"] = $userId;
-			$_SESSION["USERNAME"] = $userId;
 
-			setFeedbackAndRedirect("Thanks for logging in", "success", $referer);
+			if (password_verify($password, $dbPassword)) {
+				$_SESSION["USERNAME"] = $username;
+				$_SESSION["FIRST_NAME"] = $firstName;
+				$_SESSION["LAST_NAME"] = $lastName;
+				$_SESSION["USER_ID"] = $userId;
+				$_SESSION["USER_TYPE"] = $userType;
+
+				setFeedbackAndRedirect("Thanks for logging in", "success", $referer);
+			} else {
+				setFeedbackAndRedirect("Incorrect loggin details supplied", "error", "login.php");
+			}
 		} else {
 			setFeedbackAndRedirect("Incorrect loggin details supplied", "error", "login.php");
 		}
+
+		$stmt->close();
+		$con->close();
 	} catch (Exception $ex) {
 		setFeedbackAndRedirect($ex->getMessage(), "error", "login.php");
-	} finally {
-		$con->close();
 	}
 }
 
@@ -140,13 +149,32 @@ function createPostImage($postId, $image, $imageType)
 
 		// foreach ($images as $i) {
 		//     $result = $con->query($sql);
-			// $imageId = $con->insert_id;
+		// $imageId = $con->insert_id;
 		// }
 
 		$result = $con->query($sql);
 
 		$result->close();
 		$con->close();
+	} catch (Exception $ex) {
+		setFeedbackAndRedirect($ex->getMessage(), "error");
+	}
+}
+
+function getUserType($username)
+{
+	try {
+		$names = []; // TODO extract names from links
+		$con = $GLOBALS['con'];
+		$sql = "SELECT user_type FROM users WHERE u_name = $username";
+
+		$result = $con->query($sql);
+		$row = $result->fetch_assoc();
+
+		$result->close();
+		$con->close();
+
+		return $row['user_type'];
 	} catch (Exception $ex) {
 		setFeedbackAndRedirect($ex->getMessage(), "error");
 	}

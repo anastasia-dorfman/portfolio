@@ -5,12 +5,6 @@ session_start();
 include_once "includes/functions.php";
 include_once "includes/Post.php";
 
-// if (!(isset($_SESSION["USERNAME"]))) {
-//     //TODO check type of user...
-//     // header('Location:login.php');
-//     exit;
-// }
-
 $referer = isset($_SESSION["REFERER"]) ? $_SESSION["REFERER"] : 'index.php';
 $posts = Post::getPosts();
 ?>
@@ -48,6 +42,13 @@ $posts = Post::getPosts();
         </span>
       </h2>
 
+      <?php
+      if (isset($_SESSION["USER_TYPE"]) && $_SESSION["USER_TYPE"] == 'admin') {
+        echo '<a href="./create_post.php" class="btn btn--med btn--theme-inv" target="_blank">Create Post</a>';
+        exit;
+      }
+      ?>
+
       <div class="projects__content">
         <div class="projects__row">
 
@@ -59,10 +60,11 @@ $posts = Post::getPosts();
             </div>
             <div class="projects__row-content">
               <h3 class="projects__row-content-title"><?php echo $p->getTitle() ?></h3>
-              <p class="projects__row-content-desc"><?php echo substr("{$p->getContent()}", 0, 170).'...' ?></p>
+              <p class="projects__row-content-desc"><?php echo substr("{$p->getContent()}", 0, 170) . '...' ?></p>
               <a href="./post.php?post_id=<?php echo $p->getPostId() ?>" class="btn btn--med btn--theme dynamicBgClr" target="_blank">Read more</a>
             </div>
-            <?php //echo $t ?>
+            <?php //echo $t 
+            ?>
           <?php
           }
           ?>
