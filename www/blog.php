@@ -1,3 +1,19 @@
+<?php
+//displays all posts
+session_start();
+
+include_once "includes/functions.php";
+include_once "includes/Post.php";
+
+// if (!(isset($_SESSION["USERNAME"]))) {
+//     //TODO check type of user...
+//     // header('Location:login.php');
+//     exit;
+// }
+
+$referer = isset($_SESSION["REFERER"]) ? $_SESSION["REFERER"] : 'index.php';
+$posts = Post::getPosts();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,30 +43,33 @@
       <h2 class="heading heading-sec heading-sec__mb-bg">
         <span class="heading-sec__main">Blog</span>
         <span class="heading-sec__sub">
-        Visit my blog to follow my journey as a full stack developer, where I share my learnings and experiences from 
-        my ongoing studies and projects
+          Visit my blog to follow my journey as a full stack developer, where I share my learnings and experiences from
+          my ongoing studies and projects
         </span>
       </h2>
 
       <div class="projects__content">
         <div class="projects__row">
-          <div class="projects__row-img-cont">
-            <img src="./assets/images/project-mockup-example.jpeg" alt="Software Screenshot" class="projects__row-img" loading="lazy" />
-          </div>
-          <div class="projects__row-content">
-            <h3 class="projects__row-content-title">Project 1</h3>
-            <p class="projects__row-content-desc">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic facilis tempora, explicabo quae quod deserunt eius
-              sapiente praesentium.
-            </p>
-            <a href="./post.php?post_id=.php" class="btn btn--med btn--theme dynamicBgClr" target="_blank">Read more</a>
-          </div>
+
+          <?php
+          foreach ($posts as $p) {
+          ?>
+            <div class="projects__row-img-cont">
+              <img src="<?php echo $p->getAvatar() ?>" alt="Software Screenshot" class="projects__row-img" loading="lazy" />
+            </div>
+            <div class="projects__row-content">
+              <h3 class="projects__row-content-title"><?php echo $p->getTitle() ?></h3>
+              <p class="projects__row-content-desc"><?php echo substr("{$p->getContent()}", 0, 170).'...' ?></p>
+              <a href="./post.php?post_id=<?php echo $p->getPostId() ?>" class="btn btn--med btn--theme dynamicBgClr" target="_blank">Read more</a>
+            </div>
+            <?php //echo $t ?>
+          <?php
+          }
+          ?>
         </div>
       </div>
-
-      
     </div>
-</div>
+  </div>
   <?php
   include "includes/footer.php";
   ?>

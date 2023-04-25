@@ -96,7 +96,6 @@
           Check out some of my latest projects and see how I can turn your web development ideas into reality
         </span>
       </h2>
-
       <div class="post__content">
         <div class="projects__row">
           <div class="projects__row-img-cont">

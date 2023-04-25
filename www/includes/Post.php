@@ -117,7 +117,7 @@ class Post
     #region Public methods
     public static function getPostById(int $postId)
     {
-        try {            
+        try {
             $tags = self::getTagsByPostId($postId);
             $images = self::getImagesByPostId($postId);
             $avatar = self::getAvatarByPostId($postId);
@@ -181,35 +181,44 @@ class Post
         }
     }
 
-    public static function getPosts(int $blogId)
+    public static function getPosts(int $blogId = null): array
     {
         try {
             $title = '';
             $content = '';
             $dateCreated = '';
             $userId = -1;
+            $postId = -1;
+            $blogId = $blogId == null ? 1 : $blogId;
 
             $con = $GLOBALS['con'];
-            $sql = "SELECT post_id, title, content, created_at, blog_id, user_id FROM posts WHERE blog_id = ?";
+            $sql = "SELECT post_id, title, content, created_at, user_id FROM posts WHERE blog_id = ?";
             $stmt = $con->prepare($sql);
             $stmt->bind_param('i', $blogId);
-            $postId = $stmt->insert_id;
-            $stmt->bind_result($postId, $title, $content, $dateCreated, $blogId, $userId);
             $stmt->execute();
+            $stmt->bind_result($postId, $title, $content, $dateCreated, $userId);
 
             $posts = [];
 
-            if ($stmt->num_rows > 0) {
-                while ($stmt->fetch()) {
-                    $tags = [];
-                    $tags = self::getTagsByPostId($postId);
-                    $images = [];
-                    $images = self::getImagesByPostId($postId);
-                    $posts =  new Post($userId, $title, $content, $blogId, $tags, $postId, $images);
-                }
+            while ($stmt->fetch()) {
+                array_push($posts, new Post($userId, $title, $content, $blogId, [],$postId));
             }
 
             $stmt->close();
+
+            foreach($posts as $p){
+                $postId = $p->getPostId();
+                $tags = [];
+                $tags = self::getTagsByPostId($postId);
+                $images = [];
+                $images = self::getImagesByPostId($postId);
+                $avatar = '';
+                $avatar = self::getAvatarByPostId($postId);
+                $p->setTags($tags);
+                $p->setImages($images);
+                $p->setAvatar($avatar);
+            }
+
             return $posts;
         } catch (Exception $ex) {
             setFeedbackAndRedirect($ex->getMessage(), "error");
@@ -253,24 +262,49 @@ class Post
     }
 
     #region Private Methods
-    private static function getTagsByPostId($postId): array
-    {
-        try {
-            $con = $GLOBALS['con'];
-            $sql = "SELECT tag_name FROM post_tags WHERE post_id = $postId";
-            $result = $con->query($sql);
-            $numRows = $result->num_rows;
-            $tags = [];
-            while ($row = $result->fetch_assoc()) {
-                array_push($tags, $row['tag_name']);
-            }
-            $result->close();
+    // private static function getTagsByPostId($postId): array
+    // {
+    //     try {
+    //         $con = $GLOBALS['con'];
+    //         $sql = "SELECT tag_name FROM post_tags WHERE post_id = $postId";
+    //         $result = $con->query($sql);
+    //         $numRows = $result->num_rows;
+    //         $tags = [];
+    //         while ($row = $result->fetch_assoc()) {
+    //             array_push($tags, $row['tag_name']);
+    //         }
+    //         $result->close();
 
-            return $tags;
-        } catch (Exception $ex) {
-            setFeedbackAndRedirect($ex->getMessage(), "error");
+    //         return $tags;
+    //     } catch (Exception $ex) {
+    //         setFeedbackAndRedirect($ex->getMessage(), "error");
+    //     }
+    // }
+
+    private static function getTagsByPostId($postId): array
+{
+    try {
+        $tagName = '';
+        $con = $GLOBALS['con'];
+        $sql = "SELECT tag_name FROM post_tags WHERE post_id = ?";
+        $stmt = $con->prepare($sql);
+        $stmt->bind_param('i', $postId);
+        $stmt->execute();
+        $stmt->bind_result($tagName);
+
+        $tags = [];
+        while ($stmt->fetch()) {
+            array_push($tags, $tagName);
         }
+
+        $stmt->close();
+
+        return $tags;
+    } catch (Exception $ex) {
+        setFeedbackAndRedirect($ex->getMessage(), "error");
     }
+}
+
 
     private static function getAvatarByPostId($postId): string
     {
@@ -280,7 +314,7 @@ class Post
             $result = $con->query($sql);
             $numRows = $result->num_rows;
             $avatar = '';
-            
+
             if ($numRows == 1) {
                 $row = $result->fetch_assoc();
                 $avatar = $row['link'];

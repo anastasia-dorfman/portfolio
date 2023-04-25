@@ -1,5 +1,5 @@
 <?php
-//displays all the details for a particular Bitter user
+//displays all the details for a particular post
 
 session_start();
 
