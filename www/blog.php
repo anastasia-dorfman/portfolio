@@ -5,6 +5,9 @@ session_start();
 include_once "includes/functions.php";
 include_once "includes/Post.php";
 
+$_SESSION["REFERER"] = "blog.php";
+
+
 $referer = isset($_SESSION["REFERER"]) ? $_SESSION["REFERER"] : 'index.php';
 $posts = Post::getPosts();
 ?>
@@ -15,7 +18,7 @@ $posts = Post::getPosts();
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Anastasia Dorfman - Blog</title>
+  <title>My Blog</title>
   <meta name="description" content="Portfolio Template for Developer" />
 
   <link rel="stylesheet" href="includes/css/style.css" />
@@ -32,44 +35,54 @@ $posts = Post::getPosts();
   <?php
   include "includes/header.php";
   ?>
-  <div id="blog" class="projects sec-pad">
-    <div class="main-container">
-      <h2 class="heading heading-sec heading-sec__mb-bg">
-        <span class="heading-sec__main">Blog</span>
-        <span class="heading-sec__sub">
-          Visit my blog to follow my journey as a full stack developer, where I share my learnings and experiences from
-          my ongoing studies and projects
-        </span>
-      </h2>
+  <div id="blog" class="contact sec-pad dynamicBg">
+    <h2 class="heading heading-sec heading-sec__blog">
+      <span class="heading-sec__main heading-sec__main--lt">Blog</span>
+      <span class="heading-sec__sub heading-sec__sub--lt">
+        Visit my blog to follow my journey as a full stack developer, where I share my learnings and experiences from
+        my ongoing studies and projects
+      </span>
+    </h2>
+  </div>
+
+  <?php
+  if (isset($_SESSION["USER_TYPE"]) && $_SESSION["USER_TYPE"] == 'admin') {
+  ?>
+    <div class="btn__margin">
+      <a href="./create_post.php" class="btn btn--med btn--theme-inv">Create Post</a>
+    </div>
+  <?php
+  }
+  ?>
+
+  <div class="post__content">
+    <div class="projects__row">
 
       <?php
-      if (isset($_SESSION["USER_TYPE"]) && $_SESSION["USER_TYPE"] == 'admin') {
-        echo '<a href="./create_post.php" class="btn btn--med btn--theme-inv" target="_blank">Create Post</a>';
-        exit;
+      foreach ($posts as $p) {
+      ?>
+        <div class="projects__row-img-cont">
+          <img src="<?php echo $p->getAvatar() ?>" alt="Software Screenshot" class="projects__row-img" loading="lazy" />
+        </div>
+        <div class="projects__row-content">
+          <h3 class="projects__row-content-title"><?php echo $p->getTitle() ?></h3>
+          <p class="projects__row-content-desc"><?php echo substr("{$p->getContent()}", 0, 170) . '...' ?></p>
+          <div class="buttons-container">
+            <a href="./post.php?post_id=<?php echo $p->getPostId() ?>" class="btn btn--med btn--theme dynamicBgClr">Read more</a>
+            <?php
+            if (isset($_SESSION["USER_TYPE"]) && $_SESSION["USER_TYPE"] == 'admin') {
+            ?>
+              <a href="./create_post.php?post_id=<?php echo $p->getPostId() ?>" class="btn btn--med btn--theme-inv">Edit Post</a>
+            <?php
+            }
+            ?>
+          </div>
+        </div>
+        <?php //echo $t 
+        ?>
+      <?php
       }
       ?>
-
-      <div class="projects__content">
-        <div class="projects__row">
-
-          <?php
-          foreach ($posts as $p) {
-          ?>
-            <div class="projects__row-img-cont">
-              <img src="<?php echo $p->getAvatar() ?>" alt="Software Screenshot" class="projects__row-img" loading="lazy" />
-            </div>
-            <div class="projects__row-content">
-              <h3 class="projects__row-content-title"><?php echo $p->getTitle() ?></h3>
-              <p class="projects__row-content-desc"><?php echo substr("{$p->getContent()}", 0, 170) . '...' ?></p>
-              <a href="./post.php?post_id=<?php echo $p->getPostId() ?>" class="btn btn--med btn--theme dynamicBgClr" target="_blank">Read more</a>
-            </div>
-            <?php //echo $t 
-            ?>
-          <?php
-          }
-          ?>
-        </div>
-      </div>
     </div>
   </div>
   <?php

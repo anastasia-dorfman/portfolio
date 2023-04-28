@@ -1301,3 +1301,57 @@ textarea {
   align-self: flex-start;
   margin-left: 2rem;
 }
+
+.heading-sec__blog {
+  margin-bottom: 1rem;
+}
+
+.btn__margin {
+  padding-top: 3rem;
+  width: 96%;
+  margin: auto;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.buttons-container a {
+  margin: 0 10px;
+}
+
+.post__form-container {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background: white;
+  padding: 4rem;
+  margin-top: 6rem;
+  max-width: 120rem;
+  text-align: right;
+  width: 95%;
+  border-radius: 5px;
+  margin: 5rem auto 0 auto;
+}
+
+@media only screen and (max-width: 37.5em) {
+  .post__form-container {
+    padding: 3rem;
+  }
+}
+
+.upload-field {
+  margin-bottom: 4rem;
+  width: 25%;
+  float: left;
+}
+
+.add-btn {
+  float: right;
+  margin-top: 24px;
+}
+
+.btn-margin {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}

@@ -164,17 +164,34 @@ class Post
                 $stmt->execute();
                 $postId = $stmt->insert_id;
                 $stmt->close();
-
-                // self::createTags($postId, $tags);
-                // self::createPostImages($postId, $images);
             } else {
                 setFeedbackAndRedirect("An error occured", "error");
             }
 
-            if ($postId > 0)
-                setFeedbackAndRedirect("The post is created", "success", $referer);
+            return $postId;
+        } catch (Exception $ex) {
+            setFeedbackAndRedirect($ex->getMessage(), "error");
+        }
+    }
 
-            $con->close();
+    public static function updatePost($postId, $userId, $title, $content, $blogId)
+    {
+        try {
+            $referer = $_SESSION["REFERER"];
+            $con = $GLOBALS['con'];
+            $sql = "UPDATE posts SET user_id = ?, title = ?, content = ?, blog_id = ? WHERE post_id = ?";
+            $stmt = $con->prepare($sql);
+
+            if ($stmt) {
+                $stmt->bind_param('issii', $userId, $title, $content, $blogId, $postId);
+                $stmt->execute();
+                $stmt->close();
+
+                setFeedbackAndRedirect("The post was updated", "success", $referer);
+            } else {
+                setFeedbackAndRedirect("An error occured", "error");
+            }
+
             return $postId;
         } catch (Exception $ex) {
             setFeedbackAndRedirect($ex->getMessage(), "error");
@@ -201,12 +218,12 @@ class Post
             $posts = [];
 
             while ($stmt->fetch()) {
-                array_push($posts, new Post($userId, $title, $content, $blogId, [],$postId));
+                array_push($posts, new Post($userId, $title, $content, $blogId, [], $postId));
             }
 
             $stmt->close();
 
-            foreach($posts as $p){
+            foreach ($posts as $p) {
                 $postId = $p->getPostId();
                 $tags = [];
                 $tags = self::getTagsByPostId($postId);
@@ -225,41 +242,85 @@ class Post
         }
     }
 
-    public static function displayPosts(array $posts)
+    public static function updateImage($imageLink, $fileName, $postId, $isUpdate, $index = null)
     {
         try {
-            if (!empty($posts)) {
-                echo '<div class="projects__content">';
+            $con = $GLOBALS['con'];
 
-                foreach ($posts as $p) {
-
-                    $tags = $p->getTags();
-                    // $images = $p->getImages();
-
-                    echo '<div class="projects__row">';
-                    echo '<div class="projects__row-img-cont">';
-
-                    // foreach ($images as $i) {
-                    //     echo "<img src=".$i." alt='Post Image' class='projects__row-img' loading='lazy' />";
-                    // }
-
-                    echo "<img src=" . $p->getAvatar() . " alt='Post Image' class='projects__row-img' loading='lazy' />";
-                    echo '</div>';
-                    echo '<div class="projects__row-content">';
-                    echo '<h3 class="projects__row-content-title">' . $p->getTitle() . '</h3>';
-                    echo '<p class="projects__row-content-desc">' . substr("{$p->getContent()}", 0, 100) . '</p>';
-                    echo '<a href="./post.php?id=".$p->getPostId()." class="btn btn--med btn--theme dynamicBgClr" target="_blank">Read more</a>';
-                    echo '</div>';
-                    echo '</div>';
-                }
-                echo '</div>';
+            if (is_null($index)) {
+                if (!$isUpdate)
+                    $sql = "INSERT INTO images (type, link, post_id, name) VALUES('avatar', '$imageLink', $postId, '$fileName')";
+                $con->query($sql);
             } else {
-                echo 'There are no posts yet';
+                $sql2 = "INSERT INTO images (type, link, post_id, name) VALUES('image', '$imageLink', $postId, '$fileName')";
+                $con->query($sql2);
             }
+
+            return true;
         } catch (Exception $ex) {
             setFeedbackAndRedirect($ex->getMessage(), "error");
         }
     }
+
+    public static function updateTags($tags, $postId)
+    {
+        try {
+            $con = $GLOBALS['con'];
+
+            $dbTags = [];
+
+            $sql = "SELECT name FROM tags";
+            $result = $con->query($sql);
+
+            while ($row = $result->fetch_assoc()) {
+                array_push($dbTags, $row['name']);
+            }
+
+            $sql2 = "DELETE FROM post_tags WHERE post_id = $postId";
+            $con->query($sql2);
+
+            foreach ($tags as $t) {
+                $sql3 = "INSERT INTO tags (name) VALUES ('$t')";
+                if (!in_array($t, $dbTags)) {
+                    $con->query($sql3);
+                }
+                $sql4 = "INSERT INTO post_tags (post_id, tag_name) VALUES ($postId, '$t')";
+                $con->query($sql4);
+            }
+
+            return true;
+        } catch (Exception $ex) {
+            setFeedbackAndRedirect($ex->getMessage(), "error");
+        }
+    }
+
+    public static function countImage($postId)
+    {
+        try {
+            $numImages = -1;
+            $con = $GLOBALS['con'];
+
+            $sql = "SELECT image_id FROM images WHERE post_id = $postId";
+            $result = $con->query($sql);
+            $numImages = $result->num_rows;
+            return $numImages;
+        } catch (Exception $ex) {
+            setFeedbackAndRedirect($ex->getMessage(), "error");
+        }
+    }
+
+    public static function deleteIamages($postId)
+    {
+        try {
+            $con = $GLOBALS['con'];
+            $sql = "DELETE FROM images WHERE post_id = $postId AND type = 'image'";
+            $con->query($sql);
+            return true;
+        } catch (Exception $ex) {
+            setFeedbackAndRedirect($ex->getMessage(), "error");
+        }
+    }
+
 
     #region Private Methods
     private static function getTagsByPostId($postId): array

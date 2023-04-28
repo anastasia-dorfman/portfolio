@@ -1,5 +1,4 @@
 <?php
-//displays all the details for a particular post
 
 session_start();
 
@@ -17,9 +16,9 @@ if (!(isset($_GET['post_id'])) || empty($_GET['post_id'])) {
 }
 
 $postId = $_GET['post_id'];
-// $_SESSION["REFERER"] = "post.php?post_id=".$userToSeeId;
 
-$referer = isset($_SESSION["REFERER"]) ? $_SESSION["REFERER"] : 'index.php';
+$_SESSION["REFERER"] = "post.php?post_id=".$postId;
+
 $post = Post::getPostById($postId);
 $images = $post->getImages();
 $tags = $post->getTags();

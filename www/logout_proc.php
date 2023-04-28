@@ -1,4 +1,7 @@
 <?php
+session_start();
+
+$referer = isset($_SESSION["REFERER"]) ? $_SESSION["REFERER"] : "index.php";
 
 $_SESSION = array();
 $user = null;
@@ -10,4 +13,5 @@ if (isset($_COOKIE[session_name()])) {
 
 #Destroy the session
 session_destroy();
-header('Location:login.php');
+// header('Location:login.php');
+header("Location:$referer");
