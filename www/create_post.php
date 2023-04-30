@@ -123,10 +123,10 @@ if ($postId != -1) {
                                     <div class="contact__form-input fixed-height">
                                         <img src="<?php echo $images[$i - 1] ?>" alt="Image <?php echo $i ?>" />
                                         <div class="mt-auto">
-                                            <form method="POST" >
+                                            <form method="POST">
                                                 <input type="hidden" name="postId" value="<?php echo $postId ?>">
                                                 <input type="hidden" name="imageLink" value="<?php echo $images[$i - 1] ?>">
-                                                <button type="submit" class="btn btn--med float-left" name="removeImage">Remove</button>
+                                                <button type="submit" class="btn btn--med" name="removeImage">Remove</button>
                                             </form>
                                         </div>
                                     </div>
@@ -141,11 +141,12 @@ if ($postId != -1) {
                         <?php } ?>
                         <div id="image-container"></div>
                         <div class="btn-margin">
-                            <button type="button" class="btn btn--med" onclick="addImageField($imagesCount)">Add Image</button>
+                            <button type="button" class="btn btn--med" id="addImage">Add Image</button>
                         </div>
                     </div>
                     <input type="submit" class="btn btn--theme contact__btn" name="createEditPost" value="<?php echo $editing ? 'Update Post' : 'Create Post'; ?>">
                 </form>
+
             </div>
         </div>
     </div>
@@ -159,7 +160,28 @@ if ($postId != -1) {
 <?php include 'includes/scripts.php'; ?>
 
 <script>
-    function addImageField(imagesCount) {
+    const addImageButton = document.getElementById("addImage");
+    let imageIndex = <?php echo $imagesCount ?>;
+    let shift = imageIndex == 0 ? 2 : 1 ;
+
+    addImageButton.addEventListener("click", function() {
+        const container = document.getElementById("image-container");
+        const div = document.createElement("div");
+        const label = document.createElement("label");
+        label.className = "contact__form-label";
+        label.innerHTML = `Image ${container.children.length + imageIndex + shift}`;
+        const input = document.createElement("input");
+        input.required = true;
+        input.type = "file";
+        input.className = "contact__form-input";
+        input.name = "image[]";
+        input.accept = "image/*";
+        div.appendChild(label);
+        div.appendChild(input);
+        container.appendChild(div);
+    });
+
+    function addImageField() {
         // Get the container that will hold the new file input field
         const container = document.getElementById("image-container");
         // Create a new div element to hold the file input field

@@ -178,7 +178,7 @@ textarea {
 }
 
 .main-container {
-  max-width: 120rem;
+  max-width: 80%;
   margin: auto;
   width: 92%;
 }
@@ -1329,7 +1329,7 @@ textarea {
   background: white;
   padding: 4rem;
   margin-top: 6rem;
-  max-width: 120rem;
+  max-width: 93%;
   text-align: right;
   width: 95%;
   border-radius: 5px;
@@ -1365,7 +1365,7 @@ textarea {
 
 .image-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(5rem, 1fr));
   grid-gap: 10px;
   align-items: start;
 }
@@ -1373,12 +1373,11 @@ textarea {
 .contact__form-field img {
   max-width: 100%;
   height: auto;
-
-  max-width: 85%;
+  max-height: 91%;
 }
 
 .fixed-height {
-  height: 400px; 
+  height: 100%; 
   display: flex;
   flex-direction: column;
 }
