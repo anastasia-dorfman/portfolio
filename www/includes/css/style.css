@@ -1264,6 +1264,7 @@ textarea {
   /* grid-gap: 5rem;
   margin-left: 2rem; */
 }
+
 @media only screen and (max-width: 56.25em) {
   .post__col {
     grid-template-rows: 1fr;
@@ -1271,6 +1272,7 @@ textarea {
     margin-left: 0.5rem;
   }
 }
+
 @media only screen and (max-width: 56.25em) {
   .post__col {
     text-align: center;
@@ -1287,12 +1289,12 @@ textarea {
 
 .post__avatar {
   width: 100%;
-  margin-bottom: 2rem; 
+  margin-bottom: 2rem;
 }
 
 .post__img {
   max-width: 80%;
-  margin-bottom: 5rem; 
+  margin-bottom: 5rem;
 }
 
 /*#endregion*/
@@ -1354,4 +1356,33 @@ textarea {
 .btn-margin {
   margin-top: 1rem;
   margin-bottom: 2rem;
+}
+
+.images__form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 10px;
+  align-items: start;
+}
+
+.contact__form-field img {
+  max-width: 100%;
+  height: auto;
+
+  max-width: 85%;
+}
+
+.fixed-height {
+  height: 400px; 
+  display: flex;
+  flex-direction: column;
+}
+
+.mt-auto {
+  margin-top: auto;
 }

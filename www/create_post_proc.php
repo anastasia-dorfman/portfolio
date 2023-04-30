@@ -18,6 +18,13 @@ if (!(isset($_SESSION["USERNAME"]))) {
 }
 
 try {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['removeAvatar'])) {
+        $postId = $_POST['postId'];
+        $avatarLink = $_POST['avatarLink'];
+        deleteImage($postId, $avatarLink);
+        header("Location:create_post.php?post_id=$postId");
+    }
+
     // Handle form submission
     if (isset($_POST['createEditPost'])) {
         $userId = $_SESSION["USER_ID"];
@@ -156,3 +163,17 @@ function doFileCheck($file, $postId, $isEdit, $index = null)
         }
     }
 }
+
+function deleteImage($postId, $imagePath)
+{
+    // $imagePath = './assets/images/' . $filename;
+    
+    if (file_exists($imagePath)) {
+        unlink($imagePath);
+        Post::removeImage($postId, $imagePath); 
+        return true;
+    } else {
+        return false;
+    }
+}
+

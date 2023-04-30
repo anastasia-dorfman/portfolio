@@ -17,7 +17,7 @@ if (!(isset($_GET['post_id'])) || empty($_GET['post_id'])) {
 
 $postId = $_GET['post_id'];
 
-$_SESSION["REFERER"] = "post.php?post_id=".$postId;
+$_SESSION["REFERER"] = "post.php?post_id=" . $postId;
 
 $post = Post::getPostById($postId);
 $images = $post->getImages();
@@ -49,6 +49,17 @@ $tags = $post->getTags();
             <h1 class="heading-post"><?php echo $post->getTitle() ?></h1>
         </div>
     </div>
+
+    <?php
+    if (isset($_SESSION["USER_TYPE"]) && $_SESSION["USER_TYPE"] == 'admin') {
+    ?>
+        <div class="btn__margin">
+            <a href="./create_post.php?post_id=<?php echo $postId ?>" class="btn btn--med btn--theme-inv">Edit Post</a>
+        </div>
+    <?php
+    }
+    ?>
+
     <div class="post__content">
         <div class="post__row">
             <div class="post__col">
@@ -81,7 +92,7 @@ $tags = $post->getTags();
                 </div>
             </div>
         </div>
-            <a href="./blog.php" class="btn btn--med btn--theme-inv btn-back" target="_blank">Back to Blog</a>
+        <a href="./blog.php" class="btn btn--med btn--theme-inv btn-back" target="_blank">Back to Blog</a>
     </div>
 
     <?php

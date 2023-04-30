@@ -242,6 +242,20 @@ class Post
         }
     }
 
+    public static function removeImage($postId, $imageLink)
+    {
+        try {
+            $con = $GLOBALS['con'];
+
+            $sql = "DELETE FROM images WHERE link = '$imageLink' AND post_id = $postId";
+            $con->query($sql);
+
+            return true;
+        } catch (Exception $ex) {
+            setFeedbackAndRedirect($ex->getMessage(), "error");
+        }
+    }
+
     public static function updateImage($imageLink, $fileName, $postId, $isUpdate, $index = null)
     {
         try {
@@ -250,6 +264,9 @@ class Post
             if (is_null($index)) {
                 if (!$isUpdate)
                     $sql = "INSERT INTO images (type, link, post_id, name) VALUES('avatar', '$imageLink', $postId, '$fileName')";
+                else
+                    $sql = "UPDATE images SET link = '$imageLink', name = '$fileName' WHERE post_id = $postId AND type = 'avatar'";
+
                 $con->query($sql);
             } else {
                 $sql2 = "INSERT INTO images (type, link, post_id, name) VALUES('image', '$imageLink', $postId, '$fileName')";
