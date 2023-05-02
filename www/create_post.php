@@ -63,6 +63,15 @@ if ($postId != -1) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="includes/tinymce/js/tinymce/tinymce.min.js"></script>
+    <script>
+        tinymce.init({
+            selector: "#content",
+            height: 300,
+            plugins: "advlist autolink lists link image charmap print preview anchor",
+            toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+        });
+    </script>
 </head>
 
 <body>
@@ -87,7 +96,7 @@ if ($postId != -1) {
                     </div>
                     <div class="contact__form-field">
                         <label class="contact__form-label" for="content">Content</label>
-                        <textarea required cols="40" rows="15" class="contact__form-input" name="content" id="content" placeholder="Content"><?php echo $content ?></textarea>
+                        <textarea required cols="40" rows="30" class="contact__form-input tiny-mce" name="content" id="content" placeholder="Content"><?php echo $content ?></textarea>
                     </div>
                     <div class="contact__form-field">
                         <label class="contact__form-label" for="tags">Tags</label>

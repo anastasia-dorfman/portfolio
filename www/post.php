@@ -5,12 +5,6 @@ session_start();
 include_once "includes/functions.php";
 include_once "includes/Post.php";
 
-// if (!(isset($_SESSION["USERNAME"]))) {
-//     //TODO check type of user...
-//     // header('Location:login.php');
-//     exit;
-// }
-
 if (!(isset($_GET['post_id'])) || empty($_GET['post_id'])) {
     setFeedbackAndRedirect("Choose a post to show", "error");
 }
@@ -64,7 +58,7 @@ $tags = $post->getTags();
     <div class="post__content">
         <div class="post__row">
             <div class="post__col">
-                <img src="<?php echo $post->getAvatar() ?>" class="post__avatar" />
+                <img src="<?php echo $post->getAvatar() ?>" class="post__avatar"/>
                 <div class="post__row">
                     <?php
                     foreach ($images as $i) {
