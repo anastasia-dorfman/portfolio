@@ -55,6 +55,7 @@ $tags = $post->getTags();
     ?>
         <div class="btn__margin">
             <a href="./create_post.php?post_id=<?php echo $postId ?>" class="btn btn--med btn--theme-inv">Edit Post</a>
+            <a href="./delete_post_proc.php?post_id=<?php echo $postId ?>" onclick="return confirm('Are you sure you want to delete this post?')" class="btn btn--med btn--theme-inv">Delete Post</a>
         </div>
     <?php
     }
@@ -63,12 +64,12 @@ $tags = $post->getTags();
     <div class="post__content">
         <div class="post__row">
             <div class="post__col">
-                <img src="<?php echo $post->getAvatar() ?>" alt="Project Image" class="post__avatar" />
+                <img src="<?php echo $post->getAvatar() ?>" class="post__avatar" />
                 <div class="post__row">
                     <?php
                     foreach ($images as $i) {
                     ?>
-                        <img src="<?php echo $i ?>" alt="Project Image" class="post__img" />
+                        <img src="<?php echo $i ?>" class="post__img" />
                     <?php
                     }
                     ?>

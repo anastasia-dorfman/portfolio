@@ -9,8 +9,8 @@ function setFeedbackAndRedirect(string $message, string $icon, string $redirectT
 
 	if ($redirectTo)
 		header("Location:$redirectTo");
-	else
-		header("Refresh:0");
+	// else
+	// 	header("Refresh:0");
 }
 
 /**

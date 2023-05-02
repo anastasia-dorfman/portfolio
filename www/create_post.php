@@ -74,7 +74,8 @@ if ($postId != -1) {
                 <span class="heading-sec__main heading-sec__main--lt"><?php echo $editing ? 'Edit Post' : 'Create Post'; ?></span>
             </h2>
             <div class="post__form-container">
-                <form action="remove_image.php" method="POST" id="remove_image"></form>
+                <form action="create_post_proc.php" method="POST" id="remove_image"></form>
+                <form action="create_post_proc.php" method="POST" id="remove_avatar"></form>
                 <form action="create_post_proc.php" method="POST" class="contact__form" enctype="multipart/form-data">
                     <input type="hidden" name="postId" value="<?php echo $postId ?>">
                     <input type="hidden" name="isEdit" value="<?php echo $editing ?>">
@@ -99,11 +100,11 @@ if ($postId != -1) {
                         ?>
                             <div class="contact__form-input">
                                 <img src="<?php echo $post->getAvatar() ?>" alt="Avatar" class="post__avatar" />
-                                <form action="remove_image.php" method="POST">
-                                    <input type="hidden" name="postId" value="<?php echo $postId ?>">
-                                    <input type="hidden" name="link" value="<?php echo $post->getAvatar() ?>">
-                                    <button type="submit" class="btn btn--med" class="header__link" name="removeImage">Remove/Update</button>
-                                </form>
+                                <!-- <form action="create_post_proc.php" method="POST"> -->
+                                    <input type="hidden" name="postId" value="<?php echo $postId ?>" form="remove_avatar">
+                                    <input type="hidden" name="link" value="<?php echo $post->getAvatar() ?>" form="remove_avatar">
+                                    <button type="submit" class="btn btn--med" class="header__link" name="removeImage" form="remove_avatar">Remove/Update</button>
+                                <!-- </form> -->
                             </div>
                         <?php
                         }

@@ -115,89 +115,6 @@ class Post
     #endregion
 
     #region Public methods
-    public static function getPostById(int $postId)
-    {
-        try {
-            $tags = self::getTagsByPostId($postId);
-            $images = self::getImagesByPostId($postId);
-            $avatar = self::getAvatarByPostId($postId);
-
-            $con = $GLOBALS['con'];
-            $sql = "SELECT title, content, created_at, blog_id, user_id FROM posts WHERE post_id = ?";
-            $stmt = $con->prepare($sql);
-            $stmt->bind_param('i', $postId);
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            if ($result->num_rows > 0) {
-                $row = $result->fetch_assoc();
-                return new Post(
-                    $row['user_id'],
-                    $row['title'],
-                    $row['content'],
-                    $row['blog_id'],
-                    $tags,
-                    $postId,
-                    $images,
-                    $avatar
-                );
-            } else {
-                return null;
-            }
-            $stmt->close();
-            $result->close();
-        } catch (Exception $ex) {
-            setFeedbackAndRedirect($ex->getMessage(), "error");
-        }
-    }
-    public static function createPost($userId, $title, $content, $blogId): int
-    {
-        try {
-            $postId = -1;
-            $referer = $_SESSION["REFERER"];
-            $con = $GLOBALS['con'];
-            $sql = "INSERT INTO posts (user_id, title, content, blog_id) VALUES (?,?,?,?)";
-            $stmt = $con->prepare($sql);
-
-            if ($stmt) {
-                $stmt->bind_param('issi', $userId, $title, $content, $blogId);
-                $stmt->execute();
-                $postId = $stmt->insert_id;
-                $stmt->close();
-            } else {
-                setFeedbackAndRedirect("An error occured", "error");
-            }
-
-            return $postId;
-        } catch (Exception $ex) {
-            setFeedbackAndRedirect($ex->getMessage(), "error");
-        }
-    }
-
-    public static function updatePost($postId, $userId, $title, $content, $blogId)
-    {
-        try {
-            $referer = $_SESSION["REFERER"];
-            $con = $GLOBALS['con'];
-            $sql = "UPDATE posts SET user_id = ?, title = ?, content = ?, blog_id = ? WHERE post_id = ?";
-            $stmt = $con->prepare($sql);
-
-            if ($stmt) {
-                $stmt->bind_param('issii', $userId, $title, $content, $blogId, $postId);
-                $stmt->execute();
-                $stmt->close();
-
-                setFeedbackAndRedirect("The post was updated", "success", $referer);
-            } else {
-                setFeedbackAndRedirect("An error occured", "error");
-            }
-
-            return $postId;
-        } catch (Exception $ex) {
-            setFeedbackAndRedirect($ex->getMessage(), "error");
-        }
-    }
-
     public static function getPosts(int $blogId = null): array
     {
         try {
@@ -237,6 +154,115 @@ class Post
             }
 
             return $posts;
+        } catch (Exception $ex) {
+            setFeedbackAndRedirect($ex->getMessage(), "error");
+        }
+    }
+
+    public static function getPostById(int $postId)
+    {
+        try {
+            $tags = self::getTagsByPostId($postId);
+            $images = self::getImagesByPostId($postId);
+            $avatar = self::getAvatarByPostId($postId);
+
+            $con = $GLOBALS['con'];
+            $sql = "SELECT title, content, created_at, blog_id, user_id FROM posts WHERE post_id = ?";
+            $stmt = $con->prepare($sql);
+            $stmt->bind_param('i', $postId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                return new Post(
+                    $row['user_id'],
+                    $row['title'],
+                    $row['content'],
+                    $row['blog_id'],
+                    $tags,
+                    $postId,
+                    $images,
+                    $avatar
+                );
+            } else {
+                return null;
+            }
+            $stmt->close();
+            $result->close();
+        } catch (Exception $ex) {
+            setFeedbackAndRedirect($ex->getMessage(), "error");
+        }
+    }
+    public static function createPost($userId, $title, $content, $blogId): int
+    {
+        try {
+            $postId = -1;
+            $con = $GLOBALS['con'];
+            $sql = "INSERT INTO posts (user_id, title, content, blog_id) VALUES (?,?,?,?)";
+            $stmt = $con->prepare($sql);
+
+            if ($stmt) {
+                $stmt->bind_param('issi', $userId, $title, $content, $blogId);
+                $stmt->execute();
+                $postId = $stmt->insert_id;
+                $stmt->close();
+            } else {
+                setFeedbackAndRedirect("An error occured", "error");
+            }
+
+            return $postId;
+        } catch (Exception $ex) {
+            setFeedbackAndRedirect($ex->getMessage(), "error");
+        }
+    }
+
+    public static function updatePost($postId, $userId, $title, $content, $blogId)
+    {
+        try {
+            $con = $GLOBALS['con'];
+            $sql = "UPDATE posts SET user_id = ?, title = ?, content = ?, blog_id = ? WHERE post_id = ?";
+            $stmt = $con->prepare($sql);
+
+            if ($stmt) {
+                $stmt->bind_param('issii', $userId, $title, $content, $blogId, $postId);
+                $stmt->execute();
+                $stmt->close();
+            } else {
+                setFeedbackAndRedirect("An error occured", "error");
+            }
+
+            return $postId;
+        } catch (Exception $ex) {
+            setFeedbackAndRedirect($ex->getMessage(), "error");
+        }
+    }
+
+    public static function deletePost($postId, $post): int
+    {
+        try {
+            $con = $GLOBALS['con'];
+            $sql1 = "DELETE FROM post_tags WHERE post_id = $postId";
+            $con->query($sql1);
+
+            $sql2 = "DELETE FROM images WHERE post_id = $postId";
+            $con->query($sql2);
+
+            $images = [];
+
+            if (isset($post->getAvatar))
+                array_push($images, $post->getAvatar);
+            if (isset($post->getImages))
+                array_push($images, $post->getImages);
+
+            foreach ($images as $i) {
+                    unlink($i);
+                }
+
+            $sql3 = "DELETE FROM posts WHERE post_id = $postId";
+            $con->query($sql3);
+
+            return true;
         } catch (Exception $ex) {
             setFeedbackAndRedirect($ex->getMessage(), "error");
         }
@@ -335,7 +361,8 @@ class Post
             if ($numImages > 0) {
                 $row = $result->fetch_assoc();
                 $name = $row['name'];
-                $pattern = "/image(\d+)\./";
+                // $pattern = "/image(\d+)\./";
+                $pattern = "/image(\d+)$/i";
                 preg_match($pattern, $name, $matches);
                 $imageIndex = $matches[1];
             }
