@@ -46,7 +46,7 @@ if ($postId != -1) {
         $imageUrls = implode(', ', $post->getImages());
         $editing = true;
     } else {
-        setFeedbackAndRedirect("Invalid post ID", "error");
+        setFeedbackAndRedirect("Invalid post ID", "error", "blog.php");
     }
 }
 ?>
@@ -74,10 +74,11 @@ if ($postId != -1) {
                 <span class="heading-sec__main heading-sec__main--lt"><?php echo $editing ? 'Edit Post' : 'Create Post'; ?></span>
             </h2>
             <div class="post__form-container">
+                <form action="remove_image.php" method="POST" id="remove_image"></form>
                 <form action="create_post_proc.php" method="POST" class="contact__form" enctype="multipart/form-data">
                     <input type="hidden" name="postId" value="<?php echo $postId ?>">
                     <input type="hidden" name="isEdit" value="<?php echo $editing ?>">
-                    <input type="hidden" name="upload">
+                    <!-- <input type="hidden" name="upload"> -->
                     <input type="hidden" name="MAX_FILE_SIZE" value="2000000">
                     <div class="contact__form-field">
                         <label class="contact__form-label" for="title">Title</label>
@@ -94,21 +95,21 @@ if ($postId != -1) {
                     <div class="contact__form-field">
                         <label class="contact__form-label" for="avatar">Avatar</label>
                         <?php
-                        if ($postId != -1 && $post->getAvatar() != null) {
+                        if ($postId != -1 && $post != null && $post->getAvatar() != null) {
                         ?>
                             <div class="contact__form-input">
                                 <img src="<?php echo $post->getAvatar() ?>" alt="Avatar" class="post__avatar" />
-                                <form method="POST">
+                                <form action="remove_image.php" method="POST">
                                     <input type="hidden" name="postId" value="<?php echo $postId ?>">
-                                    <input type="hidden" name="avatarLink" value="<?php echo $post->getAvatar() ?>">
-                                    <button type="submit" class="btn btn--med" class="header__link" name="removeAvatar">Remove/Update</button>
+                                    <input type="hidden" name="link" value="<?php echo $post->getAvatar() ?>">
+                                    <button type="submit" class="btn btn--med" class="header__link" name="removeImage">Remove/Update</button>
                                 </form>
                             </div>
                         <?php
                         }
                         ?>
                         <?php
-                        if ($postId == -1 || $post->getAvatar() == null) {
+                        if ($postId == -1 || $post == null || $post->getAvatar() == null) {
                         ?>
                             <input type="file" class="contact__form-input" name="avatar" id="avatar" />
                         <?php
@@ -123,11 +124,11 @@ if ($postId != -1) {
                                     <div class="contact__form-input fixed-height">
                                         <img src="<?php echo $images[$i - 1] ?>" alt="Image <?php echo $i ?>" />
                                         <div class="mt-auto">
-                                            <form method="POST">
-                                                <input type="hidden" name="postId" value="<?php echo $postId ?>">
-                                                <input type="hidden" name="imageLink" value="<?php echo $images[$i - 1] ?>">
-                                                <button type="submit" class="btn btn--med" name="removeImage">Remove</button>
-                                            </form>
+                                            <!-- <form action="remove_image.php" method="POST"> -->
+                                            <input type="hidden" name="postId" value="<?php echo $postId ?>" form="remove_image">
+                                            <input type="hidden" name="link" value="<?php echo $images[$i - 1] ?>" form="remove_image">
+                                            <button type="submit" class="btn btn--med" name="removeImage" form="remove_image">Remove</button>
+                                            <!-- </form> -->
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -146,7 +147,6 @@ if ($postId != -1) {
                     </div>
                     <input type="submit" class="btn btn--theme contact__btn" name="createEditPost" value="<?php echo $editing ? 'Update Post' : 'Create Post'; ?>">
                 </form>
-
             </div>
         </div>
     </div>
@@ -162,7 +162,7 @@ if ($postId != -1) {
 <script>
     const addImageButton = document.getElementById("addImage");
     let imageIndex = <?php echo $imagesCount ?>;
-    let shift = imageIndex == 0 ? 2 : 1 ;
+    let shift = imageIndex == 0 ? 2 : 1;
 
     addImageButton.addEventListener("click", function() {
         const container = document.getElementById("image-container");
@@ -180,28 +180,4 @@ if ($postId != -1) {
         div.appendChild(input);
         container.appendChild(div);
     });
-
-    function addImageField() {
-        // Get the container that will hold the new file input field
-        const container = document.getElementById("image-container");
-        // Create a new div element to hold the file input field
-        const div = document.createElement("div");
-        // div.className = "upload-field";
-        // Create a new label element for the file input field
-        const label = document.createElement("label");
-        label.className = "contact__form-label";
-        label.innerHTML = `Image ${container.children.length + 2 + imagesCount}`;
-        // Create a new file input element
-        const input = document.createElement("input");
-        input.required = true;
-        input.type = "file";
-        input.className = "contact__form-input";
-        input.name = "image[]";
-        input.accept = "image/*";
-        // Append the label and input elements to the new div element
-        div.appendChild(label);
-        div.appendChild(input);
-        // Append the new div element to the container
-        container.appendChild(div);
-    }
 </script>

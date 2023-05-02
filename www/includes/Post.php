@@ -256,22 +256,18 @@ class Post
         }
     }
 
-    public static function updateImage($imageLink, $fileName, $postId, $isUpdate, $index = null)
+    public static function updateImage($imageLink, $fileName, $postId, $index = null)
     {
         try {
             $con = $GLOBALS['con'];
 
             if (is_null($index)) {
-                if (!$isUpdate)
-                    $sql = "INSERT INTO images (type, link, post_id, name) VALUES('avatar', '$imageLink', $postId, '$fileName')";
-                else
-                    $sql = "UPDATE images SET link = '$imageLink', name = '$fileName' WHERE post_id = $postId AND type = 'avatar'";
-
-                $con->query($sql);
+                $sql = "INSERT INTO images (type, link, post_id, name) VALUES('avatar', '$imageLink', $postId, '$fileName')";
             } else {
-                $sql2 = "INSERT INTO images (type, link, post_id, name) VALUES('image', '$imageLink', $postId, '$fileName')";
-                $con->query($sql2);
+                $sql = "INSERT INTO images (type, link, post_id, name) VALUES('image', '$imageLink', $postId, '$fileName')";
             }
+
+            $con->query($sql);
 
             return true;
         } catch (Exception $ex) {
@@ -314,13 +310,39 @@ class Post
     public static function countImage($postId)
     {
         try {
-            $numImages = -1;
+            $numImages = 0;
             $con = $GLOBALS['con'];
 
             $sql = "SELECT image_id FROM images WHERE post_id = $postId";
             $result = $con->query($sql);
             $numImages = $result->num_rows;
             return $numImages;
+        } catch (Exception $ex) {
+            setFeedbackAndRedirect($ex->getMessage(), "error");
+        }
+    }
+
+    public static function getLastImageIndex($postId)
+    {
+        try {
+            $imageIndex = 0;
+            $con = $GLOBALS['con'];
+
+            $sql = "SELECT name FROM images WHERE post_id = $postId AND type = 'image' ORDER BY name DESC LIMIT 1";
+            $result = $con->query($sql);
+            $numImages = $result->num_rows;
+
+            if ($numImages > 0) {
+                $row = $result->fetch_assoc();
+                $name = $row['name'];
+                $pattern = "/image(\d+)\./";
+                preg_match($pattern, $name, $matches);
+                $imageIndex = $matches[1];
+            }
+
+            $result->close();
+
+            return $imageIndex;
         } catch (Exception $ex) {
             setFeedbackAndRedirect($ex->getMessage(), "error");
         }

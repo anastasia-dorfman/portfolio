@@ -2,30 +2,30 @@
 session_start();
 
 include_once "includes/functions.php";
-include_once "includes/Post.php";
 
 $_SESSION["REFERER"] = "create_post.php";
 
 if (!(isset($_SESSION["USERNAME"]))) {
-    if ($postId != -1)
-        $_SESSION["REFERER"] = "create_post.php?post_id=$postId";
-    else
-        $_SESSION["REFERER"] = "create_post.php";
-    exit;
-
+    $postId = $_GET['post_id'] ?? -1;
+    $_SESSION["REFERER"] = "create_post.php" . ($postId !== -1 ? "?post_id=$postId" : "");
     header("Location: login.php");
     exit;
 }
 
+include_once "includes/Post.php";
+// use App\Post;
+
 try {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['removeAvatar'])) {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['removeImage'])) {
         $postId = $_POST['postId'];
-        $avatarLink = $_POST['avatarLink'];
-        deleteImage($postId, $avatarLink);
+        $link = $_POST['link'];
+        // $postId = filter_input(INPUT_POST, 'postId', FILTER_SANITIZE_NUMBER_INT);
+        // $link = filter_input(INPUT_POST, 'link', FILTER_SANITIZE_URL);
+        deleteImage($postId, $link);
         header("Location:create_post.php?post_id=$postId");
+        exit;
     }
 
-    // Handle form submission
     if (isset($_POST['createEditPost'])) {
         $userId = $_SESSION["USER_ID"];
         $isEdit = $_POST['isEdit'];
@@ -35,52 +35,36 @@ try {
         $avatar = $_FILES['avatar']['tmp_name'];
         $tags = explode(',', $_POST['tags']);
 
+        $errors = validateFormData($title, $content, $tags);
+
+        if (count($errors) > 0) {
+            $msg = implode("\n", $errors);
+            // throw new Exception(implode("\n", $errors));
+            setFeedbackAndRedirect($msg, "error", "create_post.php");
+        }
+
         $post = null;
 
-        #region Validate form data
-        $errors = array();
-        if (empty($title)) {
-            $errors[] = "Title is required";
-        }
-        if (empty($content)) {
-            $errors[] = "Content is required";
-        }
-        if (empty($tags)) {
-            $errors[] = "At least one tag is required";
-        }
-        #endregion
-        // TODO: Validate image URLs
-
-        // If there are no errors, create/update the post and redirect to the post page
-        if (empty($errors)) {
-            if ($isEdit) {
-                $postId = Post::updatePost($postId, $userId, $title, $content, 1);
-                $post = Post::getPostById($postId);
-            } else {
-                $postId = Post::createPost($userId, $title, $content, 1);
-                $post = Post::getPostById($postId);
-            }
-
-            Post::updateTags($tags, $postId);
-            uploadAvatar($postId, $isEdit);
-            if ($isEdit)
-                Post::deleteIamages($postId);
-            uploadImages($postId);
-
-            setFeedbackAndRedirect("Post saved successfully", "success", "post.php?post_id=" . $post->getPostId());
+        if ($isEdit) {
+            $postId = Post::updatePost($postId, $userId, $title, $content, 1);
+            $lastSavedImageIndex = Post::getLastImageIndex($postId);
         } else {
-            $msg = '';
-            foreach ($errors as $e) {
-                $msg .= $e . '\n';
-            }
-            setFeedbackAndRedirect($e, "error", "create_post.php");
+            $postId = Post::createPost($userId, $title, $content, 1);
         }
+
+        $post = Post::getPostById($postId);
+
+        Post::updateTags($tags, $postId);
+        uploadAvatar($postId);
+        uploadImages($postId, $lastSavedImageIndex);
+
+        setFeedbackAndRedirect("Post saved successfully", "success", "post.php?post_id=" . $post->getPostId());
     }
 } catch (Exception $ex) {
     setFeedbackAndRedirect($ex->getMessage(), "error", "create_post.php");
 }
 
-function uploadAvatar($postId, $isEdit)
+function uploadAvatar($postId)
 {
     try {
         if (!empty($_FILES['avatar']['tmp_name'])) {
@@ -91,13 +75,12 @@ function uploadAvatar($postId, $isEdit)
             $intpos = strpos($mime_type_long, ";");
             $mime_type = substr($mime_type_long, 0, $intpos);
 
-            if (
-                $mime_type == 'image/png' || $mime_type == 'image/jpeg' || $mime_type == 'image/jpg' ||
-                $mime_type == 'image/gif' || $mime_type == 'image/bmp' || $mime_type == 'image/pjpg' || $mime_type == 'image/x-png'
-            ) {
-                doFileCheck($avatar, $postId, $isEdit);
+            $allowed_mime_types = array('image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/bmp', 'image/pjpg', 'image/x-png');
+
+            if (in_array($mime_type, $allowed_mime_types)) {
+                doFileCheck($avatar, $postId);
             } else {
-                setFeedbackAndRedirect("Not so fast, incorrect mime type ... $mime_type_long", "error");
+                setFeedbackAndRedirect("Incorrect mime type: " . $mime_type_long, "error");
             }
         }
     } catch (Exception $ex) {
@@ -105,7 +88,7 @@ function uploadAvatar($postId, $isEdit)
     }
 }
 
-function uploadImages($postId)
+function uploadImages($postId, $lastSavedImageIndex = null)
 {
     try {
         // Check if at least one file was uploaded
@@ -120,13 +103,12 @@ function uploadImages($postId)
                 $intpos = strpos($mime_type_long, ";");
                 $mime_type = substr($mime_type_long, 0, $intpos);
 
-                if (
-                    $mime_type == 'image/png' || $mime_type == 'image/jpeg' || $mime_type == 'image/jpg' ||
-                    $mime_type == 'image/gif' || $mime_type == 'image/bmp' || $mime_type == 'image/pjpg' || $mime_type == 'image/x-png'
-                ) {
-                    doFileCheck($file, $postId, false, $i);
+                $allowed_mime_types = array('image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/bmp', 'image/pjpg', 'image/x-png');
+
+                if (in_array($mime_type, $allowed_mime_types)) {
+                    doFileCheck($file, $postId, $i, $lastSavedImageIndex);
                 } else {
-                    setFeedbackAndRedirect("Not so fast, incorrect mime type ... $mime_type_long", "error");
+                    setFeedbackAndRedirect("Incorrect mime type: " . $mime_type_long, "error");
                 }
             }
         }
@@ -134,14 +116,15 @@ function uploadImages($postId)
         setFeedbackAndRedirect($ex->getMessage(), "error");
     }
 }
-function doFileCheck($file, $postId, $isEdit, $index = null)
+function doFileCheck($file, $postId, $index = null, $lastSavedImageIndex = null)
 {
     if (is_null($index)) {
         $pathinfo = pathinfo($_FILES['avatar']['name']);
         $basename = "post" . $postId . "_avatar." . $pathinfo['extension'];
     } else {
         $pathinfo = pathinfo($_FILES['image']['name'][$index]);
-        $basename = "post" . $postId . "_image" . ($index + 1) . "." . $pathinfo['extension'];
+        $basenameIndex = $index + 1 + $lastSavedImageIndex;
+        $basename = "post" . $postId . "_image" . $basenameIndex . "." . $pathinfo['extension'];
     }
 
     $imginfo_array = getimagesize($file);
@@ -155,7 +138,7 @@ function doFileCheck($file, $postId, $isEdit, $index = null)
         }
 
         if (move_uploaded_file($file, $uploadfile)) {
-            if (!Post::updateImage($uploadfile, $basename, $postId, $isEdit, $index)) {
+            if (!Post::updateImage($uploadfile, $basename, $postId, $basenameIndex)) {
                 setFeedbackAndRedirect("Post created, but there was an Error uploading image(s)", "error");
             }
         } else {
@@ -166,14 +149,26 @@ function doFileCheck($file, $postId, $isEdit, $index = null)
 
 function deleteImage($postId, $imagePath)
 {
-    // $imagePath = './assets/images/' . $filename;
-    
     if (file_exists($imagePath)) {
         unlink($imagePath);
-        Post::removeImage($postId, $imagePath); 
+        Post::removeImage($postId, $imagePath);
         return true;
     } else {
         return false;
     }
 }
 
+function validateFormData($title, $content, $tags)
+{
+    $errors = [];
+    if (empty($title)) {
+        $errors[] = "Title is required";
+    }
+    if (empty($content)) {
+        $errors[] = "Content is required";
+    }
+    if (empty($tags)) {
+        $errors[] = "At least one tag is required";
+    }
+    return $errors;
+}
