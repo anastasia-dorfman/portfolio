@@ -30,16 +30,17 @@
         if (!isset($_SESSION['USERNAME'])) {
         ?>
           <div class="header__search">
-            <a href="./login.php" class="header__link">
-              <img src="assets/svg/login.svg" alt="Login" class="header__search-icon" />
+            <a href="./login.php" class="header__link" title="Login">
+              <img src="assets/svg/login.svg" alt="Login" class="header__search-icon" /> <title></title>
             </a>
           </div>
         <?php
         } else {
         ?>
           <div class="header__search">
-            <a href="./logout_proc.php" class="header__link">
+            <a href="./logout_proc.php" class="header__link" title="Logout">
               <img src="assets/svg/logout.svg" alt="Logout" class="header__search-icon" />
+              <span class="hint">Logout</span>
             </a>
           </div>
         <?php
@@ -47,7 +48,7 @@
         ?>
 
         <div class="header__search">
-          <form action="search.php" method="POST" class="header__search-box" role="search">
+          <form action="search.php" method="POST" role="search">
             <input type="search" name="q" placeholder="Search..." class="header__search-input" />
             <button type="submit" class="header__search-button" aria-label="Search">
               <img src="assets/svg/search.svg" alt="Search" class="header__search-icon" />

@@ -71,6 +71,7 @@ $tags = $post->getTags();
             </div>
             <div class="post__content-main">
                 <p class="project-details__desc-para"><?php echo $post->getContent() ?></p>
+                <br>
                 <div class="project-details__tools-used">
                     <h3 class="project-details__content-title">Tags</h3>
                     <div class="skills">

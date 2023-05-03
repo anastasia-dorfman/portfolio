@@ -6,7 +6,7 @@ include_once "includes/functions.php";
 $postId = $_GET['post_id'] ?? -1;
 
 if (!(isset($_SESSION["USERNAME"]))) {
-    $_SESSION["REFERER"] = "delete_post.php?post_id=$postId";
+    $_SESSION["REFERER"] = "delete_post_proc.php?post_id=$postId";
     header("Location: login.php");
     exit;
 }
@@ -22,5 +22,5 @@ try {
 
     setFeedbackAndRedirect("Post was deleted", "success", "blog.php");
 } catch (Exception $ex) {
-    setFeedbackAndRedirect($ex->getMessage(), "error", "delete_post.php?post_id=$postId");
+    setFeedbackAndRedirect($ex->getMessage(), "error", "post.php?post_id=$postId");
 }

@@ -1074,8 +1074,8 @@ textarea {
   background-color: #f8f8f8;
   width: 200px;
   outline: none;
-  transition: width 0.3s ease-in-out;
-  font-size: inherit;
+  transition: width 0.5s ease-in-out;
+  font-size: 1.7rem;
 }
 
 .header__search-input:focus {

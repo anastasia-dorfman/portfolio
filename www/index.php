@@ -126,7 +126,7 @@ session_start();
         </span>
       </h2>
       <div class="contact__form-container">
-        <form action="#" class="contact__form">
+        <form action="send_message_proc.php" class="contact__form" method="POST">
           <div class="contact__form-field">
             <label class="contact__form-label" for="name">Name</label>
             <input required placeholder="Enter Your Name" type="text" class="contact__form-input" name="name" id="name" />

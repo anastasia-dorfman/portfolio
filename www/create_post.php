@@ -121,7 +121,7 @@ if ($postId != -1) {
                         <?php
                         if ($postId == -1 || $post == null || $post->getAvatar() == null) {
                         ?>
-                            <input type="file" class="contact__form-input" name="avatar" id="avatar" />
+                            <input required type="file" class="contact__form-input" name="avatar" id="avatar" />
                         <?php
                         }
                         ?>

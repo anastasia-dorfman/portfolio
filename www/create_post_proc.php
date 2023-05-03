@@ -3,11 +3,11 @@ session_start();
 
 include_once "includes/functions.php";
 
-$_SESSION["REFERER"] = "create_post.php";
+$postId = $_GET['post_id'] ?? -1;
+$_SESSION["REFERER"] = "create_post.php" . ($postId !== -1 ? "?post_id=$postId" : "");
+$referer = $_SESSION["REFERER"];
 
 if (!(isset($_SESSION["USERNAME"]))) {
-    $postId = $_GET['post_id'] ?? -1;
-    $_SESSION["REFERER"] = "create_post.php" . ($postId !== -1 ? "?post_id=$postId" : "");
     header("Location: login.php");
     exit;
 }
@@ -30,11 +30,16 @@ try {
         $title = $_POST['title'];
         $content = $_POST['content'];
         $tags = explode(',', $_POST['tags']);
+        // $avatar = $_POST['avatar'];
 
-        $errors = validateFormData($title, $content, $tags);
+        $post = $postId == -1 ? null : Post::getPostById($postId);
+
+        // $avatar = $post != null ? $post->getAvatar() : $_POST['avatar'];
+        
+        $errors = validateFormData($title, $content);
 
         if (!empty($errors)) {
-            setFeedbackAndRedirect(implode("\n", $errors), "error", "create_post.php");
+            setFeedbackAndRedirect(implode("\n", $errors), "error", $referer);
             return;
         }
 
@@ -56,7 +61,7 @@ try {
         setFeedbackAndRedirect("Post saved successfully", "success", "post.php?post_id=" . $post->getPostId());
     }
 } catch (Exception $ex) {
-    setFeedbackAndRedirect($ex->getMessage(), "error", "create_post.php");
+    setFeedbackAndRedirect($ex->getMessage(), "error", $referer);
 }
 
 function uploadFile($postId, $fileType, $prefix, $lastSavedImageIndex = null,  $fileFieldName = null)
@@ -122,7 +127,7 @@ function deleteImage($postId, $imagePath)
     }
 }
 
-function validateFormData($title, $content, $tags)
+function validateFormData($title, $content)
 {
     $errors = [];
     if (empty($title)) {
@@ -134,5 +139,8 @@ function validateFormData($title, $content, $tags)
     if (empty($_POST['tags'])) {
         $errors[] = "At least one tag is required";
     }
+    // if (empty($avatar)) {
+    //     $errors[] = "Avatar is required";
+    // }
     return $errors;
 }

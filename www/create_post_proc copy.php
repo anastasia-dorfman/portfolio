@@ -17,10 +17,8 @@ include_once "includes/Post.php";
 
 try {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['removeImage'])) {
-        // $postId = $_POST['postId'];
-        // $link = $_POST['link'];
-        $postId = filter_input(INPUT_POST, 'postId', FILTER_SANITIZE_NUMBER_INT);
-        $link = filter_input(INPUT_POST, 'link', FILTER_SANITIZE_URL);
+        $postId = $_POST['postId'];
+        $link = $_POST['link'];
         deleteImage($postId, $link);
         header("Location:create_post.php?post_id=$postId");
         exit;
@@ -28,14 +26,10 @@ try {
 
     if (isset($_POST['createEditPost'])) {
         $userId = $_SESSION["USER_ID"];
-        // $isEdit = $_POST['isEdit'];
-        // $postId = $_POST['postId'];
-        // $title = $_POST['title'];
-        // $content = $_POST['content'];
-        $isEdit = filter_input(INPUT_POST, 'isEdit', FILTER_SANITIZE_NUMBER_INT);
-        $postId = filter_input(INPUT_POST, 'postId', FILTER_SANITIZE_NUMBER_INT);
-        $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING);
-        $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_STRING);
+        $isEdit = $_POST['isEdit'];
+        $postId = $_POST['postId'];
+        $title = $_POST['title'];
+        $content = $_POST['content'];
         $avatar = $_FILES['avatar']['tmp_name'];
         $tags = explode(',', $_POST['tags']);
 
