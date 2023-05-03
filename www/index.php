@@ -111,7 +111,7 @@ session_start();
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic facilis tempora, explicabo quae quod deserunt eius
               sapiente praesentium.
             </p>
-            <a href="./project.php?id=<?php //TODO project id?>" class="btn btn--med btn--theme dynamicBgClr" target="_blank">Case Study</a>
+            <a href="./project.php?project_id=<?php //TODO project id?>" class="btn btn--med btn--theme dynamicBgClr">Case Study</a>
           </div>
         </div>
       </div>

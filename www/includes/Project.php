@@ -10,7 +10,7 @@ class Project
     private $name;
     private $description;
     private $overview;
-    private $created_at;
+    private $dateCreated;
     private $codeLink;
     private $tags = [];
     private $images = [];
@@ -20,7 +20,7 @@ class Project
         string $name,
         string $description,
         string $overview,
-        $created_at,
+        $dateCreated,
         string $codeLink,
         array $tags = null,
         array $images = null,
@@ -29,7 +29,7 @@ class Project
         $this->name = $name;
         $this->description = $description;
         $this->overview = $overview;
-        $this->created_at = $created_at;
+        $this->dateCreated = $dateCreated;
         $this->codeLink = $codeLink;
         $this->tags = $tags;
         $this->images = $images;
@@ -63,6 +63,15 @@ class Project
     public function setOverview(int $overview): void
     {
         $this->overview = $overview;
+    }
+
+    public function getDateCreated()
+    {
+        return $this->dateCreated;
+    }
+    public function setDateCreated($dateCreated)
+    {
+        $this->dateCreated = $dateCreated;
     }
 
     public function getCodeLink(): string
@@ -131,9 +140,9 @@ class Project
             foreach ($projects as $p) {
                 $projectId = $p->getProjectId();
                 $tags = [];
-                $tags = self::getTagsByProjectId($postId);
+                $tags = self::getTagsByProjectId($projectId);
                 $images = [];
-                $images = self::getImagesByProjectId($postId);
+                $images = self::getImagesByProjectId($projectId);
                 $p->setTags($tags);
                 $p->setImages($images);
             }
@@ -144,31 +153,30 @@ class Project
         }
     }
 
-    public static function getPostById(int $postId)
+    public static function getProjectById(int $projectId)
     {
         try {
-            $tags = self::getTagsByPostId($postId);
-            $images = self::getImagesByPostId($postId);
-            $avatar = self::getAvatarByPostId($postId);
+            $tags = self::getTagsByProjectId($projectId);
+            $images = self::getImagesByProjectId($projectId);
 
             $con = $GLOBALS['con'];
-            $sql = "SELECT title, content, created_at, blog_id, user_id FROM posts WHERE post_id = ?";
+            $sql = "SELECT name, description, overview, code_link, created_at FROM projects WHERE id = ?";
             $stmt = $con->prepare($sql);
-            $stmt->bind_param('i', $postId);
+            $stmt->bind_param('i', $projectId);
             $stmt->execute();
             $result = $stmt->get_result();
 
             if ($result->num_rows > 0) {
                 $row = $result->fetch_assoc();
-                return new Post(
-                    $row['user_id'],
-                    $row['title'],
-                    $row['content'],
-                    $row['blog_id'],
+                return new Project(
+                    $row['name'],
+                    $row['description'],
+                    $row['overview'],
+                    $row['created_at'],
+                    $row['code_link'],
                     $tags,
-                    $postId,
                     $images,
-                    $avatar
+                    $projectId
                 );
             } else {
                 return null;
@@ -333,13 +341,13 @@ class Project
         }
     }
 
-    public static function getLastImageIndex($postId)
+    public static function getLastImageIndex($projectId)
     {
         try {
             $imageIndex = 0;
             $con = $GLOBALS['con'];
 
-            $sql = "SELECT name FROM images WHERE post_id = $postId AND type = 'image' ORDER BY name DESC LIMIT 1";
+            $sql = "SELECT name FROM images WHERE project_id = $projectId ORDER BY name DESC LIMIT 1";
             $result = $con->query($sql);
             $numImages = $result->num_rows;
 
@@ -355,6 +363,46 @@ class Project
             $result->close();
 
             return $imageIndex;
+        } catch (Exception $ex) {
+            setFeedbackAndRedirect($ex->getMessage(), "error");
+        }
+    }
+
+    public static function getFirstImageIndex($projectId)
+    {
+        try {
+            $imageIndex = 0;
+            $name = self::getFirstImage($projectId);
+
+            if ($name !== null) {
+                $pattern = "/image(\d+)$/i";
+                preg_match($pattern, $name, $matches);
+                $imageIndex = $matches[1];
+            }
+
+            return $imageIndex;
+        } catch (Exception $ex) {
+            setFeedbackAndRedirect($ex->getMessage(), "error");
+        }
+    }
+
+    public static function getFirstImage($projectId)
+    {
+        try {
+            $con = $GLOBALS['con'];
+            $sql = "SELECT link FROM images WHERE project_id = $projectId ORDER BY name ASC LIMIT 1";
+            $result = $con->query($sql);
+            $numImages = $result->num_rows;
+            $name = '';
+
+            if ($numImages > 0) {
+                $row = $result->fetch_assoc();
+                $name = $row['link'];
+            }
+
+            $result->close();
+
+            return $name;
         } catch (Exception $ex) {
             setFeedbackAndRedirect($ex->getMessage(), "error");
         }
