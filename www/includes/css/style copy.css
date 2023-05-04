@@ -644,12 +644,19 @@ textarea {
 }
 
 .project-details__showcase-img-cont {
+  /* width: 100%;
+  margin-bottom: 6rem; */
+  position: relative;
   width: 100%;
-  margin-bottom: 6rem;
+  /* max-width: 600px; */
+  margin: 0 auto;
 }
 
 .project-details__showcase-img {
+  /* width: 100%; */
+  display: block;
   width: 100%;
+  height: auto;
 }
 
 .project-details__content-main {
@@ -1388,4 +1395,13 @@ textarea {
 
 .mt-auto {
   margin-top: auto;
+}
+
+.project-details__showcase-img--overlay {
+  position: absolute;
+  top: 60px;
+  left: 20rem; 
+  /* z-index: 200;  */
+  width: 62%;
+  height: auto;
 }

@@ -60,7 +60,6 @@ $avatar = $project->getFirstImage($projectId);
     <div class="main-container">
       <div class="project-details__content">
         <div class="project-details__showcase-img-cont">
-          <img src="./assets/images/project-mockup-example.jpeg" alt="Project Image" class="project-details__showcase-img" />
           <img src="<?php echo $avatar ?>" alt="Project Image" class="project-details__showcase-img" />
         </div>
         <div class="project-details__content-main">
@@ -68,21 +67,31 @@ $avatar = $project->getFirstImage($projectId);
             <h3 class="project-details__content-title">Project Overview</h3>
             <p class="project-details__desc-para"><?php echo $overview ?></p>
           </div>
-          <div class="project-details__tools-used">
-            <h3 class="project-details__content-title">Tools Used</h3>
-            <div class="skills">
-              <?php foreach ($tags as $t) { ?>
-                <div class="skills__skill"><?php echo $t ?></div>
-              <?php } ?>
-            </div>
-          </div>
-          <div class="project-details__links">
-            <!-- <h3 class="project-details__content-title">See Live</h3> -->
-            <!-- <a href="#" class="btn btn--med btn--theme project-details__links-btn" target="_blank">Live Link</a> -->
-            <a href="<?php echo $codeLink ?>" class="btn btn--med btn--theme-inv project-details__links-btn" target="_blank">Code Link</a>
+          <div class="post__row">
+            <?php foreach ($images as $i) {
+              if ($i != $avatar) {
+            ?>
+                <img src="<?php echo $i ?>" alt="Project Image" class="project-details__showcase-img post__img" />
+            <?php
+              }
+            } ?>
           </div>
         </div>
+        <div class="project-details__tools-used">
+          <h3 class="project-details__content-title">Tools Used</h3>
+          <div class="skills">
+            <?php foreach ($tags as $t) { ?>
+              <div class="skills__skill"><?php echo $t ?></div>
+            <?php } ?>
+          </div>
+        </div>
+        <div class="project-details__links">
+          <!-- <h3 class="project-details__content-title">See Live</h3> -->
+          <!-- <a href="#" class="btn btn--med btn--theme project-details__links-btn" target="_blank">Live Link</a> -->
+          <a href="<?php echo $codeLink ?>" class="btn btn--med btn--theme-inv project-details__links-btn" target="_blank">Code Link</a>
+        </div>
       </div>
+    </div>
     </div>
   </section>
   <?php include "includes/footer.php"; ?>

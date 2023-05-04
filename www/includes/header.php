@@ -40,7 +40,6 @@
           <div class="header__search">
             <a href="./logout_proc.php" class="header__link" title="Logout">
               <img src="assets/svg/logout.svg" alt="Logout" class="header__search-icon" />
-              <span class="hint">Logout</span>
             </a>
           </div>
         <?php
