@@ -76,22 +76,21 @@ $avatar = $project->getFirstImage($projectId);
               }
             } ?>
           </div>
-        </div>
-        <div class="project-details__tools-used">
-          <h3 class="project-details__content-title">Tools Used</h3>
-          <div class="skills">
-            <?php foreach ($tags as $t) { ?>
-              <div class="skills__skill"><?php echo $t ?></div>
-            <?php } ?>
+          <div class="project-details__tools-used">
+            <h3 class="project-details__content-title">Tools Used</h3>
+            <div class="skills">
+              <?php foreach ($tags as $t) { ?>
+                <div class="skills__skill"><?php echo $t ?></div>
+              <?php } ?>
+            </div>
+          </div>
+          <div class="project-details__links">
+            <!-- <h3 class="project-details__content-title">See Live</h3> -->
+            <!-- <a href="#" class="btn btn--med btn--theme project-details__links-btn" target="_blank">Live Link</a> -->
+            <a href="<?php echo $codeLink ?>" class="btn btn--med btn--theme-inv project-details__links-btn" target="_blank">Code Link</a>
           </div>
         </div>
-        <div class="project-details__links">
-          <!-- <h3 class="project-details__content-title">See Live</h3> -->
-          <!-- <a href="#" class="btn btn--med btn--theme project-details__links-btn" target="_blank">Live Link</a> -->
-          <a href="<?php echo $codeLink ?>" class="btn btn--med btn--theme-inv project-details__links-btn" target="_blank">Code Link</a>
-        </div>
       </div>
-    </div>
     </div>
   </section>
   <?php include "includes/footer.php"; ?>

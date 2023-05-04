@@ -1,5 +1,14 @@
 <?php
 session_start();
+
+include_once "includes/functions.php";
+include_once "includes/Project.php";
+include_once "includes/Post.php";
+
+$_SESSION["REFERER"] = "index.php";
+
+$projects = Project::getProjects();
+
 ?>
 
 <!DOCTYPE html>
@@ -25,7 +34,6 @@ session_start();
 <body>
   <?php
   include "includes/header.php";
-  include "includes/functions.php";
 
   $_SESSION["REFERER"] = "index.php";
 
@@ -72,7 +80,7 @@ session_start();
           <h3 class="about__content-title">Get to know me!</h3>
           <div class="about__content-details">
             <p class="about__content-details-para">
-              Hey! I'm <strong>Anastasia Dorfman</strong> , a senior IT student with a passion for <strong> web development </strong>. I am 
+              Hey! I'm <strong>Anastasia Dorfman</strong> , a senior IT student with a passion for <strong> web development </strong>. I am
               located in Moncton, NB, Canada, but open to relocation for the right opportunity.
               I always seek to expand my knowledge and stay up-to-date with industry trends and best practices.
             </p>
@@ -85,9 +93,7 @@ session_start();
         </div>
         <div class="about__content-skills">
           <h3 class="about__content-title">My Skills</h3>
-          <?php
-          getSkills();
-          ?>
+          <?php getSkills(); ?>
         </div>
       </div>
     </div>
@@ -100,21 +106,21 @@ session_start();
           Check out some of my latest projects and see how I can turn your web development ideas into reality
         </span>
       </h2>
-      <div class="post__content">
-        <div class="projects__row">
-          <div class="projects__row-img-cont">
-            <img src="./assets/images/project-mockup-example.jpeg" alt="Software Screenshot" class="projects__row-img" loading="lazy" />
-          </div>
-          <div class="projects__row-content">
-            <h3 class="projects__row-content-title">Project 1</h3>
-            <p class="projects__row-content-desc">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic facilis tempora, explicabo quae quod deserunt eius
-              sapiente praesentium.
-            </p>
-            <a href="./project.php?project_id=<?php //TODO project id?>" class="btn btn--med btn--theme dynamicBgClr">Case Study</a>
+      <?php foreach ($projects as $p) { 
+        $projectId = $p->getProjectId(); ?>
+        <div class="projects__content">
+          <div class="projects__row">
+            <div class="projects__row-img-cont">
+              <img src="<?php echo $p->getFirstImage($projectId) ?>" alt="Software Screenshot" class="projects__row-img" loading="lazy" />
+            </div>
+            <div class="projects__row-content">
+              <h3 class="projects__row-content-title"><?php echo $p->getName() ?></h3>
+              <p class="projects__row-content-desc"><?php echo $p->getDescription() ?></p>
+              <a href="./project.php?project_id=<?php echo $projectId ?>" class="btn btn--med btn--theme dynamicBgClr">Case Study</a>
+            </div>
           </div>
         </div>
-      </div>
+      <?php } ?>
     </div>
   </section>
   <section id="contact" class="contact sec-pad dynamicBg">

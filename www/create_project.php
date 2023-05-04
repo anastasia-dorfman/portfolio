@@ -3,43 +3,43 @@
 session_start();
 
 include_once "includes/functions.php";
-include_once "includes/Post.php";
+include_once "includes/Project.php";
 
-$postId = -1;
+$projectId = -1;
 
-if (isset($_GET['post_id']) && !empty($_GET['post_id']))
-    $postId = $_GET['post_id'];
+if (isset($_GET['project_id']) && !empty($_GET['project_id']))
+    $projectId = $_GET['project_id'];
 
-$_SESSION["REFERER"] = $postId === -1 ? "create_post.php" : "create_post.php?post_id=$postId";
+$_SESSION["REFERER"] = $projectId === -1 ? "create_project.php" : "create_project.php?project_id=$projectId";
 
 if (!(isset($_SESSION["USERNAME"]))) {
     header("Location: login.php");
     exit;
 }
 
-// Initialize variables for the post form
-$title = '';
-$content = '';
+$name = '';
+$description = '';
+$overview = '';
 $tags = '';
 $avatar = '';
 $imageUrls = '';
 $editing = false;
 $imagesCount = 0;
 
-// Check if we're editing an existing post
-if ($postId != -1) {
-    $post = Post::getPostById($postId);
-    if ($post) {
-        $title = $post->getTitle();
-        $content = $post->getContent();
-        $tags = implode(', ', $post->getTags());
-        $avatar = $post->getAvatar();
-        $images = $post->getImages();
+if ($projectId != -1) {
+    $project = Project::getProjectById($projectId);
+    if ($project) {
+        $name = $project->getName();
+        $description = $project->getDescription();
+        $overview = $project->getOverview();
+        $tags = implode(', ', $project->getTags());
+        $avatar = $project->getFirstImage($projectId);
+        $images = $project->getImages();
         $imagesCount = $images == null ? 0 : count($images);
-        $imageUrls = implode(', ', $post->getImages());
+        $imageUrls = implode(', ', $project->getImages());
         $editing = true;
     } else {
-        setFeedbackAndRedirect("Invalid post ID", "error", "blog.php");
+        setFeedbackAndRedirect("Invalid project ID", "error", "index#projects.php");
     }
 }
 ?>
@@ -51,7 +51,7 @@ if ($postId != -1) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title><?php echo $editing ? 'Edit Post' : 'Create Post' ?></title>
+    <title><?php echo $editing ? 'Edit Project' : 'Create Project' ?></title>
     <link rel="stylesheet" href="includes/css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -73,13 +73,13 @@ if ($postId != -1) {
     <div id="contact" class="contact sec-pad dynamicBg">
         <div class="main-container">
             <h2>
-                <span class="heading-sec__main heading-sec__main--lt"><?php echo $editing ? 'Edit Post' : 'Create Post'; ?></span>
+                <span class="heading-sec__main heading-sec__main--lt"><?php echo $editing ? 'Edit Project' : 'Create Project'; ?></span>
             </h2>
             <div class="post__form-container">
                 <form action="create_post_proc.php" method="POST" id="remove_image"></form>
                 <form action="create_post_proc.php" method="POST" id="remove_avatar"></form>
                 <form action="create_post_proc.php" method="POST" class="contact__form" enctype="multipart/form-data">
-                    <input type="hidden" name="postId" value="<?php echo $postId ?>">
+                    <input type="hidden" name="projectId" value="<?php echo $projectId ?>">
                     <input type="hidden" name="isEdit" value="<?php echo $editing ?>">
                     <!-- <input type="hidden" name="upload"> -->
                     <input type="hidden" name="MAX_FILE_SIZE" value="2000000">
@@ -98,13 +98,13 @@ if ($postId != -1) {
                     <div class="contact__form-field">
                         <label class="contact__form-label" for="avatar">Avatar</label>
                         <?php
-                        if ($postId != -1 && $post != null && $post->getAvatar() != null) {
+                        if ($projectId != -1 && $project != null && $project->getAvatar() != null) {
                         ?>
                             <div class="contact__form-input">
-                                <img src="<?php echo $post->getAvatar() ?>" alt="Avatar" class="post__avatar" />
+                                <img src="<?php echo $project->getAvatar() ?>" alt="Avatar" class="post__avatar" />
                                 <!-- <form action="create_post_proc.php" method="POST"> -->
-                                <input type="hidden" name="postId" value="<?php echo $postId ?>" form="remove_avatar">
-                                <input type="hidden" name="link" value="<?php echo $post->getAvatar() ?>" form="remove_avatar">
+                                <input type="hidden" name="projectId" value="<?php echo $projectId ?>" form="remove_avatar">
+                                <input type="hidden" name="link" value="<?php echo $project->getAvatar() ?>" form="remove_avatar">
                                 <button type="submit" class="btn btn--med" class="header__link" name="removeImage" form="remove_avatar">Remove/Update</button>
                                 <!-- </form> -->
                             </div>
@@ -112,7 +112,7 @@ if ($postId != -1) {
                         }
                         ?>
                         <?php
-                        if ($postId == -1 || $post == null || $post->getAvatar() == null) {
+                        if ($projectId == -1 || $project == null || $project->getAvatar() == null) {
                         ?>
                             <input required type="file" class="contact__form-input" name="avatar" id="avatar" />
                         <?php
@@ -120,7 +120,7 @@ if ($postId != -1) {
                         ?>
                     </div>
                     <div class="contact__form-field">
-                        <?php if ($postId != -1 && $imageUrls != '') { ?>
+                        <?php if ($projectId != -1 && $imageUrls != '') { ?>
                             <label class="contact__form-label" for="image">Images</label>
                             <div class="image-grid">
                                 <?php for ($i = 1; $i <= $imagesCount; $i++) { ?>
@@ -128,7 +128,7 @@ if ($postId != -1) {
                                         <img src="<?php echo $images[$i - 1] ?>" alt="Image <?php echo $i ?>" />
                                         <div class="mt-auto">
                                             <!-- <form action="remove_image.php" method="POST"> -->
-                                            <input type="hidden" name="postId" value="<?php echo $postId ?>" form="remove_image">
+                                            <input type="hidden" name="projectId" value="<?php echo $projectId ?>" form="remove_image">
                                             <input type="hidden" name="link" value="<?php echo $images[$i - 1] ?>" form="remove_image">
                                             <button type="submit" class="btn btn--med" name="removeImage" form="remove_image">Remove</button>
                                             <!-- </form> -->
@@ -139,7 +139,7 @@ if ($postId != -1) {
                         <?php } ?>
                     </div>
                     <div class="contact__form-field">
-                        <?php if ($postId == -1 || $imageUrls == '') { ?>
+                        <?php if ($projectId == -1 || $imageUrls == '') { ?>
                             <label class="contact__form-label" for="image">Image <?php echo ($imagesCount + 1) ?> </label>
                             <input type="file" class="contact__form-input" name="image[]" id="image" accept="image/*" />
                         <?php } ?>

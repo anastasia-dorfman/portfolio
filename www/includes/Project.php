@@ -123,11 +123,10 @@ class Project
             $projectId = -1;
 
             $con = $GLOBALS['con'];
-            $sql = "SELECT project_id, name, description, overview, code_link, created_at FROM projects";
+            $sql = "SELECT id, name, description, overview, code_link, created_at FROM projects";
             $stmt = $con->prepare($sql);
-            $stmt->bind_param('i', $projectId);
             $stmt->execute();
-            $stmt->bind_result($name, $description, $overview, $codeLink, $dateCreated);
+            $stmt->bind_result($projectId, $name, $description, $overview, $codeLink, $dateCreated);
 
             $projects = [];
 

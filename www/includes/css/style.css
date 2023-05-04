@@ -395,6 +395,11 @@ textarea {
   margin-bottom: 4rem;
 }
 
+.projects__content {
+  width: 80%;
+  margin: auto;
+}
+
 .projects__row {
   display: grid;
   grid-template-columns: 1.5fr 1fr;
