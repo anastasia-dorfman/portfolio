@@ -12,6 +12,7 @@ class Project
     private $overview;
     private $dateCreated;
     private $codeLink;
+    private $avatar;
     private $tags = [];
     private $images = [];
     private $projectId;
@@ -22,6 +23,7 @@ class Project
         string $overview,
         $dateCreated,
         string $codeLink,
+        string $avatar,
         array $tags = null,
         array $images = null,
         int $projectId = null
@@ -31,6 +33,7 @@ class Project
         $this->overview = $overview;
         $this->dateCreated = $dateCreated;
         $this->codeLink = $codeLink;
+        $this->avatar = $avatar;
         $this->tags = $tags;
         $this->images = $images;
         $this->projectId = $projectId;
@@ -82,7 +85,16 @@ class Project
     {
         $this->codeLink = $codeLink;
     }
-    
+
+    public function getAvatar(): string
+    {
+        return $this->avatar;
+    }
+    public function setAvatar(int $avatar): void
+    {
+        $this->avatar = $avatar;
+    }
+
     public function getProjectId(): int
     {
         return $this->projectId;
@@ -131,13 +143,15 @@ class Project
             $projects = [];
 
             while ($stmt->fetch()) {
-                array_push($projects, new Project($name, $description, $overview, $dateCreated, $codeLink, [], [], $projectId));
+                array_push($projects, new Project($name, $description, $overview, $dateCreated, $codeLink, '', [], [], $projectId));
             }
 
             $stmt->close();
 
             foreach ($projects as $p) {
                 $projectId = $p->getProjectId();
+                $avatar = '';
+                $avatar = self::getAvatarByProjectId($projectId);
                 $tags = [];
                 $tags = self::getTagsByProjectId($projectId);
                 $images = [];
@@ -156,6 +170,7 @@ class Project
     {
         try {
             $tags = self::getTagsByProjectId($projectId);
+            $avatar = self::getAvatarByProjectId($projectId);
             $images = self::getImagesByProjectId($projectId);
 
             $con = $GLOBALS['con'];
@@ -173,6 +188,7 @@ class Project
                     $row['overview'],
                     $row['created_at'],
                     $row['code_link'],
+                    $avatar,
                     $tags,
                     $images,
                     $projectId
@@ -186,45 +202,45 @@ class Project
             setFeedbackAndRedirect($ex->getMessage(), "error");
         }
     }
-    public static function createPost($userId, $title, $content, $blogId): int
+    public static function createProject($name, $description, $overview, $codeLink, $dateCreated): int
     {
         try {
-            $postId = -1;
+            $projectId = -1;
             $con = $GLOBALS['con'];
-            $sql = "INSERT INTO posts (user_id, title, content, blog_id) VALUES (?,?,?,?)";
+            $sql = "INSERT INTO projects (name, description, overview, code_link, date_created) VALUES (?,?,?,?,?)";
             $stmt = $con->prepare($sql);
 
             if ($stmt) {
-                $stmt->bind_param('issi', $userId, $title, $content, $blogId);
+                $stmt->bind_param('sssss', $name, $description, $overview, $codeLink, $dateCreated);
                 $stmt->execute();
-                $postId = $stmt->insert_id;
+                $projectId = $stmt->insert_id;
                 $stmt->close();
             } else {
                 setFeedbackAndRedirect("An error occured", "error");
             }
 
-            return $postId;
+            return $projectId;
         } catch (Exception $ex) {
             setFeedbackAndRedirect($ex->getMessage(), "error");
         }
     }
 
-    public static function updatePost($postId, $userId, $title, $content, $blogId)
+    public static function updateProject($projectId, $name, $description, $overview, $codeLink, $dateCreated = null)
     {
         try {
             $con = $GLOBALS['con'];
-            $sql = "UPDATE posts SET user_id = ?, title = ?, content = ?, blog_id = ? WHERE post_id = ?";
+            $sql = "UPDATE projects SET name = ?, description = ?, overview = ?, code_link = ?, date_created = ? WHERE project_id = ?";
             $stmt = $con->prepare($sql);
 
             if ($stmt) {
-                $stmt->bind_param('issii', $userId, $title, $content, $blogId, $postId);
+                $stmt->bind_param('sssss', $name, $description, $overview, $codeLink, $dateCreated);
                 $stmt->execute();
                 $stmt->close();
             } else {
                 setFeedbackAndRedirect("An error occured", "error");
             }
 
-            return $postId;
+            return $projectId;
         } catch (Exception $ex) {
             setFeedbackAndRedirect($ex->getMessage(), "error");
         }
@@ -248,8 +264,8 @@ class Project
                 array_push($images, $post->getImages);
 
             foreach ($images as $i) {
-                    unlink($i);
-                }
+                unlink($i);
+            }
 
             $sql3 = "DELETE FROM posts WHERE post_id = $postId";
             $con->query($sql3);
@@ -260,12 +276,12 @@ class Project
         }
     }
 
-    public static function removeImage($postId, $imageLink)
+    public static function removeImage($projectId, $imageLink)
     {
         try {
             $con = $GLOBALS['con'];
 
-            $sql = "DELETE FROM images WHERE link = '$imageLink' AND post_id = $postId";
+            $sql = "DELETE FROM images WHERE link = '$imageLink' AND project_id = $projectId";
             $con->query($sql);
 
             return true;
@@ -274,15 +290,15 @@ class Project
         }
     }
 
-    public static function updateImage($imageLink, $fileName, $postId, $index = null)
+    public static function updateImage($imageLink, $fileName, $projectId, $index = null)
     {
         try {
             $con = $GLOBALS['con'];
 
             if (is_null($index)) {
-                $sql = "INSERT INTO images (type, link, post_id, name) VALUES('avatar', '$imageLink', $postId, '$fileName')";
+                $sql = "INSERT INTO images (type, link, project_id, name) VALUES('avatar', '$imageLink', $projectId, '$fileName')";
             } else {
-                $sql = "INSERT INTO images (type, link, post_id, name) VALUES('image', '$imageLink', $postId, '$fileName')";
+                $sql = "INSERT INTO images (type, link, project_id, name) VALUES('image', '$imageLink', $projectId, '$fileName')";
             }
 
             $con->query($sql);
@@ -293,29 +309,27 @@ class Project
         }
     }
 
-    public static function updateTags($tags, $postId)
+    public static function updateTags($tags, $projectId)
     {
         try {
             $con = $GLOBALS['con'];
-
-            $dbTags = [];
-
-            $sql = "SELECT name FROM tags";
+            $sql = "SELECT name, type FROM skills";
             $result = $con->query($sql);
 
+            $dbTags = [];
             while ($row = $result->fetch_assoc()) {
                 array_push($dbTags, $row['name']);
             }
 
-            $sql2 = "DELETE FROM post_tags WHERE post_id = $postId";
+            $sql2 = "DELETE FROM project_skills WHERE prpject_id = $projectId";
             $con->query($sql2);
 
             foreach ($tags as $t) {
-                $sql3 = "INSERT INTO tags (name) VALUES ('$t')";
-                if (!in_array($t, $dbTags)) {
-                    $con->query($sql3);
-                }
-                $sql4 = "INSERT INTO post_tags (post_id, tag_name) VALUES ($postId, '$t')";
+                // $sql3 = "INSERT INTO tags (name) VALUES ('$t')";
+                // if (!in_array($t, $dbTags)) {
+                //     $con->query($sql3);
+                // }
+                $sql4 = "INSERT INTO project_skills (prpject_id, skill_name) VALUES ($projectId, '$t')";
                 $con->query($sql4);
             }
 
@@ -346,14 +360,13 @@ class Project
             $imageIndex = 0;
             $con = $GLOBALS['con'];
 
-            $sql = "SELECT name FROM images WHERE project_id = $projectId ORDER BY name DESC LIMIT 1";
+            $sql = "SELECT name FROM images WHERE project_id = $projectId AND type = 'image' ORDER BY name DESC LIMIT 1";
             $result = $con->query($sql);
             $numImages = $result->num_rows;
 
             if ($numImages > 0) {
                 $row = $result->fetch_assoc();
                 $name = $row['name'];
-                // $pattern = "/image(\d+)\./";
                 $pattern = "/image(\d+)$/i";
                 preg_match($pattern, $name, $matches);
                 $imageIndex = $matches[1];
@@ -385,11 +398,34 @@ class Project
         }
     }
 
+    public static function getAvatarByProjectId($projectId)
+    {
+        try {
+            $avatar = '';
+            $con = $GLOBALS['con'];
+
+            $sql = "SELECT link FROM images WHERE project_id = $projectId AND type = 'avatar'";
+            $result = $con->query($sql);
+            $numRows = $result->num_rows;
+
+            if ($numRows === 1) {
+                $row = $result->fetch_assoc();
+                $avatar = $row['link'];
+            }
+
+            $result->close();
+
+            return $avatar;
+        } catch (Exception $ex) {
+            setFeedbackAndRedirect($ex->getMessage(), "error");
+        }
+    }
+
     public static function getFirstImage($projectId)
     {
         try {
             $con = $GLOBALS['con'];
-            $sql = "SELECT link FROM images WHERE project_id = $projectId ORDER BY name ASC LIMIT 1";
+            $sql = "SELECT link FROM images WHERE project_id = $projectId AND type = 'image' ORDER BY name ASC LIMIT 1";
             $result = $con->query($sql);
             $numImages = $result->num_rows;
             $name = '';
@@ -419,6 +455,24 @@ class Project
         }
     }
 
+    public static function getAllTools()
+    {
+        try {
+            $con = $GLOBALS['con'];
+            $sql = "SELECT * FROM skills";
+            $result = $con->query($sql);
+            $tools = [];
+
+            while ($row = $result->fetch_assoc())
+                array_push($tools, $row['name']);
+
+            $result->close();
+
+            return $tools;
+        } catch (Exception $ex) {
+            setFeedbackAndRedirect($ex->getMessage(), "error");
+        }
+    }
 
     #region Private Methods
     private static function getTagsByProjectId($projectId): array

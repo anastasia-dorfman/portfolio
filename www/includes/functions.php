@@ -6,11 +6,14 @@ function setFeedbackAndRedirect(string $message, string $icon, string $redirectT
 {
 	$_SESSION['STATUS'] = $message;
 	$_SESSION['STATUS_CODE'] = $icon;
+	$referer = isset($_SESSION["REFERER"]) ? $_SESSION["REFERER"] : '';
 
 	if ($redirectTo)
 		header("Location:$redirectTo");
-	// else
-	// 	header("Refresh:0");
+	else if ($referer != '')
+		header("Location:$referer");
+	else
+		header("Refresh: 0");
 }
 
 /**

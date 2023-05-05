@@ -17,12 +17,19 @@ if (!(isset($_SESSION["USERNAME"]))) {
     exit;
 }
 
+$tools = Project::getAllTools();
+
+date_default_timezone_set('America/Halifax');
+$currentTime = new DateTime();
+$currentTime->setTimestamp(time());
+
 $name = '';
 $description = '';
 $overview = '';
+$codeLink = '';
+$dateCreated = $currentTime;
 $tags = '';
 $avatar = '';
-$imageUrls = '';
 $editing = false;
 $imagesCount = 0;
 
@@ -32,11 +39,12 @@ if ($projectId != -1) {
         $name = $project->getName();
         $description = $project->getDescription();
         $overview = $project->getOverview();
-        $tags = implode(', ', $project->getTags());
-        $avatar = $project->getFirstImage($projectId);
+        $codeLink = $project->getCodeLink();
+        $dateCreated = $project->getDateCreated();
+        $tags = $project->getTags();
+        $avatar = $project->getAvatar();
         $images = $project->getImages();
         $imagesCount = $images == null ? 0 : count($images);
-        $imageUrls = implode(', ', $project->getImages());
         $editing = true;
     } else {
         setFeedbackAndRedirect("Invalid project ID", "error", "index#projects.php");
@@ -59,7 +67,7 @@ if ($projectId != -1) {
     <script src="includes/tinymce/js/tinymce/tinymce.min.js"></script>
     <script>
         tinymce.init({
-            selector: "#content",
+            selector: "#overview",
             height: 600,
             plugins: "advlist autolink lists link image charmap print preview anchor",
             toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
@@ -76,62 +84,70 @@ if ($projectId != -1) {
                 <span class="heading-sec__main heading-sec__main--lt"><?php echo $editing ? 'Edit Project' : 'Create Project'; ?></span>
             </h2>
             <div class="post__form-container">
-                <form action="create_post_proc.php" method="POST" id="remove_image"></form>
-                <form action="create_post_proc.php" method="POST" id="remove_avatar"></form>
-                <form action="create_post_proc.php" method="POST" class="contact__form" enctype="multipart/form-data">
+                <form action="create_project_proc.php" method="POST" id="remove_image"></form>
+                <form action="create_project_proc.php" method="POST" id="remove_avatar"></form>
+                <form action="create_project_proc.php" method="POST" class="contact__form" enctype="multipart/form-data">
                     <input type="hidden" name="projectId" value="<?php echo $projectId ?>">
                     <input type="hidden" name="isEdit" value="<?php echo $editing ?>">
-                    <!-- <input type="hidden" name="upload"> -->
                     <input type="hidden" name="MAX_FILE_SIZE" value="2000000">
                     <div class="contact__form-field">
-                        <label class="contact__form-label" for="title">Title</label>
-                        <input required type="text" class="contact__form-input" name="title" id="title" placeholder="Title" value="<?php echo $title ?>" />
+                        <label class="contact__form-label" for="name">Name</label>
+                        <input required type="text" class="contact__form-input" name="name" id="name" placeholder="Name" value="<?php echo $name ?>" />
                     </div>
                     <div class="contact__form-field">
-                        <label class="contact__form-label" for="content">Content</label>
-                        <textarea required cols="40" rows="30" class="contact__form-input tiny-mce" name="content" id="content" placeholder="Content"><?php echo $content ?></textarea>
+                        <label class="contact__form-label" for="description">Description</label>
+                        <input required type="text" class="contact__form-input" name="description" id="description" placeholder="Description" value="<?php echo $description ?>" />
                     </div>
                     <div class="contact__form-field">
-                        <label class="contact__form-label" for="tags">Tags</label>
+                        <label class="contact__form-label" for="overview">Overview</label>
+                        <textarea required cols="40" rows="30" class="contact__form-input tiny-mce" name="overview" id="overview" placeholder="Overview"><?php echo $overview ?></textarea>
+                    </div>
+                    <div class="contact__form-field">
+                        <label class="contact__form-label" for="code_link">Code Link</label>
+                        <input required type="text" class="contact__form-input" name="code_link" id="code_link" placeholder="Code Link" value="<?php echo $codeLink ?>" />
+                    </div>
+                    <div class="contact__form-field">
+                        <label class="contact__form-label" for="created_at">Date Created</label>
+                        <input required type="date" class="contact__form-input" name="created_at" id="created_at" max="<?php echo $currentTime->format('Y-m-d') ?>" value="<?php echo $dateCreated->format('Y-m-d') ?>" />
+                    </div>
+                    <!-- <div class="contact__form-field">
+                        <label class="contact__form-label" for="tags">Tools Used</label>
                         <input required type="text" class="contact__form-input" name="tags" id="tags" placeholder="Tags (comma-separated)" value="<?php echo $tags; ?>" />
-                    </div>
+                    </div> -->
+
                     <div class="contact__form-field">
-                        <label class="contact__form-label" for="avatar">Avatar</label>
-                        <?php
-                        if ($projectId != -1 && $project != null && $project->getAvatar() != null) {
-                        ?>
+                        <label class="contact__form-label">Tools Used</label>
+                        <div class="tools-container">
+                            <?php foreach ($tools as $t) { ?>
+                                <div class="tools-checkbox"><input type="checkbox" name="tags[]" class="tools-checkbox" value="<?php echo $t ?>"><?php echo $t ?></div>
+                            <?php } ?>
+                        </div>
+                    </div>
+
+                    <div class="contact__form-field">
+                        <label class="contact__form-label" for="avatar">Main image</label>
+                        <?php if ($projectId != -1 && $project != null && $avatar != null) { ?>
                             <div class="contact__form-input">
-                                <img src="<?php echo $project->getAvatar() ?>" alt="Avatar" class="post__avatar" />
-                                <!-- <form action="create_post_proc.php" method="POST"> -->
+                                <img src="<?php echo $avatar ?>" alt="Avatar" class="post__avatar" />
                                 <input type="hidden" name="projectId" value="<?php echo $projectId ?>" form="remove_avatar">
-                                <input type="hidden" name="link" value="<?php echo $project->getAvatar() ?>" form="remove_avatar">
+                                <input type="hidden" name="link" value="<?php echo $avatar ?>" form="remove_avatar">
                                 <button type="submit" class="btn btn--med" class="header__link" name="removeImage" form="remove_avatar">Remove/Update</button>
-                                <!-- </form> -->
                             </div>
-                        <?php
-                        }
-                        ?>
-                        <?php
-                        if ($projectId == -1 || $project == null || $project->getAvatar() == null) {
-                        ?>
+                        <?php } else { ?>
                             <input required type="file" class="contact__form-input" name="avatar" id="avatar" />
-                        <?php
-                        }
-                        ?>
+                        <?php } ?>
                     </div>
                     <div class="contact__form-field">
-                        <?php if ($projectId != -1 && $imageUrls != '') { ?>
+                        <?php if ($projectId != -1 && $images != null) { ?>
                             <label class="contact__form-label" for="image">Images</label>
                             <div class="image-grid">
                                 <?php for ($i = 1; $i <= $imagesCount; $i++) { ?>
                                     <div class="contact__form-input fixed-height">
                                         <img src="<?php echo $images[$i - 1] ?>" alt="Image <?php echo $i ?>" />
                                         <div class="mt-auto">
-                                            <!-- <form action="remove_image.php" method="POST"> -->
                                             <input type="hidden" name="projectId" value="<?php echo $projectId ?>" form="remove_image">
                                             <input type="hidden" name="link" value="<?php echo $images[$i - 1] ?>" form="remove_image">
                                             <button type="submit" class="btn btn--med" name="removeImage" form="remove_image">Remove</button>
-                                            <!-- </form> -->
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -139,7 +155,7 @@ if ($projectId != -1) {
                         <?php } ?>
                     </div>
                     <div class="contact__form-field">
-                        <?php if ($projectId == -1 || $imageUrls == '') { ?>
+                        <?php if ($projectId == -1 || $images != null) { ?>
                             <label class="contact__form-label" for="image">Image <?php echo ($imagesCount + 1) ?> </label>
                             <input type="file" class="contact__form-input" name="image[]" id="image" accept="image/*" />
                         <?php } ?>
@@ -148,7 +164,7 @@ if ($projectId != -1) {
                             <button type="button" class="btn btn--med" id="addImage">Add Image</button>
                         </div>
                     </div>
-                    <input type="submit" class="btn btn--theme contact__btn" name="createEditPost" value="<?php echo $editing ? 'Update Post' : 'Create Post'; ?>">
+                    <input type="submit" class="btn btn--theme contact__btn" name="createEditProject" value="<?php echo $editing ? 'Update Project' : 'Create Project'; ?>">
                 </form>
             </div>
         </div>

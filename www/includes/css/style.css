@@ -1394,3 +1394,24 @@ textarea {
 .mt-auto {
   margin-top: auto;
 }
+
+.tools-container {
+  columns: 5;
+}
+
+.tools-checkbox{
+  color: #333;
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.tools-checkbox input[type="checkbox"] {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.tools-checkbox label {
+  display: inline-block;
+  margin-left: 5px;
+}
