@@ -97,9 +97,7 @@ if ($postId != -1) {
                     </div>
                     <div class="contact__form-field">
                         <label class="contact__form-label" for="avatar">Avatar</label>
-                        <?php
-                        if ($postId != -1 && $post != null && $post->getAvatar() != null) {
-                        ?>
+                        <?php if ($postId != -1 && $post != null && $post->getAvatar() != null) { ?>
                             <div class="contact__form-input">
                                 <img src="<?php echo $post->getAvatar() ?>" alt="Avatar" class="post__avatar" />
                                 <!-- <form action="create_post_proc.php" method="POST"> -->
@@ -108,16 +106,10 @@ if ($postId != -1) {
                                 <button type="submit" class="btn btn--med" class="header__link" name="removeImage" form="remove_avatar">Remove/Update</button>
                                 <!-- </form> -->
                             </div>
-                        <?php
-                        }
-                        ?>
-                        <?php
-                        if ($postId == -1 || $post == null || $post->getAvatar() == null) {
-                        ?>
+                        <?php } ?>
+                        <?php if ($postId == -1 || $post == null || $post->getAvatar() == null) { ?>
                             <input required type="file" class="contact__form-input" name="avatar" id="avatar" />
-                        <?php
-                        }
-                        ?>
+                        <?php } ?>
                     </div>
                     <div class="contact__form-field">
                         <?php if ($postId != -1 && $imageUrls != '') { ?>

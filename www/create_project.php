@@ -22,13 +22,14 @@ $tools = Project::getAllTools();
 date_default_timezone_set('America/Halifax');
 $currentTime = new DateTime();
 $currentTime->setTimestamp(time());
+$currentTime = $currentTime->format('Y-m-d');
 
 $name = '';
 $description = '';
 $overview = '';
 $codeLink = '';
 $dateCreated = $currentTime;
-$tags = '';
+$tags = [];
 $avatar = '';
 $editing = false;
 $imagesCount = 0;
@@ -40,7 +41,8 @@ if ($projectId != -1) {
         $description = $project->getDescription();
         $overview = $project->getOverview();
         $codeLink = $project->getCodeLink();
-        $dateCreated = $project->getDateCreated();
+        $dateCreated = new DateTime($project->getDateCreated());
+        $dateCreated = $dateCreated->format('Y-m-d');;
         $tags = $project->getTags();
         $avatar = $project->getAvatar();
         $images = $project->getImages();
@@ -87,8 +89,7 @@ if ($projectId != -1) {
                 <form action="create_project_proc.php" method="POST" id="remove_image"></form>
                 <form action="create_project_proc.php" method="POST" id="remove_avatar"></form>
                 <form action="create_project_proc.php" method="POST" class="contact__form" enctype="multipart/form-data">
-                    <input type="hidden" name="projectId" value="<?php echo $projectId ?>">
-                    <input type="hidden" name="isEdit" value="<?php echo $editing ?>">
+                    <input type="hidden" name="project_id" value="<?php echo $projectId ?>">
                     <input type="hidden" name="MAX_FILE_SIZE" value="2000000">
                     <div class="contact__form-field">
                         <label class="contact__form-label" for="name">Name</label>
@@ -108,7 +109,7 @@ if ($projectId != -1) {
                     </div>
                     <div class="contact__form-field">
                         <label class="contact__form-label" for="created_at">Date Created</label>
-                        <input required type="date" class="contact__form-input" name="created_at" id="created_at" max="<?php echo $currentTime->format('Y-m-d') ?>" value="<?php echo $dateCreated->format('Y-m-d') ?>" />
+                        <input required type="date" class="contact__form-input" name="created_at" id="created_at" max="<?php echo $currentTime ?>" value="<?php echo $dateCreated ?>" />
                     </div>
                     <!-- <div class="contact__form-field">
                         <label class="contact__form-label" for="tags">Tools Used</label>
@@ -119,7 +120,12 @@ if ($projectId != -1) {
                         <label class="contact__form-label">Tools Used</label>
                         <div class="tools-container">
                             <?php foreach ($tools as $t) { ?>
-                                <div class="tools-checkbox"><input type="checkbox" name="tags[]" class="tools-checkbox" value="<?php echo $t ?>"><?php echo $t ?></div>
+                                <div class="tools-checkbox">
+                                    <input type="checkbox" name="tags[]" value="<?php echo $t ?>" <?php if (in_array($t, $tags)) {
+                                                                                                        echo 'checked="checked"';
+                                                                                                    } ?>>
+                                    <?php echo $t ?>
+                                </div>
                             <?php } ?>
                         </div>
                     </div>
@@ -129,7 +135,7 @@ if ($projectId != -1) {
                         <?php if ($projectId != -1 && $project != null && $avatar != null) { ?>
                             <div class="contact__form-input">
                                 <img src="<?php echo $avatar ?>" alt="Avatar" class="post__avatar" />
-                                <input type="hidden" name="projectId" value="<?php echo $projectId ?>" form="remove_avatar">
+                                <input type="hidden" name="project_id" value="<?php echo $projectId ?>" form="remove_avatar">
                                 <input type="hidden" name="link" value="<?php echo $avatar ?>" form="remove_avatar">
                                 <button type="submit" class="btn btn--med" class="header__link" name="removeImage" form="remove_avatar">Remove/Update</button>
                             </div>
@@ -145,7 +151,7 @@ if ($projectId != -1) {
                                     <div class="contact__form-input fixed-height">
                                         <img src="<?php echo $images[$i - 1] ?>" alt="Image <?php echo $i ?>" />
                                         <div class="mt-auto">
-                                            <input type="hidden" name="projectId" value="<?php echo $projectId ?>" form="remove_image">
+                                            <input type="hidden" name="project_id" value="<?php echo $projectId ?>" form="remove_image">
                                             <input type="hidden" name="link" value="<?php echo $images[$i - 1] ?>" form="remove_image">
                                             <button type="submit" class="btn btn--med" name="removeImage" form="remove_image">Remove</button>
                                         </div>
@@ -155,7 +161,7 @@ if ($projectId != -1) {
                         <?php } ?>
                     </div>
                     <div class="contact__form-field">
-                        <?php if ($projectId == -1 || $images != null) { ?>
+                        <?php if ($projectId == -1 || $images == null) { ?>
                             <label class="contact__form-label" for="image">Image <?php echo ($imagesCount + 1) ?> </label>
                             <input type="file" class="contact__form-input" name="image[]" id="image" accept="image/*" />
                         <?php } ?>

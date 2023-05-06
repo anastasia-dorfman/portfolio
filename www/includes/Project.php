@@ -207,7 +207,7 @@ class Project
         try {
             $projectId = -1;
             $con = $GLOBALS['con'];
-            $sql = "INSERT INTO projects (name, description, overview, code_link, date_created) VALUES (?,?,?,?,?)";
+            $sql = "INSERT INTO projects (name, description, overview, code_link, created_at) VALUES (?,?,?,?,?)";
             $stmt = $con->prepare($sql);
 
             if ($stmt) {
@@ -229,11 +229,11 @@ class Project
     {
         try {
             $con = $GLOBALS['con'];
-            $sql = "UPDATE projects SET name = ?, description = ?, overview = ?, code_link = ?, date_created = ? WHERE project_id = ?";
+            $sql = "UPDATE projects SET name = ?, description = ?, overview = ?, code_link = ?, created_at = ? WHERE id = ?";
             $stmt = $con->prepare($sql);
 
             if ($stmt) {
-                $stmt->bind_param('sssss', $name, $description, $overview, $codeLink, $dateCreated);
+                $stmt->bind_param('sssssi', $name, $description, $overview, $codeLink, $dateCreated, $projectId);
                 $stmt->execute();
                 $stmt->close();
             } else {
@@ -293,14 +293,10 @@ class Project
     public static function updateImage($imageLink, $fileName, $projectId, $index = null)
     {
         try {
+            $type = is_null($index) ? 'avatar' : 'image';
+
             $con = $GLOBALS['con'];
-
-            if (is_null($index)) {
-                $sql = "INSERT INTO images (type, link, project_id, name) VALUES('avatar', '$imageLink', $projectId, '$fileName')";
-            } else {
-                $sql = "INSERT INTO images (type, link, project_id, name) VALUES('image', '$imageLink', $projectId, '$fileName')";
-            }
-
+            $sql = "INSERT INTO images (type, link, project_id, name) VALUES('$type', '$imageLink', $projectId, '$fileName')";
             $con->query($sql);
 
             return true;
@@ -321,15 +317,11 @@ class Project
                 array_push($dbTags, $row['name']);
             }
 
-            $sql2 = "DELETE FROM project_skills WHERE prpject_id = $projectId";
+            $sql2 = "DELETE FROM project_skills WHERE project_id = $projectId";
             $con->query($sql2);
 
             foreach ($tags as $t) {
-                // $sql3 = "INSERT INTO tags (name) VALUES ('$t')";
-                // if (!in_array($t, $dbTags)) {
-                //     $con->query($sql3);
-                // }
-                $sql4 = "INSERT INTO project_skills (prpject_id, skill_name) VALUES ($projectId, '$t')";
+                $sql4 = "INSERT INTO project_skills (project_id, skill_name) VALUES ($projectId, '$t')";
                 $con->query($sql4);
             }
 
@@ -367,7 +359,8 @@ class Project
             if ($numImages > 0) {
                 $row = $result->fetch_assoc();
                 $name = $row['name'];
-                $pattern = "/image(\d+)$/i";
+                // $pattern = "/image(\d+)$/i";
+                $pattern = "/image(\d+)/i";
                 preg_match($pattern, $name, $matches);
                 $imageIndex = $matches[1];
             }
@@ -497,7 +490,7 @@ class Project
     {
         try {
             $con = $GLOBALS['con'];
-            $sql = "SELECT link FROM images WHERE project_id = $projectId";
+            $sql = "SELECT link FROM images WHERE project_id = $projectId AND type = 'image'";
             $result = $con->query($sql);
             $images = [];
             while ($row = $result->fetch_assoc()) {

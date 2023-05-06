@@ -21,7 +21,7 @@ $date = $project->getDateCreated();
 $codeLink = $project->getCodeLink();
 $images = $project->getImages();
 $tags = $project->getTags();
-$avatar = $project->getFirstImage($projectId);
+$avatar = $project->getAvatar();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -68,13 +68,9 @@ $avatar = $project->getFirstImage($projectId);
             <p class="project-details__desc-para"><?php echo $overview ?></p>
           </div>
           <div class="post__row">
-            <?php foreach ($images as $i) {
-              if ($i != $avatar) {
-            ?>
+            <?php foreach ($images as $i) { ?>
                 <img src="<?php echo $i ?>" alt="Project Image" class="project-details__showcase-img post__img" />
-            <?php
-              }
-            } ?>
+            <?php } ?>
           </div>
           <div class="project-details__tools-used">
             <h3 class="project-details__content-title">Tools Used</h3>
