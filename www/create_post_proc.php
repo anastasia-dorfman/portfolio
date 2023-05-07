@@ -77,30 +77,33 @@ function uploadFile($postId, $fileType, $prefix, $lastSavedImageIndex = null,  $
         $total = $lastSavedImageIndex === null ? 1 : count($_FILES[$fileFieldName]['name']);
 
         for ($i = 0; $i < $total; $i++) {
-            $file = $lastSavedImageIndex === null ? $_FILES[$fileFieldName]['tmp_name'] : $_FILES[$fileFieldName]['tmp_name'][$i];
+            $tempFile = $lastSavedImageIndex === null ? $_FILES[$fileFieldName]['tmp_name'] : $_FILES[$fileFieldName]['tmp_name'][$i];
             $file_info = new finfo(FILEINFO_MIME);
 
-            $mime_type_long = $file_info->buffer(file_get_contents($file));
+            $mime_type_long = $file_info->buffer(file_get_contents($tempFile));
             $intpos = strpos($mime_type_long, ";");
             $mime_type = substr($mime_type_long, 0, $intpos);
 
             if (in_array($mime_type, $allowedFileTypes)) {
-                $pathinfo = pathinfo($_FILES[$fileFieldName]['name'][$i]);
+                $file = $lastSavedImageIndex === null ? $_FILES[$fileFieldName]['name'] : $_FILES[$fileFieldName]['name'][$i];
+                $pathinfo = pathinfo($file);
+                $extension = $pathinfo['extension'];
                 $basenameIndex = $fileType == 'avatar' ? null : $i + $lastSavedImageIndex + 1;
-                $basename = "post" . $postId . "_" . $prefix . $basenameIndex ?? '' . "." . $pathinfo['extension'];
+                $basenameNoExtension = "project" . $postId . "_" . $prefix . $basenameIndex ?? '';
+                $basename = $basenameNoExtension . ".".$extension;
 
-                $imginfo_array = getimagesize($file);
+                $imginfo_array = getimagesize($tempFile);
 
                 if ($imginfo_array !== false) {
                     $uploaddir = './assets/images/';
                     $uploadfile = $uploaddir . $basename;
 
-                    if (file_exists($uploadfile)) {
-                        unlink($uploadfile);
+                    foreach (glob($uploaddir . $basenameNoExtension . '.*') as $filename) {
+                        unlink($filename);
                     }
 
-                    if (move_uploaded_file($file, $uploadfile)) {
-                        if (!Post::updateImage($uploadfile, $basename, $postId, $basenameIndex)) {
+                    if (move_uploaded_file($tempFile, $uploadfile)) {
+                        if (!Post::updateImage($uploadfile, $basenameNoExtension, $postId, $basenameIndex)) {
                             setFeedbackAndRedirect("Post created, but there was an Error uploading image(s)", "error");
                         }
                     } else {
@@ -120,11 +123,9 @@ function deleteImage($postId, $imagePath)
 {
     if (file_exists($imagePath)) {
         unlink($imagePath);
-        Post::removeImage($postId, $imagePath);
-        return true;
-    } else {
-        return false;
-    }
+    } 
+    Post::removeImage($postId, $imagePath);
+    return true;
 }
 
 function validateFormData($title, $content)

@@ -56,6 +56,18 @@ $avatar = $project->getAvatar();
       </div>
     </div>
   </section>
+
+  <?php
+    if (isset($_SESSION["USER_TYPE"]) && $_SESSION["USER_TYPE"] == 'admin') {
+    ?>
+        <div class="btn__margin">
+            <a href="./create_project.php?project_id=<?php echo $projectId ?>" class="btn btn--med btn--theme-inv">Edit Project</a>
+            <a href="./delete_project_proc.php?project_id=<?php echo $projectId ?>" onclick="return confirm('Are you sure you want to delete the project?')" class="btn btn--med btn--theme-inv">Delete Project</a>
+        </div>
+    <?php
+    }
+    ?>
+
   <section class="project-details">
     <div class="main-container">
       <div class="project-details__content">

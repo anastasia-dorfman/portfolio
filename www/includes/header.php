@@ -29,11 +29,14 @@
         <?php
         if (!isset($_SESSION['USERNAME'])) {
         ?>
-          <div class="header__search">
-            <a href="./login.php" class="header__link" title="Login">
-              <img src="assets/svg/login.svg" alt="Login" class="header__search-icon" /> <title></title>
-            </a>
-          </div>
+          <li class="header__link-wrapper">
+            <div class="header__search">
+              <a href="./login.php" class="header__link" title="Login">
+                <img src="assets/svg/login.svg" alt="Login" class="header__search-icon" />
+                <title></title>
+              </a>
+            </div>
+          </li>
         <?php
         } else {
         ?>
@@ -48,15 +51,13 @@
 
         <div class="header__search">
           <form action="search.php" method="POST" role="search">
-            <input type="search" name="q" placeholder="Search..." class="header__search-input" />
+            <input type="text" name="search" placeholder="Search..." class="header__search-input" />
             <button type="submit" class="header__search-button" aria-label="Search">
               <img src="assets/svg/search.svg" alt="Search" class="header__search-icon" />
             </button>
           </form>
         </div>
       </ul>
-
-
 
       <div class="header__main-ham-menu-cont">
         <img src="./assets/svg/ham-menu.svg" alt="hamburger menu" class="header__main-ham-menu" />

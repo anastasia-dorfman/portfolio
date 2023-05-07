@@ -56,7 +56,7 @@ try {
 function uploadFile($projectId, $fileType, $prefix, $referer, $lastSavedImageIndex = null,  $fileFieldName = null)
 {
     try {
-        $fileFieldName = $fileType;
+        $fileFieldName = $fileFieldName ?? $fileType;
         $allowedFileTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/bmp', 'image/pjpg', 'image/x-png'];
 
         if (empty($_FILES[$fileFieldName]['name']) && empty($_FILES[$fileFieldName]['name'][0])) {

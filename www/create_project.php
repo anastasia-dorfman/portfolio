@@ -67,14 +67,14 @@ if ($projectId != -1) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="includes/tinymce/js/tinymce/tinymce.min.js"></script>
-    <script>
+    <!-- <script>
         tinymce.init({
             selector: "#overview",
             height: 600,
             plugins: "advlist autolink lists link image charmap print preview anchor",
             toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
         });
-    </script>
+    </script> -->
 </head>
 
 <body>
@@ -111,11 +111,6 @@ if ($projectId != -1) {
                         <label class="contact__form-label" for="created_at">Date Created</label>
                         <input required type="date" class="contact__form-input" name="created_at" id="created_at" max="<?php echo $currentTime ?>" value="<?php echo $dateCreated ?>" />
                     </div>
-                    <!-- <div class="contact__form-field">
-                        <label class="contact__form-label" for="tags">Tools Used</label>
-                        <input required type="text" class="contact__form-input" name="tags" id="tags" placeholder="Tags (comma-separated)" value="<?php echo $tags; ?>" />
-                    </div> -->
-
                     <div class="contact__form-field">
                         <label class="contact__form-label">Tools Used</label>
                         <div class="tools-container">

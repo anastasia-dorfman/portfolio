@@ -194,6 +194,40 @@ class Post
             setFeedbackAndRedirect($ex->getMessage(), "error");
         }
     }
+
+    public static function searchPosts($searchQuery)
+    {
+        try {
+            $searchStr = strtolower("%" . $searchQuery . "%");
+            $con = $GLOBALS['con'];
+            $sql = "SELECT DISTINCT posts.* FROM posts INNER JOIN post_tags ON posts.post_id = post_tags.post_id WHERE 
+            LOWER(posts.title) LIKE ? OR LOWER(posts.content) LIKE ? OR posts.created_at LIKE ? OR LOWER(post_tags.tag_name) LIKE ? ;";
+            $stmt = $con->prepare($sql);
+
+            if ($stmt) {
+                $posts = [];
+                $params = array_fill(0, 4, $searchStr);
+                $stmt->bind_param(str_repeat('s', 4), ...$params);
+                // $stmt->bind_param('sssss', $searchStr, $searchStr, $searchStr, $searchStr, $searchStr);
+                $stmt->execute();
+                $result = $stmt->get_result();
+
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        $postId = $row['post_id'];
+                        $post = Post::getPostById($postId);
+                        array_push($posts, $post);
+                    }
+                } 
+                $stmt->close();
+
+                return $posts;
+            } 
+        } catch (Exception $ex) {
+            setFeedbackAndRedirect($ex->getMessage(), "error", "search.php");
+        }
+    }
+
     public static function createPost($userId, $title, $content, $blogId): int
     {
         try {

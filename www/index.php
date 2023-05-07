@@ -111,12 +111,18 @@ $projects = Project::getProjects();
         <div class="projects__content">
           <div class="projects__row">
             <div class="projects__row-img-cont">
-              <img src="<?php echo $p->getFirstImage($projectId) ?>" alt="Software Screenshot" class="projects__row-img" loading="lazy" />
+              <img src="<?php echo $p->getAvatar() ?>" alt="Software Screenshot" class="projects__row-img" loading="lazy" />
             </div>
             <div class="projects__row-content">
               <h3 class="projects__row-content-title"><?php echo $p->getName() ?></h3>
               <p class="projects__row-content-desc"><?php echo $p->getDescription() ?></p>
+              <div class="buttons-container">
               <a href="./project.php?project_id=<?php echo $projectId ?>" class="btn btn--med btn--theme dynamicBgClr">Case Study</a>
+              <?php if (isset($_SESSION["USER_TYPE"]) && $_SESSION["USER_TYPE"] == 'admin') { ?>
+              <a href="./create_project.php?project_id=<?php echo $projectId ?>" class="btn btn--med btn--theme-inv">Edit</a>
+              <a href="./delete_project_proc.php?project_id=<?php echo $projectId ?>" onclick="return confirm('Are you sure you want to delete the project?')" class="btn btn--med btn--theme-inv">Delete</a>
+            <?php } ?>
+              </div>
             </div>
           </div>
         </div>

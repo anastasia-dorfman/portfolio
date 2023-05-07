@@ -226,7 +226,7 @@ textarea {
 /* manual */
 .sec-pad {
   /* padding: 12rem 0; } */
-  padding: 10rem 0 6rem 0;
+  padding: 8rem 0 6rem 0;
 }
 
 @media only screen and (max-width: 56.25em) {
@@ -402,7 +402,7 @@ textarea {
 
 .projects__row {
   display: grid;
-  grid-template-columns: 1.5fr 1fr;
+  grid-template-columns: 1.5fr 1.3fr;
   grid-gap: 5rem;
   margin-bottom: 11rem;
 }
@@ -752,6 +752,10 @@ textarea {
 }
 
 .header__logo-container:hover {
+  color: #0062b9;
+}
+
+.header__search-icon:hover {
   color: #0062b9;
 }
 
@@ -1330,7 +1334,7 @@ textarea {
 }
 
 .buttons-container a {
-  margin: 0 10px;
+  margin: 0 5px;
 }
 
 .post__form-container {
@@ -1414,4 +1418,15 @@ textarea {
 .tools-checkbox label {
   display: inline-block;
   margin-left: 5px;
+}
+
+.header__search_results {
+  color: #fff;
+  background: linear-gradient(to right, rgba(0, 98, 185, 0.8), rgba(0, 98, 185, 0.8)), url(../../assets/svg/common-bg.svg);
+  background-position: center;
+  height: 40vh;
+  min-height: 40rem;
+  max-height: 120rem;
+  position: relative;
+  padding-top: 5rem;
 }

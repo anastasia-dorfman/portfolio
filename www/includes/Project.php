@@ -246,28 +246,30 @@ class Project
         }
     }
 
-    public static function deletePost($postId, $post): int
+    public static function deleteProject($project): int
     {
         try {
+            $projectId = $project->getProjectId();
+
             $con = $GLOBALS['con'];
-            $sql1 = "DELETE FROM post_tags WHERE post_id = $postId";
+            $sql1 = "DELETE FROM project_skills WHERE project_id = $projectId";
             $con->query($sql1);
 
-            $sql2 = "DELETE FROM images WHERE post_id = $postId";
+            $sql2 = "DELETE FROM images WHERE project_id = $projectId";
             $con->query($sql2);
 
             $images = [];
 
-            if (isset($post->getAvatar))
-                array_push($images, $post->getAvatar);
-            if (isset($post->getImages))
-                array_push($images, $post->getImages);
+            if (isset($project->getAvatar))
+                array_push($images, $project->getAvatar);
+            if (isset($project->getImages))
+                array_push($images, $project->getImages);
 
             foreach ($images as $i) {
                 unlink($i);
             }
 
-            $sql3 = "DELETE FROM posts WHERE post_id = $postId";
+            $sql3 = "DELETE FROM projects WHERE id = $projectId";
             $con->query($sql3);
 
             return true;
@@ -436,18 +438,6 @@ class Project
         }
     }
 
-    public static function deleteIamages($postId)
-    {
-        try {
-            $con = $GLOBALS['con'];
-            $sql = "DELETE FROM images WHERE post_id = $postId AND type = 'image'";
-            $con->query($sql);
-            return true;
-        } catch (Exception $ex) {
-            setFeedbackAndRedirect($ex->getMessage(), "error");
-        }
-    }
-
     public static function getAllTools()
     {
         try {
@@ -464,6 +454,40 @@ class Project
             return $tools;
         } catch (Exception $ex) {
             setFeedbackAndRedirect($ex->getMessage(), "error");
+        }
+    }
+
+    public static function searchProjects($searchQuery)
+    {
+        try {
+            $searchStr = strtolower("%" . $searchQuery . "%");
+            $con = $GLOBALS['con'];
+            $sql = "SELECT DISTINCT projects.* FROM projects INNER JOIN project_skills ON projects.id = project_skills.project_id WHERE 
+            LOWER(projects.name) LIKE ? OR LOWER(projects.overview) LIKE ? OR LOWER(projects.overview) LIKE ? OR projects.created_at LIKE ? OR 
+            LOWER(project_skills.skill_name) LIKE ? ;";
+            $stmt = $con->prepare($sql);
+
+            if ($stmt) {
+                $projects = [];
+                $params = array_fill(0, 5, $searchStr);
+                $stmt->bind_param(str_repeat('s', 5), ...$params);
+                // $stmt->bind_param('sssss', $searchStr, $searchStr, $searchStr, $searchStr, $searchStr);
+                $stmt->execute();
+                $result = $stmt->get_result();
+
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        $projectId = $row['id'];
+                        $project = Project::getProjectById($projectId);
+                        array_push($projects, $project);
+                    }
+                } 
+                $stmt->close();
+
+                return $projects;
+            } 
+        } catch (Exception $ex) {
+            setFeedbackAndRedirect($ex->getMessage(), "error", "search.php");
         }
     }
 
