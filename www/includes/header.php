@@ -51,8 +51,8 @@
 
         <div class="header__search">
           <form action="search.php" method="POST" role="search">
-            <input type="text" name="search" placeholder="Search..." class="header__search-input" />
-            <button type="submit" class="header__search-button" aria-label="Search">
+            <input type="text" name="search_query" placeholder="Search..." class="header__search-input" />
+            <button type="submit" name="search_btn" class="header__search-button" aria-label="Search">
               <img src="assets/svg/search.svg" alt="Search" class="header__search-icon" />
             </button>
           </form>

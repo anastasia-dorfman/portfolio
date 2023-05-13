@@ -90,7 +90,7 @@ class Project
     {
         return $this->avatar;
     }
-    public function setAvatar(int $avatar): void
+    public function setAvatar(string $avatar): void
     {
         $this->avatar = $avatar;
     }
@@ -157,6 +157,7 @@ class Project
                 $images = [];
                 $images = self::getImagesByProjectId($projectId);
                 $p->setTags($tags);
+                $p->setAvatar($avatar);
                 $p->setImages($images);
             }
 
@@ -438,11 +439,13 @@ class Project
         }
     }
 
-    public static function getAllTools()
+    public static function getAllTools($type = null)
     {
         try {
+            $type ?? '';
+            $whereClause = $type == '' ? '' : "WHERE type = '$type' ";
             $con = $GLOBALS['con'];
-            $sql = "SELECT * FROM skills";
+            $sql = "SELECT * FROM skills $whereClause";
             $result = $con->query($sql);
             $tools = [];
 
@@ -453,7 +456,7 @@ class Project
 
             return $tools;
         } catch (Exception $ex) {
-            setFeedbackAndRedirect($ex->getMessage(), "error");
+            setFeedbackAndRedirect($ex->getMessage(), "error", "search.php");
         }
     }
 
@@ -481,11 +484,30 @@ class Project
                         $project = Project::getProjectById($projectId);
                         array_push($projects, $project);
                     }
-                } 
+                }
                 $stmt->close();
 
                 return $projects;
-            } 
+            }
+        } catch (Exception $ex) {
+            setFeedbackAndRedirect($ex->getMessage(), "error", "search.php");
+        }
+    }
+
+    public static function filterProjects($filters, $projects = null)
+    {
+        try {
+            $projects ?? self::getProjects();
+            $filteredProjects = [];
+
+            foreach ($projects as $p) {
+                foreach ($filters as $f) {
+                    if (in_array($f, $p->getTags())) {
+                        array_push($filteredProjects, $p);
+                    }
+                }
+            }
+            return $filteredProjects;
         } catch (Exception $ex) {
             setFeedbackAndRedirect($ex->getMessage(), "error", "search.php");
         }

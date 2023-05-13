@@ -1420,13 +1420,95 @@ textarea {
   margin-left: 5px;
 }
 
-.header__search_results {
+.search_results {
   color: #fff;
   background: linear-gradient(to right, rgba(0, 98, 185, 0.8), rgba(0, 98, 185, 0.8)), url(../../assets/svg/common-bg.svg);
   background-position: center;
   height: 40vh;
-  min-height: 40rem;
+  min-height: 50rem;
   max-height: 120rem;
   position: relative;
-  padding-top: 5rem;
+  padding-top: 14rem;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+
+.input-large {
+  flex-grow: 2; /* Enlarge the search input */
+}
+
+/* Common styles for selects/options and inputs */
+.select,
+.input {
+  background: #fff;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: inline-block;
+  font-weight: 700;
+  border-radius: 5px;
+  box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.15);
+  transition: transform .3s;
+}
+
+.select:hover,
+.input:hover {
+  transform: translateY(-3px);
+}
+
+/* Styles for selects/options */
+.select {
+  padding: 1.2rem 3rem;
+  font-size: 1.6rem;
+  /* Add additional styles specific to selects/options if needed */
+}
+
+/* Styles for inputs */
+.input {
+  padding: 1.2rem 3.5rem;
+  font-size: 1.8rem;
+  width: 100%;
+}
+
+/* Theme-specific styles */
+.select--theme {
+  background: #0062b9;
+  color: #fff;
+}
+
+.select--theme-inv {
+  color: #777;
+  background: #fff;
+  border: 2px solid #0062b9;
+  box-shadow: none;
+  padding: calc(1.2rem - 2px) calc(3rem - 2px);
+  margin-right: 1rem;
+}
+
+.input--theme {
+  background: #0062b9;
+  color: #fff;
+}
+
+.input--theme-inv {
+  color: #777;
+  background: #fff;
+  border: 2px solid #0062b9;
+  box-shadow: none;
+  padding: calc(1.2rem - 2px) calc(3rem - 2px);
+  margin-right: 1rem;
+}
+
+.input-container {
+  width: 100%; /* Adjust the width value as needed */
+}
+.input-container input {
+  width: 100%;
+  /* Other existing styles for inputs */
 }

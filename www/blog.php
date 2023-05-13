@@ -33,7 +33,7 @@ $posts = Post::getPosts();
 <body>
   <?php include "includes/header.php";  ?>
 
-  <section class="header__search_results">
+  <section class="search_results">
   <div id="blog" class="contact sec-pad dynamicBg">
     <h2 class="heading heading-sec heading-sec__blog">
       <span class="heading-sec__main heading-sec__main--lt">Blog</span>

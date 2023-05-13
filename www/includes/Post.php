@@ -228,6 +228,25 @@ class Post
         }
     }
 
+    public static function filterPosts($filters, $posts = null)
+    {
+        try {
+            $posts ?? self::getPosts();
+            $filteredPosts = [];
+
+            foreach ($posts as $p) {
+                foreach ($filters as $f) {
+                    if (in_array($f, $p->getTags())) {
+                        array_push($filteredProjects, $p);
+                    }
+                }
+            }
+            return $filteredPosts;
+        } catch (Exception $ex) {
+            setFeedbackAndRedirect($ex->getMessage(), "error", "search.php");
+        }
+    }
+
     public static function createPost($userId, $title, $content, $blogId): int
     {
         try {

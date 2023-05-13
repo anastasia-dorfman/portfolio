@@ -5,9 +5,20 @@ include_once "includes/functions.php";
 include_once "includes/Project.php";
 include_once "includes/Post.php";
 
-$searchQuery = isset($_POST["search"]) ? $_POST["search"] : '';
+$_SESSION["REFERER"] = "search.php";
 
-$_SESSION["REFERER"] = "search_results.php";
+$searchQuery = '';
+
+if (isset($_POST["search_query"]) || isset($_POST["search_query_form"]))
+  $searchQuery = isset($_POST["search_query"]) ? $_POST["search_query"] : $_POST["search_query_form"];
+
+if (isset($_POST["clear_btn"])) {
+  unset($_SESSION['framework']);
+  unset($_SESSION['language']);
+  unset($_SESSION['database']);
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -28,23 +39,99 @@ $_SESSION["REFERER"] = "search_results.php";
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon_io/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon_io/favicon-16x16.png">
   <link rel="manifest" href="/site.webmanifest">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
-  <?php include "includes/header.php"; ?>
-
-  <section class="header__search_results">
-    <div class="contact sec-pad dynamicBg">
-      <h1 class="heading-primary">Search Results</h1>
-      <div class="home-hero__info">
-        <p class="text-primary">Showing results for "<?php echo $searchQuery; ?>"</p>
-      </div>
-    </div>
-  </section>
   <?php
+  include "includes/header.php";
+
+  $frameworks = Project::getAllTools('framework');
+  $languages = Project::getAllTools('language');
+  $databases = Project::getAllTools('database');
+  ?>
+
+  <div class="search_results sec-pad">
+    <div class="search-container">
+      <form action="search.php" id="search_form" method="POST" role="search">
+        <input type="search" name="search_query_form" placeholder="Search..." class="input--theme input--theme-inv input-large" value="<?php echo $searchQuery ?? '' ?>" />
+
+        <!-- Add filter inputs -->
+        <select id="framework" name="framework" class="select--theme select--theme-inv" onchange="onSelectChange()">
+          <option value=''>Select Framework</option>
+          <?php
+          // $filterFramework = '';
+          $filterFramework = isset($_SESSION['framework']) ? $_SESSION['framework'] : '';
+          if (isset($_POST['framework']) && !empty($_POST['framework'])) {
+            $_SESSION['framework'] = $_POST['framework'];
+          }
+          foreach ($frameworks as $f) {
+            $selected = $filterFramework == $f ? 'selected' : ''; ?>
+            <option value="<?php echo $f ?>" <?php echo $selected ?>><?php echo $f ?></option>
+          <?php } ?>
+        </select>
+
+        <select name="language" class="select--theme select--theme-inv" onchange="onSelectChange()">
+          <option value="">Select Language</option>
+          <?php
+          // $filterLanguage = '';
+          $filterLanguage = isset($_SESSION['language']) ? $_SESSION['language'] : '';
+          if (isset($_POST['language']) && !empty($_POST['language'])) {
+            $_SESSION['language'] = $_POST['language'];
+          }
+          foreach ($languages as $l) {
+            $selected = $filterLanguage == $l ? 'selected' : ''; ?>
+            <option value="<?php echo $l ?>" <?php echo $selected; ?>><?php echo $l ?></option>
+          <?php } ?>
+        </select>
+
+        <select name="database" class="select--theme select--theme-inv" onchange="onSelectChange()">
+          <option value="">Select Database</option>
+          <?php
+          // $filterDatabase = '';
+          $filterDatabase = isset($_SESSION['database']) ? $_SESSION['database'] : '';
+          if (isset($_POST['database']) && !empty($_POST['database'])) {
+            $_SESSION['database'] = $_POST['database'];
+          }
+          foreach ($databases as $d) {
+            $selected = $filterDatabase == $d ? 'selected' : ''; ?>
+            <option value="<?php echo $d ?>" <?php echo $selected ?>><?php echo $d ?></option>
+          <?php } ?>
+        </select>
+        <button type="submit" name="search_form_btn" class="btn btn--med btn--theme-inv" onclick="onSelectChange()">Search</button>
+      </form>
+      <form action="search.php" id="clear" method="POST" role="search">
+        <button type="submit" name="clear_btn" class="btn btn--med btn--theme-inv" onclick="onSelectChange()">Clear</button>
+      </form>
+    </div>
+
+    <h1 class="heading-primary">Search Results</h1>
+    <div class="home-hero__info">
+      <p class="text-primary">Showing results for "<?php echo $searchQuery; ?>"</p>
+    </div>
+  </div>
+  <?php
+
+  // Getting list of Projects and Posts
   // if ((isset($_POST["search"]))) {
-  if ($searchQuery !== '') {
+  if ($searchQuery !== null) {
     $projects = Project::searchProjects($searchQuery);
+
+    $filters = [];
+
+    if (!empty($_POST['framework'])) {
+      array_push($filters, $_POST['framework']);
+    }
+
+    if (!empty($_POST['language'])) {
+      array_push($filters, $_POST['language']);
+    }
+
+    if (!empty($_POST['database'])) {
+      array_push($filters, $_POST['database']);
+    }
+
+    $projects = !empty($filters) ? Project::filterProjects($filters, $projects) : $projects;
   ?>
     <section class="projects sec-pad">
       <div class="main-container">
@@ -96,12 +183,12 @@ $_SESSION["REFERER"] = "search_results.php";
                 </div>
                 <div class="projects__row-content">
                   <h3 class="projects__row-content-title"><?php echo $p->getTitle() ?></h3>
-                  <p class="projects__row-content-desc"><?php echo substr("{$p->getContent()}", 0, 170). '...' ?></p>
+                  <p class="projects__row-content-desc"><?php echo substr("{$p->getContent()}", 0, 170) . '...' ?></p>
                   <div class="buttons-container">
-                    <a href="./project.php?project_id=<?php echo $projectId ?>" class="btn btn--med btn--theme dynamicBgClr">Read more</a>
+                    <a href="./post.php?post_id=<?php echo $postId ?>" class="btn btn--med btn--theme dynamicBgClr">Read more</a>
                     <?php if (isset($_SESSION["USER_TYPE"]) && $_SESSION["USER_TYPE"] == 'admin') { ?>
-                      <a href="./create_project.php?project_id=<?php echo $projectId ?>" class="btn btn--med btn--theme-inv">Edit</a>
-                      <a href="./delete_project_proc.php?project_id=<?php echo $projectId ?>" onclick="return confirm('Are you sure you want to delete the project?')" class="btn btn--med btn--theme-inv">Delete</a>
+                      <a href="./create_post.php?post_id=<?php echo $postId ?>" class="btn btn--med btn--theme-inv">Edit</a>
+                      <a href="./delete_post_proc.php?post_id=<?php echo $postId ?>" onclick="return confirm('Are you sure you want to delete the post?')" class="btn btn--med btn--theme-inv">Delete</a>
                     <?php } ?>
                   </div>
                 </div>
@@ -111,7 +198,6 @@ $_SESSION["REFERER"] = "search_results.php";
         <?php } ?>
       </div>
     </section>
-    <?php exit(); ?>
   <?php } else { ?>
     <h3 class="projects__row-content-title heading-sec__main">No search criteria chosen</h3>
   <?php } ?>
@@ -122,4 +208,14 @@ $_SESSION["REFERER"] = "search_results.php";
 
 </html>
 
-<?php include 'includes/scripts.php'; ?>
+<script>
+  function onSelectChange() {
+    document.getElementById("search_form").submit();
+  }
+</script>
+
+<?php
+include 'includes/scripts.php';
+unset($_SESSION["FILTERED_PROJECTS"]);
+exit();
+?>
