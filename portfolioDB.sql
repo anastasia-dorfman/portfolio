@@ -61,7 +61,7 @@ CREATE TABLE `images` (
   KEY `FK_images_projects_idx` (`project_id`),
   CONSTRAINT `FK_images_posts` FOREIGN KEY (`post_id`) REFERENCES `posts` (`post_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_images_projects` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,7 +70,7 @@ CREATE TABLE `images` (
 
 LOCK TABLES `images` WRITE;
 /*!40000 ALTER TABLE `images` DISABLE KEYS */;
-INSERT INTO `images` VALUES (3,'image','post1_image2.png','./assets/images/post1_image2.png',1,NULL),(4,'image','project1_image1.png','./assets/images/project1_image1.png',NULL,1),(5,'image','project1_image2.png','./assets/images/project1_image2.png',NULL,1),(6,'image','project1_image3.png','./assets/images/project1_image3.png',NULL,1),(9,'avatar','post16_avatar.jpeg','./assets/images/post16_avatar.jpeg',16,NULL),(10,'image','post16_image1.jpg','./assets/images/post16_image1.jpg',16,NULL),(12,'image','post1_image1.png','./assets/images/post1_image1.png',1,NULL),(14,'image','post1_image3.png','./assets/images/post1_image3.png',1,NULL),(15,'image','post1_image4.png','./assets/images/post1_image4.png',1,NULL),(33,'avatar','post1_avatar','./assets/images/post1_avatar',1,NULL);
+INSERT INTO `images` VALUES (3,'image','post1_image2.png','./assets/images/post1_image2.png',1,NULL),(9,'avatar','post16_avatar.jpeg','./assets/images/post16_avatar.jpeg',16,NULL),(10,'image','post16_image1.jpg','./assets/images/post16_image1.jpg',16,NULL),(12,'image','post1_image1.png','./assets/images/post1_image1.png',1,NULL),(14,'image','post1_image3.png','./assets/images/post1_image3.png',1,NULL),(15,'image','post1_image4.png','./assets/images/post1_image4.png',1,NULL),(16,'avatar','project2_avatar','./assets/images/project2_avatar.png',NULL,2),(17,'image','project2_image1','./assets/images/project2_image1.png',NULL,2),(18,'avatar','project3_avatar','./assets/images/project3_avatar.png',NULL,3),(19,'image','project3_image1','./assets/images/project3_image1.png',NULL,3),(20,'avatar','project4_avatar','./assets/images/project4_avatar.png',NULL,4),(21,'image','project4_image1','./assets/images/project4_image1.png',NULL,4),(22,'avatar','project5_avatar','./assets/images/project5_avatar.png',NULL,5),(23,'image','project5_image1','./assets/images/project5_image1.png',NULL,5),(24,'avatar','project6_avatar','./assets/images/project6_avatar.png',NULL,6),(25,'image','project6_image1','./assets/images/project6_image1.png',NULL,6);
 /*!40000 ALTER TABLE `images` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -97,7 +97,7 @@ CREATE TABLE `post_tags` (
 
 LOCK TABLES `post_tags` WRITE;
 /*!40000 ALTER TABLE `post_tags` DISABLE KEYS */;
-INSERT INTO `post_tags` VALUES (1,'             HTML'),(1,'             MySQL'),(1,'             PHP'),(1,'            CSS'),(16,' tips'),(16,'studentlife');
+INSERT INTO `post_tags` VALUES (1,'CSS'),(1,'HTML'),(1,'MySQL'),(1,'PHP'),(16,'studentlife'),(16,'tips');
 /*!40000 ALTER TABLE `post_tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -120,7 +120,7 @@ CREATE TABLE `posts` (
   KEY `FK_posts_users_idx` (`user_id`),
   CONSTRAINT `FK_posts` FOREIGN KEY (`blog_id`) REFERENCES `blogs` (`blog_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_posts_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -145,7 +145,7 @@ CREATE TABLE `project_skills` (
   `skill_name` varchar(45) NOT NULL,
   PRIMARY KEY (`project_id`,`skill_name`),
   KEY `FK_project_skills_skill_name_idx` (`skill_name`),
-  CONSTRAINT `FK_project_skills_project_id` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_project_skills_project_id` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_project_skills_skill_name` FOREIGN KEY (`skill_name`) REFERENCES `skills` (`name`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -156,7 +156,7 @@ CREATE TABLE `project_skills` (
 
 LOCK TABLES `project_skills` WRITE;
 /*!40000 ALTER TABLE `project_skills` DISABLE KEYS */;
-INSERT INTO `project_skills` VALUES (1,'.NET 6.0'),(1,'C#'),(1,'MSSMS'),(1,'T-SQL');
+INSERT INTO `project_skills` VALUES (1,'.NET 6.0'),(3,'.NET 6.0'),(2,'Angular'),(6,'Angular'),(3,'ASP.Net MVC 5'),(6,'ASP.Net MVC 5'),(1,'C#'),(3,'CSS'),(6,'CSS'),(2,'Flutter'),(3,'Flutter'),(6,'Flutter'),(2,'HTML'),(6,'Java'),(3,'JavaScript'),(5,'JavaScript'),(1,'MSSMS'),(2,'MSSMS'),(5,'MSSMS'),(2,'MySQL'),(5,'MySQL'),(5,'PHP'),(3,'React'),(4,'React'),(2,'SQL Server'),(4,'SQL Server'),(1,'T-SQL'),(2,'T-SQL'),(4,'T-SQL'),(4,'TypeScript');
 /*!40000 ALTER TABLE `project_skills` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -168,14 +168,14 @@ DROP TABLE IF EXISTS `projects`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `projects` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `overview` longtext NOT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `code_link` varchar(255) NOT NULL,
   `description` mediumtext,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -184,7 +184,7 @@ CREATE TABLE `projects` (
 
 LOCK TABLES `projects` WRITE;
 /*!40000 ALTER TABLE `projects` DISABLE KEYS */;
-INSERT INTO `projects` VALUES (1,'Digital Reservation System','The Digital Reservation System is a project aimed at helping businesses manage guest reservations and stays in a more efficient manner. The system allows for creating reservations, searching/viewing reservations,  and searching for available rooms. The project was created using MSSMS, C#,  N-Tier architecture, and .NET 6.0.','2022-12-11 00:00:00','https://github.com/anastasia-dorfman/Ntier_ReservationSystem','A digital reservation system for managing guest reservations and stays in a more efficient manner');
+INSERT INTO `projects` VALUES (1,'Digital Reservation System','<p><span style=\"font-size: 14pt;\">The Digital Reservation System is a project aimed at helping businesses manage guest reservations and stays in a more efficient manner. The system allows for creating reservations, searching/viewing reservations, and searching for available rooms. The project was created using <span style=\"color: rgb(132, 63, 161);\">MSSMS, C#, N-Tier architecture, and .NET 6.0.</span></span></p>','2022-12-11 00:00:00','https://github.com/anastasia-dorfman/Ntier_ReservationSystem','A digital reservation system for managing guest reservations and stays in a more efficient manner'),(2,'second project','second project','2021-02-17 00:00:00','second project','second project'),(3,'Third project','Third project','2019-08-09 00:00:00','Third project','Third project'),(4,'Fourth project','Fourth project','2015-03-18 00:00:00','Fourth project','Fourth project'),(5,'Fifth project','Fifth project','2013-06-11 00:00:00','Fifth project','Fifth project'),(6,'Project six','Project six','2023-02-18 00:00:00','Project six','Project six');
 /*!40000 ALTER TABLE `projects` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -221,7 +221,7 @@ DROP TABLE IF EXISTS `tags`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tags` (
   `name` varchar(255) NOT NULL,
-  `is_post_tag` bit(1) DEFAULT b'1',
+  `is_tool` bit(1) DEFAULT b'0',
   PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -232,7 +232,7 @@ CREATE TABLE `tags` (
 
 LOCK TABLES `tags` WRITE;
 /*!40000 ALTER TABLE `tags` DISABLE KEYS */;
-INSERT INTO `tags` VALUES ('',_binary ''),('             HTML',_binary ''),('             MySQL',_binary ''),('             PHP',_binary ''),('            CSS',_binary ''),('            HTML',_binary ''),('            MySQL',_binary ''),('            PHP',_binary ''),('           CSS',_binary ''),('           HTML',_binary ''),('           MySQL',_binary ''),('           PHP',_binary ''),('          CSS',_binary ''),('          HTML',_binary ''),('          MySQL',_binary ''),('          PHP',_binary ''),('         CSS',_binary ''),('         HTML',_binary ''),('         MySQL',_binary ''),('         PHP',_binary ''),('        CSS',_binary ''),('        HTML',_binary ''),('        MySQL',_binary ''),('        PHP',_binary ''),('       CSS',_binary ''),('       HTML',_binary ''),('       MySQL',_binary ''),('       PHP',_binary ''),('      CSS',_binary ''),('      HTML',_binary ''),('      MySQL',_binary ''),('      PHP',_binary ''),('     CSS',_binary ''),('     HTML',_binary ''),('     MySQL',_binary ''),('     PHP',_binary ''),('    CSS',_binary ''),('    HTML',_binary ''),('    MySQL',_binary ''),('    PHP',_binary ''),('   CSS',_binary ''),('   HTML',_binary ''),('   MySQL',_binary ''),('   PHP',_binary ''),('  CSS',_binary ''),('  HTML',_binary ''),('  MySQL',_binary ''),('  PHP',_binary ''),(' CSS',_binary ''),(' HTML',_binary ''),(' MySQL',_binary ''),(' PHP',_binary ''),(' tips',_binary ''),('ASP.Net',_binary ''),('Boot Spring',_binary ''),('Bootstrap',_binary ''),('C#',_binary ''),('CSS',_binary ''),('Entity Framework',_binary ''),('HTML',_binary ''),('Java',_binary ''),('JavaScript',_binary ''),('Mobile',_binary ''),('MySQL',_binary ''),('PHP',_binary ''),('SQL',_binary ''),('studentlife',_binary ''),('tips',_binary ''),('Web',_binary '');
+INSERT INTO `tags` VALUES ('ASP.Net',_binary ''),('Boot Spring',_binary ''),('Bootstrap',_binary ''),('C#',_binary ''),('CSS',_binary ''),('Entity Framework',_binary ''),('HTML',_binary ''),('Java',_binary ''),('JavaScript',_binary ''),('Mobile',_binary '\0'),('MySQL',_binary ''),('PHP',_binary ''),('SQL',_binary '\0'),('studentlife',_binary '\0'),('tips',_binary '\0'),('Web',_binary '\0');
 /*!40000 ALTER TABLE `tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -301,4 +301,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-03 15:12:28
+-- Dump completed on 2023-05-15 14:09:42

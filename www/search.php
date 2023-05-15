@@ -5,20 +5,19 @@ include_once "includes/functions.php";
 include_once "includes/Project.php";
 include_once "includes/Post.php";
 
-$_SESSION["REFERER"] = "search.php";
-
 $searchQuery = '';
 
 if (isset($_POST["search_query"]) || isset($_POST["search_query_form"]))
   $searchQuery = isset($_POST["search_query"]) ? $_POST["search_query"] : $_POST["search_query_form"];
 
-if (isset($_POST["clear_btn"])) {
+if (isset($_POST["clear_btn"]) || $_SESSION["REFERER"] != "search.php") {
   unset($_SESSION['framework']);
   unset($_SESSION['language']);
   unset($_SESSION['database']);
+  unset($_SESSION['tag']);
 }
 
-
+$_SESSION["REFERER"] = "search.php";
 ?>
 
 <!DOCTYPE html>
@@ -49,6 +48,7 @@ if (isset($_POST["clear_btn"])) {
   $frameworks = Project::getAllTools('framework');
   $languages = Project::getAllTools('language');
   $databases = Project::getAllTools('database');
+  $tags = Post::getTagsOtherThanTools();
   ?>
 
   <div class="search_results sec-pad">
@@ -60,11 +60,12 @@ if (isset($_POST["clear_btn"])) {
         <select id="framework" name="framework" class="select--theme select--theme-inv" onchange="onSelectChange()">
           <option value=''>Select Framework</option>
           <?php
-          // $filterFramework = '';
-          $filterFramework = isset($_SESSION['framework']) ? $_SESSION['framework'] : '';
+          // $filterFramework = isset($_SESSION['framework']) ? $_SESSION['framework'] : '';
           if (isset($_POST['framework']) && !empty($_POST['framework'])) {
             $_SESSION['framework'] = $_POST['framework'];
           }
+          $filterFramework = isset($_SESSION['framework']) ? $_SESSION['framework'] : '';
+
           foreach ($frameworks as $f) {
             $selected = $filterFramework == $f ? 'selected' : ''; ?>
             <option value="<?php echo $f ?>" <?php echo $selected ?>><?php echo $f ?></option>
@@ -74,11 +75,11 @@ if (isset($_POST["clear_btn"])) {
         <select name="language" class="select--theme select--theme-inv" onchange="onSelectChange()">
           <option value="">Select Language</option>
           <?php
-          // $filterLanguage = '';
-          $filterLanguage = isset($_SESSION['language']) ? $_SESSION['language'] : '';
           if (isset($_POST['language']) && !empty($_POST['language'])) {
             $_SESSION['language'] = $_POST['language'];
           }
+          $filterLanguage = isset($_SESSION['language']) ? $_SESSION['language'] : '';
+
           foreach ($languages as $l) {
             $selected = $filterLanguage == $l ? 'selected' : ''; ?>
             <option value="<?php echo $l ?>" <?php echo $selected; ?>><?php echo $l ?></option>
@@ -88,20 +89,35 @@ if (isset($_POST["clear_btn"])) {
         <select name="database" class="select--theme select--theme-inv" onchange="onSelectChange()">
           <option value="">Select Database</option>
           <?php
-          // $filterDatabase = '';
-          $filterDatabase = isset($_SESSION['database']) ? $_SESSION['database'] : '';
           if (isset($_POST['database']) && !empty($_POST['database'])) {
             $_SESSION['database'] = $_POST['database'];
           }
+          $filterDatabase = isset($_SESSION['database']) ? $_SESSION['database'] : '';
+
           foreach ($databases as $d) {
             $selected = $filterDatabase == $d ? 'selected' : ''; ?>
             <option value="<?php echo $d ?>" <?php echo $selected ?>><?php echo $d ?></option>
           <?php } ?>
         </select>
-        <button type="submit" name="search_form_btn" class="btn btn--med btn--theme-inv" onclick="onSelectChange()">Search</button>
+
+        <select name="tag" class="select--theme select--theme-inv" onchange="onSelectChange()">
+          <option value="">Select Tag (for posts)</option>
+          <?php
+          if (isset($_POST['tag']) && !empty($_POST['tag'])) {
+            $_SESSION['tag'] = $_POST['tag'];
+          }
+          $filterTag = isset($_SESSION['tag']) ? $_SESSION['tag'] : '';
+
+          foreach ($tags as $t) {
+            $selected = $filterTag == $t ? 'selected' : ''; ?>
+            <option value="<?php echo $t ?>" <?php echo $selected ?>><?php echo $t ?></option>
+          <?php } ?>
+        </select>
+
+        <button type="submit" name="search_form_btn" class="btn btn--sm btn--theme-inv" onclick="onSelectChange()">Search</button>
       </form>
       <form action="search.php" id="clear" method="POST" role="search">
-        <button type="submit" name="clear_btn" class="btn btn--med btn--theme-inv" onclick="onSelectChange()">Clear</button>
+        <button type="submit" name="clear_btn" class="btn btn--sm btn--theme-inv" onclick="onSelectChange()">Clear</button>
       </form>
     </div>
 
@@ -116,6 +132,7 @@ if (isset($_POST["clear_btn"])) {
   // if ((isset($_POST["search"]))) {
   if ($searchQuery !== null) {
     $projects = Project::searchProjects($searchQuery);
+    $posts = Post::searchPosts($searchQuery);
 
     $filters = [];
 
@@ -131,8 +148,14 @@ if (isset($_POST["clear_btn"])) {
       array_push($filters, $_POST['database']);
     }
 
+    if (!empty($_POST['tag'])) {
+      array_push($filters, $_POST['tag']);
+    }
+    
     $projects = !empty($filters) ? Project::filterProjects($filters, $projects) : $projects;
+    $posts = !empty($filters) ? Post::filterPosts($filters, $posts) : $posts;
   ?>
+
     <section class="projects sec-pad">
       <div class="main-container">
         <?php
@@ -168,7 +191,6 @@ if (isset($_POST["clear_btn"])) {
     <section class="about sec-pad">
       <div class="main-container">
         <?php
-        $posts = Post::searchPosts($searchQuery);
         if (empty($posts)) { ?>
           <h3 class="projects__row-content-title heading-sec__main">No posts found matching your search query</h3>
         <?php } else { ?>
@@ -214,8 +236,14 @@ if (isset($_POST["clear_btn"])) {
   }
 </script>
 
+<script>
+  // window.addEventListener('beforeunload', function() {
+  //     fetch('clear_search_proc.php');
+  // });
+</script>
+
+
 <?php
 include 'includes/scripts.php';
-unset($_SESSION["FILTERED_PROJECTS"]);
-exit();
+// exit();
 ?>

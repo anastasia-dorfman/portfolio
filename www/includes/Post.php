@@ -195,6 +195,25 @@ class Post
         }
     }
 
+    public static function getTagsOtherThanTools()
+    {
+        try {
+            $con = $GLOBALS['con'];
+            $sql = "SELECT * FROM tags WHERE is_tool = 0";
+            $result = $con->query($sql);
+            $tags = [];
+
+            while ($row = $result->fetch_assoc())
+                array_push($tags, $row['name']);
+
+            $result->close();
+
+            return $tags;
+        } catch (Exception $ex) {
+            setFeedbackAndRedirect($ex->getMessage(), "error", "search.php");
+        }
+    }
+
     public static function searchPosts($searchQuery)
     {
         try {
@@ -218,11 +237,11 @@ class Post
                         $post = Post::getPostById($postId);
                         array_push($posts, $post);
                     }
-                } 
+                }
                 $stmt->close();
 
                 return $posts;
-            } 
+            }
         } catch (Exception $ex) {
             setFeedbackAndRedirect($ex->getMessage(), "error", "search.php");
         }
@@ -235,10 +254,14 @@ class Post
             $filteredPosts = [];
 
             foreach ($posts as $p) {
+                $filterCount = 0;
                 foreach ($filters as $f) {
                     if (in_array($f, $p->getTags())) {
-                        array_push($filteredProjects, $p);
+                        $filterCount++;
                     }
+                }
+                if ($filterCount === count($filters)) {
+                    array_push($filteredPosts, $p);
                 }
             }
             return $filteredPosts;
@@ -309,8 +332,8 @@ class Post
                 array_push($images, $post->getImages);
 
             foreach ($images as $i) {
-                    unlink($i);
-                }
+                unlink($i);
+            }
 
             $sql3 = "DELETE FROM posts WHERE post_id = $postId";
             $con->query($sql3);

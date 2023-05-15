@@ -501,10 +501,14 @@ class Project
             $filteredProjects = [];
 
             foreach ($projects as $p) {
+                $filterCount = 0;
                 foreach ($filters as $f) {
                     if (in_array($f, $p->getTags())) {
-                        array_push($filteredProjects, $p);
+                        $filterCount++;
                     }
+                }
+                if ($filterCount === count($filters)) {
+                    array_push($filteredProjects, $p);
                 }
             }
             return $filteredProjects;
