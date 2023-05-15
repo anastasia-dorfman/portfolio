@@ -13,6 +13,7 @@ if (!(isset($_SESSION["USERNAME"]))) {
 }
 
 include_once "includes/Post.php";
+include_once "includes/Project.php";
 
 try {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['removeImage'])) {
@@ -30,12 +31,21 @@ try {
         $title = $_POST['title'];
         $content = $_POST['content'];
         $tags = explode(',', $_POST['tags']);
+
+        $cleanTags = [];
+        foreach ($tags as $tag) {
+            $cleanTag = str_replace('  ', ' ', trim($tag));
+            if (empty($cleanTag)) {
+                continue;
+            }
+            $cleanTags[] = $cleanTag;
+        }
         // $avatar = $_POST['avatar'];
 
         $post = $postId == -1 ? null : Post::getPostById($postId);
 
         // $avatar = $post != null ? $post->getAvatar() : $_POST['avatar'];
-        
+
         $errors = validateFormData($title, $content);
 
         if (!empty($errors)) {
@@ -52,7 +62,8 @@ try {
             $postId = Post::createPost($userId, $title, $content, 1);
         }
 
-        Post::updateTags($tags, $postId);
+        $tools = Project::getAllTools();
+        Post::updateTags($cleanTags, $postId, $tools);
         uploadFile($postId, 'avatar', 'avatar');
         uploadFile($postId, 'image', 'image', $lastSavedImageIndex);
 
@@ -90,7 +101,7 @@ function uploadFile($postId, $fileType, $prefix, $lastSavedImageIndex = null,  $
                 $extension = $pathinfo['extension'];
                 $basenameIndex = $fileType == 'avatar' ? null : $i + $lastSavedImageIndex + 1;
                 $basenameNoExtension = "project" . $postId . "_" . $prefix . $basenameIndex ?? '';
-                $basename = $basenameNoExtension . ".".$extension;
+                $basename = $basenameNoExtension . "." . $extension;
 
                 $imginfo_array = getimagesize($tempFile);
 
@@ -123,7 +134,7 @@ function deleteImage($postId, $imagePath)
 {
     if (file_exists($imagePath)) {
         unlink($imagePath);
-    } 
+    }
     Post::removeImage($postId, $imagePath);
     return true;
 }

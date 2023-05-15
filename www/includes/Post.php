@@ -377,13 +377,12 @@ class Post
         }
     }
 
-    public static function updateTags($tags, $postId)
+    public static function updateTags($tags, $postId, $tools = null)
     {
         try {
-            $con = $GLOBALS['con'];
-
             $dbTags = [];
 
+            $con = $GLOBALS['con'];
             $sql = "SELECT name FROM tags";
             $result = $con->query($sql);
 
@@ -394,13 +393,22 @@ class Post
             $sql2 = "DELETE FROM post_tags WHERE post_id = $postId";
             $con->query($sql2);
 
+            $isTool = false;
             foreach ($tags as $t) {
-                $sql3 = "INSERT INTO tags (name) VALUES ('$t')";
+                $isTool = in_array($t, $tools);
+
                 if (!in_array($t, $dbTags)) {
-                    $con->query($sql3);
+
+                    $sql3 = "INSERT INTO tags (name, is_tool) VALUES (?, ?)";
+                    $stmt = $con->prepare($sql3);
+                    $stmt->bind_param('si', $t, $isTool);
+                    $stmt->execute();
                 }
-                $sql4 = "INSERT INTO post_tags (post_id, tag_name) VALUES ($postId, '$t')";
-                $con->query($sql4);
+
+                $sql4 = "INSERT INTO post_tags (post_id, tag_name) VALUES (?, ?)";
+                $stmt = $con->prepare($sql4);
+                $stmt->bind_param('is', $postId, $t);
+                $stmt->execute();
             }
 
             return true;
