@@ -61,7 +61,7 @@ CREATE TABLE `images` (
   KEY `FK_images_projects_idx` (`project_id`),
   CONSTRAINT `FK_images_posts` FOREIGN KEY (`post_id`) REFERENCES `posts` (`post_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_images_projects` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,7 +70,7 @@ CREATE TABLE `images` (
 
 LOCK TABLES `images` WRITE;
 /*!40000 ALTER TABLE `images` DISABLE KEYS */;
-INSERT INTO `images` VALUES (3,'image','post1_image2.png','./assets/images/post1_image2.png',1,NULL),(9,'avatar','post16_avatar.jpeg','./assets/images/post16_avatar.jpeg',16,NULL),(10,'image','post16_image1.jpg','./assets/images/post16_image1.jpg',16,NULL),(12,'image','post1_image1.png','./assets/images/post1_image1.png',1,NULL),(14,'image','post1_image3.png','./assets/images/post1_image3.png',1,NULL),(15,'image','post1_image4.png','./assets/images/post1_image4.png',1,NULL),(16,'avatar','project2_avatar','./assets/images/project2_avatar.png',NULL,2),(17,'image','project2_image1','./assets/images/project2_image1.png',NULL,2),(18,'avatar','project3_avatar','./assets/images/project3_avatar.png',NULL,3),(19,'image','project3_image1','./assets/images/project3_image1.png',NULL,3),(20,'avatar','project4_avatar','./assets/images/project4_avatar.png',NULL,4),(21,'image','project4_image1','./assets/images/project4_image1.png',NULL,4),(22,'avatar','project5_avatar','./assets/images/project5_avatar.png',NULL,5),(23,'image','project5_image1','./assets/images/project5_image1.png',NULL,5),(24,'avatar','project6_avatar','./assets/images/project6_avatar.png',NULL,6),(25,'image','project6_image1','./assets/images/project6_image1.png',NULL,6);
+INSERT INTO `images` VALUES (3,'image','post1_image2','./assets/images/post1_image2.png',1,NULL),(9,'avatar','post16_avatar','./assets/images/post16_avatar.jpeg',16,NULL),(10,'image','post16_image1','./assets/images/post16_image1.jpg',16,NULL),(16,'avatar','project2_avatar','./assets/images/project2_avatar.png',NULL,2),(17,'image','project2_image1','./assets/images/project2_image1.png',NULL,2),(18,'avatar','project3_avatar','./assets/images/project3_avatar.png',NULL,3),(19,'image','project3_image1','./assets/images/project3_image1.png',NULL,3),(20,'avatar','project4_avatar','./assets/images/project4_avatar.png',NULL,4),(21,'image','project4_image1','./assets/images/project4_image1.png',NULL,4),(22,'avatar','project5_avatar','./assets/images/project5_avatar.png',NULL,5),(23,'image','project5_image1','./assets/images/project5_image1.png',NULL,5),(24,'avatar','project6_avatar','./assets/images/project6_avatar.png',NULL,6),(25,'image','project6_image1','./assets/images/project6_image1.png',NULL,6),(27,'avatar','project1_avatar','./assets/images/project1_avatar.png',1,NULL),(28,'image','project1_image3','./assets/images/project1_image3.png',1,NULL);
 /*!40000 ALTER TABLE `images` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -97,7 +97,7 @@ CREATE TABLE `post_tags` (
 
 LOCK TABLES `post_tags` WRITE;
 /*!40000 ALTER TABLE `post_tags` DISABLE KEYS */;
-INSERT INTO `post_tags` VALUES (1,'CSS'),(1,'HTML'),(1,'MySQL'),(1,'PHP'),(16,'studentlife'),(16,'tips');
+INSERT INTO `post_tags` VALUES (1,'CSS'),(1,'HTML'),(1,'jobsearch'),(1,'MySQL'),(1,'PHP'),(1,'portfolio'),(16,'studentlife'),(16,'tips');
 /*!40000 ALTER TABLE `post_tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -232,7 +232,7 @@ CREATE TABLE `tags` (
 
 LOCK TABLES `tags` WRITE;
 /*!40000 ALTER TABLE `tags` DISABLE KEYS */;
-INSERT INTO `tags` VALUES ('ASP.Net',_binary ''),('Boot Spring',_binary ''),('Bootstrap',_binary ''),('C#',_binary ''),('CSS',_binary ''),('Entity Framework',_binary ''),('HTML',_binary ''),('Java',_binary ''),('JavaScript',_binary ''),('Mobile',_binary '\0'),('MySQL',_binary ''),('PHP',_binary ''),('SQL',_binary '\0'),('studentlife',_binary '\0'),('tips',_binary '\0'),('Web',_binary '\0');
+INSERT INTO `tags` VALUES ('ASP.Net',_binary ''),('Boot Spring',_binary ''),('Bootstrap',_binary ''),('C#',_binary ''),('CSS',_binary ''),('Entity Framework',_binary ''),('HTML',_binary ''),('Java',_binary ''),('JavaScript',_binary ''),('jobsearch',_binary '\0'),('Mobile',_binary '\0'),('MySQL',_binary ''),('newtag',_binary '\0'),('PHP',_binary ''),('portfolio',_binary '\0'),('SQL',_binary '\0'),('studentlife',_binary '\0'),('tips',_binary '\0'),('Web',_binary '\0');
 /*!40000 ALTER TABLE `tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -301,4 +301,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-15 14:09:42
+-- Dump completed on 2023-05-15 23:39:42
