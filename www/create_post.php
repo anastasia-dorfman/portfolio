@@ -25,6 +25,7 @@ $avatar = '';
 $imageUrls = '';
 $editing = false;
 $imagesCount = 0;
+$maxFileSize = 2000000;
 
 // Check if we're editing an existing post
 if ($postId != -1) {
@@ -56,7 +57,7 @@ if ($postId != -1) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <script src="includes/tinymce/js/tinymce/tinymce.min.js"></script>
+    <script defer src="includes/tinymce/js/tinymce/tinymce.min.js"></script>
     <script>
         tinymce.init({
             selector: "#content",
@@ -76,13 +77,17 @@ if ($postId != -1) {
                 <span class="heading-sec__main heading-sec__main--lt"><?php echo $editing ? 'Edit Post' : 'Create Post'; ?></span>
             </h2>
             <div class="post__form-container">
-                <form action="create_post_proc.php" method="POST" id="remove_image"></form>
-                <form action="create_post_proc.php" method="POST" id="remove_avatar"></form>
+                <?php if ($postId != -1 && $post != null && $post->getAvatar() != null) { ?>
+                    <form action="create_post_proc.php" method="POST" id="remove_avatar"></form>
+                <?php } ?>
+                <?php if ($postId != -1 && $imageUrls != '') { ?>
+                    <form action="create_post_proc.php" method="POST" id="remove_image"></form>
+                <?php } ?>
                 <form action="create_post_proc.php" method="POST" class="contact__form" enctype="multipart/form-data">
                     <input type="hidden" name="postId" value="<?php echo $postId ?>">
                     <input type="hidden" name="isEdit" value="<?php echo $editing ?>">
                     <!-- <input type="hidden" name="upload"> -->
-                    <input type="hidden" name="MAX_FILE_SIZE" value="2000000">
+                    <input type="hidden" name="MAX_FILE_SIZE" value="$maxFileSize">
                     <div class="contact__form-field">
                         <label class="contact__form-label" for="title">Title</label>
                         <input required type="text" class="contact__form-input" name="title" id="title" placeholder="Title" value="<?php echo $title ?>" />
@@ -148,31 +153,53 @@ if ($postId != -1) {
 
     <?php include "includes/footer.php"; ?>
     <script src="./index.js"></script>
+
+    <script>
+        const addImageButton = document.getElementById("addImage");
+        let imageIndex = <?php echo $imagesCount ?>;
+        let shift = imageIndex == 0 ? 2 : 1;
+
+        addImageButton.addEventListener("click", function() {
+            const container = document.getElementById("image-container");
+            const div = document.createElement("div");
+            const label = document.createElement("label");
+            label.className = "contact__form-label";
+            label.innerHTML = `Image ${container.children.length + imageIndex + shift}`;
+            const input = document.createElement("input");
+            input.required = true;
+            input.type = "file";
+            input.className = "contact__form-input";
+            input.name = "image[]";
+            input.accept = "image/*";
+            div.appendChild(label);
+            div.appendChild(input);
+            container.appendChild(div);
+        });
+    </script>
+    <script>
+        const avatarInput = document.getElementById('avatar');
+        const imageInputs = document.querySelectorAll('input[name="image[]"]');
+        const maxFileSize = <?php echo $maxFileSize ?>;
+
+        $('#avatra').on('change', function() {
+            const size =
+                (this.files[0].size / 1024 / 1024).toFixed(2);
+
+            if (size > 4) {
+                alert("Image must be less than 2MB");
+            }
+        });
+        $('#image[0]').on('change', function() {
+            const size =
+                (this.files[0].size / 1024 / 1024).toFixed(2);
+
+            if (size > 4) {
+                alert("Image must be less than 2MB");
+            }
+        });
+    </script>
+
+    <?php include 'includes/scripts.php'; ?>
 </body>
 
 </html>
-
-<?php include 'includes/scripts.php'; ?>
-
-<script>
-    const addImageButton = document.getElementById("addImage");
-    let imageIndex = <?php echo $imagesCount ?>;
-    let shift = imageIndex == 0 ? 2 : 1;
-
-    addImageButton.addEventListener("click", function() {
-        const container = document.getElementById("image-container");
-        const div = document.createElement("div");
-        const label = document.createElement("label");
-        label.className = "contact__form-label";
-        label.innerHTML = `Image ${container.children.length + imageIndex + shift}`;
-        const input = document.createElement("input");
-        input.required = true;
-        input.type = "file";
-        input.className = "contact__form-input";
-        input.name = "image[]";
-        input.accept = "image/*";
-        div.appendChild(label);
-        div.appendChild(input);
-        container.appendChild(div);
-    });
-</script>
