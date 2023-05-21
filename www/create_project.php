@@ -66,9 +66,6 @@ if ($projectId != -1) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="includes/magnific-popup/magnific-popup.css">
-    <script src="includes/magnific-popup/jquery.magnific-popup.js"></script>
-    <script src="includes/js/jquery.min.js"></script>
     <script src="includes/tinymce/js/tinymce/tinymce.min.js"></script>
     <script>
         tinymce.init({

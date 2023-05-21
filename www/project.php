@@ -34,7 +34,6 @@ $avatar = $project->getAvatar();
   <meta name="description" content="Case study page of Project" />
 
   <link rel="stylesheet" href="includes/css/style.css" />
-
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700;900&display=swap" rel="stylesheet" />
@@ -58,15 +57,15 @@ $avatar = $project->getAvatar();
   </section>
 
   <?php
-    if (isset($_SESSION["USER_TYPE"]) && $_SESSION["USER_TYPE"] == 'admin') {
-    ?>
-        <div class="btn__margin">
-            <a href="./create_project.php?project_id=<?php echo $projectId ?>" class="btn btn--med btn--theme-inv">Edit Project</a>
-            <a href="./delete_project_proc.php?project_id=<?php echo $projectId ?>" onclick="return confirm('Are you sure you want to delete the project?')" class="btn btn--med btn--theme-inv">Delete Project</a>
-        </div>
-    <?php
-    }
-    ?>
+  if (isset($_SESSION["USER_TYPE"]) && $_SESSION["USER_TYPE"] == 'admin') {
+  ?>
+    <div class="btn__margin">
+      <a href="./create_project.php?project_id=<?php echo $projectId ?>" class="btn btn--med btn--theme-inv">Edit Project</a>
+      <a href="./delete_project_proc.php?project_id=<?php echo $projectId ?>" onclick="return confirm('Are you sure you want to delete the project?')" class="btn btn--med btn--theme-inv">Delete Project</a>
+    </div>
+  <?php
+  }
+  ?>
 
   <section class="project-details">
     <div class="main-container">
@@ -74,14 +73,15 @@ $avatar = $project->getAvatar();
         <div class="project-details__showcase-img-cont">
           <img src="<?php echo $avatar ?>" alt="Project Image" class="project-details__showcase-img" />
         </div>
-        <div class="project-details__content-main">
           <div class="project-details__desc">
             <h3 class="project-details__content-title">Project Overview</h3>
             <p class="project-details__desc-para"><?php echo $overview ?></p>
           </div>
           <div class="post__row">
             <?php foreach ($images as $i) { ?>
+              <a href="<?php echo $i ?>" class="lightbox-link">
                 <img src="<?php echo $i ?>" alt="Project Image" class="project-details__showcase-img post__img" />
+              </a>
             <?php } ?>
           </div>
           <div class="project-details__tools-used">
@@ -97,7 +97,6 @@ $avatar = $project->getAvatar();
             <!-- <a href="#" class="btn btn--med btn--theme project-details__links-btn" target="_blank">Live Link</a> -->
             <a href="<?php echo $codeLink ?>" class="btn btn--med btn--theme-inv project-details__links-btn" target="_blank">Code Link</a>
           </div>
-        </div>
       </div>
     </div>
   </section>
