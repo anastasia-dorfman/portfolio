@@ -34,7 +34,6 @@ if (isset($_SESSION['USERNAME'])) {
     <?php include "includes/header.php"; ?>
 
     <div id="login" class="contact sec-pad">
-    <div class="main-container">
         <h2 class="heading heading-sec heading-sec__login">
             <span class="heading-sec__main heading-sec__main--lt">Login</span>
 
@@ -60,7 +59,6 @@ if (isset($_SESSION['USERNAME'])) {
                     Login
                 </button>
             </form>
-        </div>
         </div>
     </div>
     

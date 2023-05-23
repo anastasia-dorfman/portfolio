@@ -474,7 +474,6 @@ class Project
                 $projects = [];
                 $params = array_fill(0, 5, $searchStr);
                 $stmt->bind_param(str_repeat('s', 5), ...$params);
-                // $stmt->bind_param('sssss', $searchStr, $searchStr, $searchStr, $searchStr, $searchStr);
                 $stmt->execute();
                 $result = $stmt->get_result();
 
