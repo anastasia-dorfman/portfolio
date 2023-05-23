@@ -76,24 +76,29 @@ $projects = Project::getProjects();
         </span>
       </h2>
       <div class="about__content">
-        <div class="about__content-main">
-          <h3 class="about__content-title">Get to know me!</h3>
-          <div class="about__content-details">
-            <p class="about__content-details-para">
-              Hey! I'm <strong>Anastasia Dorfman</strong> , a senior IT student with a passion for <strong> web development </strong>. I am
-              located in Moncton, NB, Canada, but open to relocation for the right opportunity.
-              I always seek to expand my knowledge and stay up-to-date with industry trends and best practices.
-            </p>
-            <p class="about__content-details-para">
-              I'm excited to connect with potential employers and create efficient and secure web solutions that meet their needs.
-              Feel free to <strong>contact</strong> me here.
-            </p>
+        <div class="relative_position">
+          <div class="about__content-main">
+            <h3 class="about__content-title">Get to know me!</h3>
+            <div class="about__content-details">
+              <p class="about__content-details-para">
+                Hey! I'm <strong>Anastasia Dorfman</strong> , a senior IT student with a passion for <strong> web development </strong>. I am
+                located in Moncton, NB, Canada, but open to relocation for the right opportunity.
+                I always seek to expand my knowledge and stay up-to-date with industry trends and best practices.
+              </p>
+              <p class="about__content-details-para">
+                I'm excited to connect with potential employers and create efficient and secure web solutions that meet their needs.
+                Feel free to <strong>contact</strong> me here.
+              </p>
+            </div>
+            <a href="./#contact" class="btn btn--med btn--theme dynamicBgClr">Contact</a>
           </div>
-          <a href="./#contact" class="btn btn--med btn--theme dynamicBgClr">Contact</a>
         </div>
-        <div class="about__content-skills">
-          <h3 class="about__content-title">My Skills</h3>
-          <?php getSkills(); ?>
+        <div class="relative_position">
+          <div class="about__content-skills">
+            <h3 class="about__content-title">My Skills</h3>
+            <?php getSkills(); ?>
+          </div>
+          <a href="assets/docs/Resume_AnastasiaDorfman.pdf" class="btn btn--med btn--theme dynamicBgClr">Get the Resume</a>
         </div>
       </div>
     </div>

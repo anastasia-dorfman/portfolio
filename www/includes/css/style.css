@@ -398,6 +398,7 @@ textarea {
 .projects__content {
   width: 80%;
   margin: auto;
+  margin-bottom: 8rem;
 }
 
 .projects__row {
@@ -1057,6 +1058,7 @@ textarea {
 
 .heading-sec__login {
   margin-bottom: 2rem;
+  margin-top: 5rem;
 }
 
 @media only screen and (max-width: 56.25em) {
@@ -1511,4 +1513,20 @@ textarea {
 .input-container input {
   width: 100%;
   /* Other existing styles for inputs */
+}
+
+.relative_position {
+  position: relative;
+  padding-bottom: 2rem; 
+}
+
+.relative_position .btn {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin-top: 2rem; 
+}
+
+.mt-4 {
+  margin-top: 4rem;
 }

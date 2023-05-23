@@ -74,7 +74,7 @@ if ($postId != -1) {
     <div id="contact" class="contact sec-pad dynamicBg">
         <div class="main-container">
             <h2>
-                <span class="heading-sec__main heading-sec__main--lt"><?php echo $editing ? 'Edit Post' : 'Create Post'; ?></span>
+                <span class="heading-sec__main heading-sec__main--lt mt-4"><?php echo $editing ? 'Edit Post' : 'Create Post'; ?></span>
             </h2>
             <div class="post__form-container">
                 <?php if ($postId != -1 && $post != null && $post->getAvatar() != null) { ?>

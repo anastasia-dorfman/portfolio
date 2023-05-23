@@ -83,7 +83,7 @@ if ($projectId != -1) {
     <div id="contact" class="contact sec-pad dynamicBg">
         <div class="main-container">
             <h2>
-                <span class="heading-sec__main heading-sec__main--lt"><?php echo $editing ? 'Edit Project' : 'Create Project'; ?></span>
+                <span class="heading-sec__main heading-sec__main--lt mt-4"><?php echo $editing ? 'Edit Project' : 'Create Project'; ?></span>
             </h2>
             <div class="post__form-container">
                 <form action="create_project_proc.php" method="POST" id="remove_image"></form>
