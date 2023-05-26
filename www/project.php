@@ -71,7 +71,9 @@ $avatar = $project->getAvatar();
     <div class="main-container">
       <div class="project-details__content">
         <div class="project-details__showcase-img-cont">
+        <a href="<?php echo $avatar ?>" class="lightbox-link">
           <img src="<?php echo $avatar ?>" alt="Project Image" class="project-details__showcase-img" />
+          </a>
         </div>
           <div class="project-details__desc">
             <h3 class="project-details__content-title">Project Overview</h3>

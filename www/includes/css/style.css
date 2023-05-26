@@ -1301,6 +1301,12 @@ textarea {
   /* margin-bottom: 4rem;  */
 }
 
+@media only screen and (max-width: 56.25em) {
+  .post__row {
+    grid-template-columns: 1fr;
+  }
+}
+
 .post__avatar {
   width: 100%;
   margin-bottom: 2rem;
@@ -1385,6 +1391,12 @@ textarea {
   align-items: start;
 }
 
+@media only screen and (max-width: 56.25em) {
+  .image-grid {
+    display:block;
+  }
+}
+
 .contact__form-field img {
   max-width: 100%;
   height: auto;
@@ -1397,12 +1409,30 @@ textarea {
   flex-direction: column;
 }
 
+@media only screen and (max-width: 56.25em) {
+  .fixed-height {
+    margin-bottom: 1rem;
+  }
+}
+
 .mt-auto {
   margin-top: auto;
 }
 
 .tools-container {
   columns: 5;
+}
+
+@media only screen and (max-width: 56.25em) {
+  .tools-container {
+    columns: 3;
+  }
+}
+
+@media only screen and (max-width: 37.5em) {
+  .tools-container {
+    columns: 2;
+  }
 }
 
 .tools-checkbox{
