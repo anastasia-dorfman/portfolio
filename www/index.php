@@ -94,11 +94,15 @@ $projects = Project::getProjects();
           </div>
         </div>
         <div class="relative_position">
-          <div class="about__content-skills">
+          <div class="about__content-main">
             <h3 class="about__content-title">My Skills</h3>
-            <?php getSkills(); ?>
+            <div class="about__content-details">
+            <div class="about__content-details-para">
+              <?php getSkills(); ?>
+            </div>
+            </div>
+            <a href="assets/docs/Resume_AnastasiaDorfman.pdf" class="btn btn--med btn--theme dynamicBgClr">Get the Resume</a>
           </div>
-          <a href="assets/docs/Resume_AnastasiaDorfman.pdf" class="btn btn--med btn--theme dynamicBgClr">Get the Resume</a>
         </div>
       </div>
     </div>
@@ -171,7 +175,6 @@ $projects = Project::getProjects();
   <?php
   include "includes/footer.php";
   ?>
-  <script src="./index.js"></script>
 </body>
 
 </html>

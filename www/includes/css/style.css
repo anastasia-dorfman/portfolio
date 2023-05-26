@@ -1073,7 +1073,7 @@ textarea {
 .header__search {
   position: relative;
   display: flex;
-  align-items: center;
+  align-items: center; 
 }
 
 .header__search-box {
