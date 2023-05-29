@@ -21,9 +21,9 @@
 <?php if (isset($_SESSION['STATUS']) && $_SESSION['STATUS'] != '') { ?>
   <script type="text/javascript">
     $(document).ready(function() {
-      swal({
+      Swal.fire({
         title: "<?php echo $_SESSION['STATUS']; ?>",
-        // text: "Suceess message sent!!",
+        // text: "Success message sent!!",
         icon: "<?php echo $_SESSION['STATUS_CODE']; ?>",
         button: "Ok",
         timer: 2000

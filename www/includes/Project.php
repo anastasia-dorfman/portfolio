@@ -259,12 +259,11 @@ class Project
             $sql2 = "DELETE FROM images WHERE project_id = $projectId";
             $con->query($sql2);
 
-            $images = [];
+            $images = $project->getImages() == null ? [] : $project->getImages(); 
+            $avatar = $project->getAvatar() == null ? '' : $project->getAvatar();
 
-            if (isset($project->getAvatar))
-                array_push($images, $project->getAvatar);
-            if (isset($project->getImages))
-                array_push($images, $project->getImages);
+            if ($avatar !== '')
+                array_push($images, $avatar);
 
             foreach ($images as $i) {
                 unlink($i);

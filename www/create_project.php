@@ -178,8 +178,6 @@ if ($projectId != -1) {
 
 <?php include 'includes/scripts.php'; ?>
 
-<!-- <script src="includes/swal/sweetalert2.all.min.js"></script>  -->
-
 <script>
     const addImageButton = document.getElementById("addImage");
     let imageIndex = <?php echo $imagesCount ?>;
@@ -207,9 +205,11 @@ if ($projectId != -1) {
     const overviewTextarea = document.getElementById("overview");
 
     form.addEventListener("submit", function(event) {
-        if (overviewTextarea.value.trim().length < 250) {
+        const overviewContent = tinymce.get("overview").getContent();
+
+        if (overviewContent.trim().length < 250) {
             event.preventDefault();
-            swal({
+            Swal.fire({
                 title: 'Error',
                 text: 'Overview must be at least 250 characters long.',
                 icon: 'error',

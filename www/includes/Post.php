@@ -324,12 +324,11 @@ class Post
             $sql2 = "DELETE FROM images WHERE post_id = $postId";
             $con->query($sql2);
 
-            $images = [];
+            $images = $post->getImages() == null ? [] : $post->getImages(); 
+            $avatar = $post->getAvatar() == null ? '' : $post->getAvatar();
 
-            if (isset($post->getAvatar))
+            if ($avatar !== '')
                 array_push($images, $post->getAvatar);
-            if (isset($post->getImages))
-                array_push($images, $post->getImages);
 
             foreach ($images as $i) {
                 unlink($i);
