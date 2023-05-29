@@ -28,7 +28,7 @@ try {
         $overview = $_POST['overview'];
         $codeLink = $_POST['code_link'];
         $dateCreated = $_POST['created_at'];
-        $tags = $_POST['tags'];
+        $tags = $_POST['tags'] == null ? [] : $_POST['tags'];
 
         $project = $projectId == -1 ? null : Project::getProjectById($projectId);
 

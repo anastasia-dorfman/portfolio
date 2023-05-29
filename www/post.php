@@ -49,7 +49,7 @@ $tags = $post->getTags();
     ?>
         <div class="btn__margin">
             <a href="./create_post.php?post_id=<?php echo $postId ?>" class="btn btn--med btn--theme-inv">Edit Post</a>
-            <a href="./delete_post_proc.php?post_id=<?php echo $postId ?>" onclick="return confirm('Are you sure you want to delete this post?')" class="btn btn--med btn--theme-inv">Delete Post</a>
+            <a href="./delete_post_proc.php?post_id=<?php echo $postId ?>" onclick="showDeleteConfirmation(event)" class="btn btn--med btn--theme-inv">Delete Post</a>
         </div>
     <?php
     }
@@ -94,7 +94,6 @@ $tags = $post->getTags();
     <?php
     include "includes/footer.php";
     ?>
-    <script src="./index.js"></script>
 </body>
 
 </html>

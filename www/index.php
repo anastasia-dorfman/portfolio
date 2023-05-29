@@ -19,7 +19,7 @@ $projects = Project::getProjects();
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>Anastasia Dorfman</title>
-  <meta name="description" content="Portfolio Template for Developer" />
+  <meta name="description" content="Anastasia Dorfman - Portfolio" />
 
   <link rel="stylesheet" href="includes/css/style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -134,7 +134,7 @@ $projects = Project::getProjects();
                 <a href="./project.php?project_id=<?php echo $projectId ?>" class="btn btn--med btn--theme dynamicBgClr">Case Study</a>
                 <?php if (isset($_SESSION["USER_TYPE"]) && $_SESSION["USER_TYPE"] == 'admin') { ?>
                   <a href="./create_project.php?project_id=<?php echo $projectId ?>" class="btn btn--med btn--theme-inv">Edit</a>
-                  <a href="./delete_project_proc.php?project_id=<?php echo $projectId ?>" onclick="return confirm('Are you sure you want to delete the project?')" class="btn btn--med btn--theme-inv">Delete</a>
+                  <a href="./delete_project_proc.php?project_id=<?php echo $projectId ?>" onclick="showDeleteConfirmation(event)" class="btn btn--med btn--theme-inv">Delete</a>
                 <?php } ?>
               </div>
             </div>

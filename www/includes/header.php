@@ -82,7 +82,7 @@
           <?php if (!isset($_SESSION['USERNAME'])) { ?>
             <a href="./login.php" class="header__link"> Login </a>
           <?php } else { ?>
-            <a href="./login.php" class="header__link"> Logout </a>
+            <a href="./logout_proc.php" class="header__link"> Logout </a>
           <?php } ?>
         </li>
         <li class="header__sm-menu-link">

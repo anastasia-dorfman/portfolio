@@ -225,7 +225,6 @@ $_SESSION["REFERER"] = "search.php";
   <?php } ?>
 
   <?php include "includes/footer.php";  ?>
-  <script src="./index.js"></script>
 </body>
 
 </html>
@@ -235,13 +234,6 @@ $_SESSION["REFERER"] = "search.php";
     document.getElementById("search_form").submit();
   }
 </script>
-
-<script>
-  // window.addEventListener('beforeunload', function() {
-  //     fetch('clear_search_proc.php');
-  // });
-</script>
-
 
 <?php
 include 'includes/scripts.php';

@@ -32,7 +32,6 @@ $avatar = $project->getAvatar();
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>Case Study of <?php echo $name ?></title>
   <meta name="description" content="Case study page of Project" />
-
   <link rel="stylesheet" href="includes/css/style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -61,7 +60,7 @@ $avatar = $project->getAvatar();
   ?>
     <div class="btn__margin">
       <a href="./create_project.php?project_id=<?php echo $projectId ?>" class="btn btn--med btn--theme-inv">Edit Project</a>
-      <a href="./delete_project_proc.php?project_id=<?php echo $projectId ?>" onclick="return confirm('Are you sure you want to delete the project?')" class="btn btn--med btn--theme-inv">Delete Project</a>
+      <a href="./delete_project_proc.php?project_id=<?php echo $projectId ?>" onclick="showDeleteConfirmation(event)" class="btn btn--med btn--theme-inv">Delete Project</a>
     </div>
   <?php
   }
@@ -103,9 +102,10 @@ $avatar = $project->getAvatar();
     </div>
   </section>
   <?php include "includes/footer.php"; ?>
-  <script src="./index.js"></script>
+
+
 </body>
 
 </html>
 
-<?php include 'includes/scripts.php'; ?>
+<?php include_once 'includes/scripts.php'; ?>

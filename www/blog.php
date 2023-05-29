@@ -65,7 +65,7 @@ $posts = Post::getPosts();
             <a href="./post.php?post_id=<?php echo $p->getPostId() ?>" class="btn btn--med btn--theme dynamicBgClr">Read more</a>
             <?php if (isset($_SESSION["USER_TYPE"]) && $_SESSION["USER_TYPE"] == 'admin') { ?>
               <a href="./create_post.php?post_id=<?php echo $p->getPostId() ?>" class="btn btn--med btn--theme-inv">Edit</a>
-              <a href="./delete_post_proc.php?post_id=<?php echo $p->getPostId() ?>" onclick="return confirm('Are you sure you want to delete this post?')" class="btn btn--med btn--theme-inv">Delete</a>
+              <a href="./delete_post_proc.php?post_id=<?php echo $p->getPostId() ?>" onclick="showDeleteConfirmation(event)" class="btn btn--med btn--theme-inv">Delete</a>
             <?php } ?>
           </div>
         </div>
@@ -73,7 +73,6 @@ $posts = Post::getPosts();
     </div>
   </div>
   <?php include "includes/footer.php"; ?>
-  <script src="./index.js"></script>
 </body>
 
 </html>

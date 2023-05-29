@@ -84,7 +84,6 @@ if (isset($_SESSION['USERNAME'])) {
     <?php
     include "includes/footer.php";
     ?>
-    <script src="./index.js"></script>
 </body>
 </html>
 

@@ -71,7 +71,7 @@ if ($projectId != -1) {
         tinymce.init({
             selector: "#overview",
             height: 600,
-            plugins: "advlist autolink lists link image charmap print preview anchor",
+            plugins: "advlist autolink lists link image charmap preview anchor",
             toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
         });
     </script>
@@ -101,7 +101,7 @@ if ($projectId != -1) {
                     </div>
                     <div class="contact__form-field">
                         <label class="contact__form-label" for="overview">Overview</label>
-                        <textarea required cols="40" rows="30" class="contact__form-input tiny-mce" name="overview" id="overview" placeholder="Overview"><?php echo $overview ?></textarea>
+                        <textarea cols="40" rows="30" class="contact__form-input tiny-mce" name="overview" id="overview" placeholder="Overview"><?php echo $overview ?></textarea>
                     </div>
                     <div class="contact__form-field">
                         <label class="contact__form-label" for="code_link">Code Link</label>
@@ -158,7 +158,7 @@ if ($projectId != -1) {
                     <div class="contact__form-field">
                         <?php if ($projectId == -1 || $images == null) { ?>
                             <label class="contact__form-label" for="image">Image <?php echo ($imagesCount + 1) ?> </label>
-                            <input type="file" class="contact__form-input" name="image[]" id="image" accept="image/*" />
+                            <input required type="file" class="contact__form-input" name="image[]" id="image" accept="image/*" />
                         <?php } ?>
                         <div id="image-container"></div>
                         <div class="btn-margin">
@@ -172,12 +172,13 @@ if ($projectId != -1) {
     </div>
 
     <?php include "includes/footer.php"; ?>
-    <script src="./index.js"></script>
 </body>
 
 </html>
 
 <?php include 'includes/scripts.php'; ?>
+
+<!-- <script src="includes/swal/sweetalert2.all.min.js"></script>  -->
 
 <script>
     const addImageButton = document.getElementById("addImage");
@@ -188,10 +189,11 @@ if ($projectId != -1) {
         const container = document.getElementById("image-container");
         const div = document.createElement("div");
         const label = document.createElement("label");
+        let imageNumber = container.children.length + imageIndex + shift;
         label.className = "contact__form-label";
-        label.innerHTML = `Image ${container.children.length + imageIndex + shift}`;
+        label.innerHTML = `Image ${imageNumber}`;
         const input = document.createElement("input");
-        input.required = true;
+        input.required = imageNumber > 2 ? true : false;
         input.type = "file";
         input.className = "contact__form-input";
         input.name = "image[]";
@@ -199,5 +201,20 @@ if ($projectId != -1) {
         div.appendChild(label);
         div.appendChild(input);
         container.appendChild(div);
+    });
+
+    const form = document.querySelector(".contact__form");
+    const overviewTextarea = document.getElementById("overview");
+
+    form.addEventListener("submit", function(event) {
+        if (overviewTextarea.value.trim().length < 250) {
+            event.preventDefault();
+            swal({
+                title: 'Error',
+                text: 'Overview must be at least 250 characters long.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
     });
 </script>
