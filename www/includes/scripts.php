@@ -56,3 +56,20 @@
     });
   }
 </script>
+
+<script>
+  window.addEventListener('load', function() {
+    if (window.matchMedia('(max-width: 37.5em)').matches) {
+      const selects = document.querySelectorAll('.select-width');
+      let maxWidth = 0;
+
+      selects.forEach(function(select) {
+        maxWidth = Math.max(maxWidth, select.offsetWidth);
+      });
+
+      selects.forEach(function(select) {
+        select.style.width = maxWidth + 'px';
+      });
+    }
+  });
+</script>

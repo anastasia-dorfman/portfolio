@@ -209,6 +209,13 @@ textarea {
   font-size: 1.6rem;
 }
 
+
+@media only screen and (max-width: 56.25em) {
+  .btn--med {
+    margin-top: 1rem;
+  }
+}
+
 .btn--theme {
   background: #0062b9;
   color: #fff;
@@ -221,6 +228,12 @@ textarea {
   box-shadow: none;
   padding: calc(1.5rem - 2px) calc(5rem - 2px);
   margin-right: 1rem;
+}
+
+@media only screen and (max-width: 37.5em) {
+  .btn--theme-inv {
+    padding: calc(1rem - 2px) calc(2.5rem - 2px);
+  }
 }
 
 /* manual */
@@ -396,7 +409,7 @@ textarea {
 }
 
 .projects__content {
-  width: 80%;
+  width: 100%;
   margin: auto;
   margin-bottom: 8rem;
 }
@@ -1073,7 +1086,7 @@ textarea {
 .header__search {
   position: relative;
   display: flex;
-  align-items: center; 
+  align-items: center;
 }
 
 .header__search-box {
@@ -1393,7 +1406,7 @@ textarea {
 
 @media only screen and (max-width: 56.25em) {
   .image-grid {
-    display:block;
+    display: block;
   }
 }
 
@@ -1404,7 +1417,7 @@ textarea {
 }
 
 .fixed-height {
-  height: 100%; 
+  height: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -1435,7 +1448,7 @@ textarea {
   }
 }
 
-.tools-checkbox{
+.tools-checkbox {
   color: #333;
   font-size: 1.4rem;
   font-weight: 600;
@@ -1457,22 +1470,58 @@ textarea {
   background: linear-gradient(to right, rgba(0, 98, 185, 0.8), rgba(0, 98, 185, 0.8)), url(../../assets/svg/common-bg.svg);
   background-position: center;
   height: 40vh;
-  min-height: 50rem;
-  max-height: 120rem;
+  min-height: 48rem;
+  max-height: 100rem;
   position: relative;
   padding-top: 14rem;
+}
+
+@media only screen and (max-width: 56.25em) {
+  .search_results {
+    padding-top: 9rem;
+  }
 }
 
 .search-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
+  flex-wrap: wrap;
+  margin: auto;
 }
 
+.search-container form {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+@media only screen and (max-width: 56.25em) {
+  .search-container form {
+    justify-content: left;
+    align-items: flex-start;
+  }
+
+  .search-container .button-container {
+    margin-top: 1rem;
+  }
+
+  .search-container .select-container {
+    margin-top: 1rem;
+  }
+}
+
+@media only screen and (max-width: 37.5em) {
+  .search-container select {
+    margin-top: 1rem;
+  }
+}
 
 .input-large {
-  flex-grow: 2; /* Enlarge the search input */
+  flex-grow: 1;
+  /* Enlarge the search input */
 }
 
 /* Common styles for selects/options and inputs */
@@ -1498,7 +1547,13 @@ textarea {
 .select {
   padding: 1.2rem 3rem;
   font-size: 1.6rem;
-  /* Add additional styles specific to selects/options if needed */
+}
+
+@media (max-width: 37.5em) {
+  .select-width {
+    width: auto; /* Reset width to allow natural sizing */
+    max-width: 100%; /* Ensure select elements don't exceed container width */
+  }
 }
 
 /* Styles for inputs */
@@ -1521,6 +1576,13 @@ textarea {
   box-shadow: none;
   padding: calc(1.2rem - 2px) calc(3rem - 2px);
   margin-right: 1rem;
+  margin-left: 1rem;
+}
+
+@media only screen and (max-width: 37.5em) {
+  .select--theme-inv {
+    padding: calc(1rem - 2px) calc(1.5rem - 2px);
+  }
 }
 
 .input--theme {
@@ -1535,28 +1597,34 @@ textarea {
   box-shadow: none;
   padding: calc(1.2rem - 2px) calc(3rem - 2px);
   margin-right: 1rem;
+  margin-left: 1rem;
 }
 
 .input-container {
-  width: 100%; /* Adjust the width value as needed */
-}
-.input-container input {
   width: 100%;
-  /* Other existing styles for inputs */
+  /* Adjust the width value as needed */
 }
 
 .relative_position {
   position: relative;
-  padding-bottom: 2rem; 
+  padding-bottom: 2rem;
 }
 
 .relative_position .btn {
   position: absolute;
   bottom: 0;
   left: 0;
-  margin-top: 2rem; 
+  margin-top: 2rem;
 }
 
 .mt-4 {
   margin-top: 4rem;
+}
+
+.ml-2 {
+  margin-left: 2rem;
+}
+
+.ml-1 {
+  margin-left: 1rem;
 }

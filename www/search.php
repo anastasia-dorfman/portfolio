@@ -53,83 +53,81 @@ $_SESSION["REFERER"] = "search.php";
 
   <div class="search_results sec-pad">
     <div class="search-container">
+      <form action="search.php" id="clear" method="POST" role="search"></form>
       <form action="search.php" id="search_form" method="POST" role="search">
         <input type="search" name="search_query_form" placeholder="Search..." class="input--theme input--theme-inv input-large" value="<?php echo $searchQuery ?? '' ?>" />
 
-        <!-- Add filter inputs -->
-        <select id="framework" name="framework" class="select--theme select--theme-inv" onchange="onSelectChange()">
-          <option value=''>Select Framework</option>
-          <?php
-          // $filterFramework = isset($_SESSION['framework']) ? $_SESSION['framework'] : '';
-          if (isset($_POST['framework']) && !empty($_POST['framework'])) {
-            $_SESSION['framework'] = $_POST['framework'];
-          }
-          $filterFramework = isset($_SESSION['framework']) ? $_SESSION['framework'] : '';
+        <div class="select-container">
+          <select id="framework" name="framework" class="select--theme select--theme-inv select-width" onchange="onSelectChange()">
+            <option value=''>Select Framework</option>
+            <?php
+            // if (isset($_POST['framework']) && !empty($_POST['framework'])) {
+            if (isset($_POST['framework'])) {
+              $_SESSION['framework'] = $_POST['framework'];
+            }
+            $filterFramework = isset($_SESSION['framework']) ? $_SESSION['framework'] : '';
 
-          foreach ($frameworks as $f) {
-            $selected = $filterFramework == $f ? 'selected' : ''; ?>
-            <option value="<?php echo $f ?>" <?php echo $selected ?>><?php echo $f ?></option>
-          <?php } ?>
-        </select>
+            foreach ($frameworks as $f) {
+              $selected = $filterFramework == $f ? 'selected' : ''; ?>
+              <option value="<?php echo $f ?>" <?php echo $selected ?>><?php echo $f ?></option>
+            <?php } ?>
+          </select>
 
-        <select name="language" class="select--theme select--theme-inv" onchange="onSelectChange()">
-          <option value="">Select Language</option>
-          <?php
-          if (isset($_POST['language']) && !empty($_POST['language'])) {
-            $_SESSION['language'] = $_POST['language'];
-          }
-          $filterLanguage = isset($_SESSION['language']) ? $_SESSION['language'] : '';
+          <select name="language" class="select--theme select--theme-inv select-width" onchange="onSelectChange()">
+            <option value="">Select Language</option>
+            <?php
+            if (isset($_POST['language']) && !empty($_POST['language'])) {
+              $_SESSION['language'] = $_POST['language'];
+            }
+            $filterLanguage = isset($_SESSION['language']) ? $_SESSION['language'] : '';
 
-          foreach ($languages as $l) {
-            $selected = $filterLanguage == $l ? 'selected' : ''; ?>
-            <option value="<?php echo $l ?>" <?php echo $selected; ?>><?php echo $l ?></option>
-          <?php } ?>
-        </select>
+            foreach ($languages as $l) {
+              $selected = $filterLanguage == $l ? 'selected' : ''; ?>
+              <option value="<?php echo $l ?>" <?php echo $selected; ?>><?php echo $l ?></option>
+            <?php } ?>
+          </select>
+        </div>
+        <div class="select-container">
+          <select name="database" class="select--theme select--theme-inv select-width" onchange="onSelectChange()">
+            <option value="">Select Database</option>
+            <?php
+            if (isset($_POST['database']) && !empty($_POST['database'])) {
+              $_SESSION['database'] = $_POST['database'];
+            }
+            $filterDatabase = isset($_SESSION['database']) ? $_SESSION['database'] : '';
 
-        <select name="database" class="select--theme select--theme-inv" onchange="onSelectChange()">
-          <option value="">Select Database</option>
-          <?php
-          if (isset($_POST['database']) && !empty($_POST['database'])) {
-            $_SESSION['database'] = $_POST['database'];
-          }
-          $filterDatabase = isset($_SESSION['database']) ? $_SESSION['database'] : '';
+            foreach ($databases as $d) {
+              $selected = $filterDatabase == $d ? 'selected' : ''; ?>
+              <option value="<?php echo $d ?>" <?php echo $selected ?>><?php echo $d ?></option>
+            <?php } ?>
+          </select>
 
-          foreach ($databases as $d) {
-            $selected = $filterDatabase == $d ? 'selected' : ''; ?>
-            <option value="<?php echo $d ?>" <?php echo $selected ?>><?php echo $d ?></option>
-          <?php } ?>
-        </select>
+          <select name="tag" class="select--theme select--theme-inv select-width" onchange="onSelectChange()">
+            <option value="">Select Tag (for posts)</option>
+            <?php
+            if (isset($_POST['tag']) && !empty($_POST['tag'])) {
+              $_SESSION['tag'] = $_POST['tag'];
+            }
+            $filterTag = isset($_SESSION['tag']) ? $_SESSION['tag'] : '';
 
-        <select name="tag" class="select--theme select--theme-inv" onchange="onSelectChange()">
-          <option value="">Select Tag (for posts)</option>
-          <?php
-          if (isset($_POST['tag']) && !empty($_POST['tag'])) {
-            $_SESSION['tag'] = $_POST['tag'];
-          }
-          $filterTag = isset($_SESSION['tag']) ? $_SESSION['tag'] : '';
-
-          foreach ($tags as $t) {
-            $selected = $filterTag == $t ? 'selected' : ''; ?>
-            <option value="<?php echo $t ?>" <?php echo $selected ?>><?php echo $t ?></option>
-          <?php } ?>
-        </select>
-
-        <button type="submit" name="search_form_btn" class="btn btn--sm btn--theme-inv" onclick="onSelectChange()">Search</button>
-      </form>
-      <form action="search.php" id="clear" method="POST" role="search">
-        <button type="submit" name="clear_btn" class="btn btn--sm btn--theme-inv" onclick="onSelectChange()">Clear</button>
+            foreach ($tags as $t) {
+              $selected = $filterTag == $t ? 'selected' : ''; ?>
+              <option value="<?php echo $t ?>" <?php echo $selected ?>><?php echo $t ?></option>
+            <?php } ?>
+          </select>
+        </div>
+        <div class="button-container">
+          <button type="submit" name="search_form_btn" class="btn btn--sm btn--theme-inv ml-1" onclick="onSelectChange()">Search</button>
+          <button type="submit" name="clear_btn" class="btn btn--sm btn--theme-inv clear-btn" form="clear">Clear</button>
+        </div>
       </form>
     </div>
-
     <h1 class="heading-primary">Search Results</h1>
-    <div class="home-hero__info">
       <p class="text-primary">Showing results for "<?php echo $searchQuery; ?>"</p>
-    </div>
   </div>
   <?php
 
   // Getting list of Projects and Posts
-  // if ((isset($_POST["search"]))) {
   if ($searchQuery !== null) {
     $projects = Project::searchProjects($searchQuery);
     $posts = Post::searchPosts($searchQuery);
@@ -151,7 +149,7 @@ $_SESSION["REFERER"] = "search.php";
     if (!empty($_POST['tag'])) {
       array_push($filters, $_POST['tag']);
     }
-    
+
     $projects = !empty($filters) ? Project::filterProjects($filters, $projects) : $projects;
     $posts = !empty($filters) ? Post::filterPosts($filters, $posts) : $posts;
   ?>
