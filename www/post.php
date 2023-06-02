@@ -38,9 +38,11 @@ $tags = $post->getTags();
     <?php
     include "includes/header.php";
     ?>
-    <div class="post">
-        <div class="post__title">
-            <h1 class="heading-post"><?php echo $post->getTitle() ?></h1>
+    <div class="contact sec-pad">
+        <div class="post">
+            <div class="post__title">
+                <h1 class="heading-post"><?php echo $post->getTitle() ?></h1>
+            </div>
         </div>
     </div>
 
@@ -58,7 +60,7 @@ $tags = $post->getTags();
     <div class="post__content">
         <div class="post__row">
             <div class="post__col">
-                <img src="<?php echo $post->getAvatar() ?>" class="post__avatar"/>
+                <img src="<?php echo $post->getAvatar() ?>" class="post__avatar" />
                 <div class="post__row">
                     <?php
                     foreach ($images as $i) {

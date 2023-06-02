@@ -57,12 +57,12 @@ if ($postId != -1) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <script defer src="includes/tinymce/js/tinymce/tinymce.min.js"></script>
+    <script src="includes/tinymce/js/tinymce/tinymce.min.js"></script>
     <script>
         tinymce.init({
             selector: "#content",
             height: 600,
-            plugins: "advlist autolink lists link image charmap print preview anchor",
+            plugins: "advlist autolink lists link image charmap preview anchor",
             toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
         });
     </script>
@@ -94,7 +94,7 @@ if ($postId != -1) {
                     </div>
                     <div class="contact__form-field">
                         <label class="contact__form-label" for="content">Content</label>
-                        <textarea required cols="40" rows="30" class="contact__form-input tiny-mce" name="content" id="content" placeholder="Content"><?php echo $content ?></textarea>
+                        <textarea cols="40" rows="30" class="contact__form-input tiny-mce" name="content" id="content" placeholder="Content"><?php echo $content ?></textarea>
                     </div>
                     <div class="contact__form-field">
                         <label class="contact__form-label" for="tags">Tags</label>
@@ -152,31 +152,6 @@ if ($postId != -1) {
     </div>
 
     <?php include "includes/footer.php"; ?>
-    <script src="./index.js"></script>
-
-    <script>
-        const addImageButton = document.getElementById("addImage");
-        let imageIndex = <?php echo $imagesCount ?>;
-        let shift = imageIndex == 0 ? 2 : 1;
-
-        addImageButton.addEventListener("click", function() {
-            const container = document.getElementById("image-container");
-            const div = document.createElement("div");
-            const label = document.createElement("label");
-            let imageNumber = container.children.length + imageIndex + shift;
-            label.className = "contact__form-label";
-            label.innerHTML = `Image ${imageNumber}`;
-            const input = document.createElement("input");
-            input.required = false;
-            input.type = "file";
-            input.className = "contact__form-input";
-            input.name = "image[]";
-            input.accept = "image/*";
-            div.appendChild(label);
-            div.appendChild(input);
-            container.appendChild(div);
-        });
-    </script>
     <script>
         const avatarInput = document.getElementById('avatar');
         const imageInputs = document.querySelectorAll('input[name="image[]"]');

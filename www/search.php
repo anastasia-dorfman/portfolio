@@ -76,7 +76,7 @@ $_SESSION["REFERER"] = "search.php";
           <select name="language" class="select--theme select--theme-inv select-width" onchange="onSelectChange()">
             <option value="">Select Language</option>
             <?php
-            if (isset($_POST['language']) && !empty($_POST['language'])) {
+            if (isset($_POST['language'])) {
               $_SESSION['language'] = $_POST['language'];
             }
             $filterLanguage = isset($_SESSION['language']) ? $_SESSION['language'] : '';
@@ -91,7 +91,8 @@ $_SESSION["REFERER"] = "search.php";
           <select name="database" class="select--theme select--theme-inv select-width" onchange="onSelectChange()">
             <option value="">Select Database</option>
             <?php
-            if (isset($_POST['database']) && !empty($_POST['database'])) {
+            // if (isset($_POST['database']) && !empty($_POST['database'])) {
+            if (isset($_POST['database'])) {
               $_SESSION['database'] = $_POST['database'];
             }
             $filterDatabase = isset($_SESSION['database']) ? $_SESSION['database'] : '';
@@ -105,7 +106,7 @@ $_SESSION["REFERER"] = "search.php";
           <select name="tag" class="select--theme select--theme-inv select-width" onchange="onSelectChange()">
             <option value="">Select Tag (for posts)</option>
             <?php
-            if (isset($_POST['tag']) && !empty($_POST['tag'])) {
+            if (isset($_POST['tag'])) {
               $_SESSION['tag'] = $_POST['tag'];
             }
             $filterTag = isset($_SESSION['tag']) ? $_SESSION['tag'] : '';

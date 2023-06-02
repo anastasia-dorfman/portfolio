@@ -73,3 +73,47 @@
     }
   });
 </script>
+
+<script>
+  const form = document.querySelector(".contact__form");
+  const textareaId = document.getElementById("overview") ? "overview" : "content";
+
+  form.addEventListener("submit", function(event) {
+    const textarea = tinymce.get(textareaId);
+    const content = textarea.getContent();
+
+    if (content.trim().length < 250) {
+      event.preventDefault();
+      Swal.fire({
+        title: 'Error',
+        text: textareaId === 'overview' ? 'Overview must be at least 250 characters long.' : 'Content must be at least 250 characters long.',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+    }
+  });
+
+  const addImageButton = document.getElementById("addImage");
+  let imageIndex = <?php echo $imagesCount ?>;
+  let shift = imageIndex == 0 ? 2 : 1;
+
+  addImageButton.addEventListener("click", function() {
+    const container = document.getElementById("image-container");
+    const div = document.createElement("div");
+    const label = document.createElement("label");
+    let imageNumber = container.children.length + imageIndex + shift;
+    label.className = "contact__form-label";
+    label.innerHTML = `Image ${imageNumber}`;
+    const input = document.createElement("input");
+    input.required = textareaId == "content" ? false : imageNumber > 2 ? true : false;
+    // input.required = imageNumber > 2 ? true : false;
+    // input.required = false;
+    input.type = "file";
+    input.className = "contact__form-input";
+    input.name = "image[]";
+    input.accept = "image/*";
+    div.appendChild(label);
+    div.appendChild(input);
+    container.appendChild(div);
+  });
+</script>

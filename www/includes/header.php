@@ -78,7 +78,6 @@
           <a href="./index.php#contact"> Contact </a>
         </li>
         <li class="header__sm-menu-link">
-          <a href="./index.php#contact"> Contact </a>
           <?php if (!isset($_SESSION['USERNAME'])) { ?>
             <a href="./login.php" class="header__link"> Login </a>
           <?php } else { ?>
