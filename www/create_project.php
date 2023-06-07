@@ -33,6 +33,7 @@ $tags = [];
 $avatar = '';
 $editing = false;
 $imagesCount = 0;
+$maxFileSize = 2 * 1024 * 1024;
 
 if ($projectId != -1) {
     $project = Project::getProjectById($projectId);
@@ -90,7 +91,7 @@ if ($projectId != -1) {
                 <form action="create_project_proc.php" method="POST" id="remove_avatar"></form>
                 <form action="create_project_proc.php" method="POST" class="contact__form" enctype="multipart/form-data">
                     <input type="hidden" name="project_id" value="<?php echo $projectId ?>">
-                    <input type="hidden" name="MAX_FILE_SIZE" value="2000000">
+                    <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $maxFileSize ?>">
                     <div class="contact__form-field">
                         <label class="contact__form-label" for="name">Name</label>
                         <input required type="text" class="contact__form-input" name="name" id="name" placeholder="Name" value="<?php echo $name ?>" />

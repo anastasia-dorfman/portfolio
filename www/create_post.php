@@ -25,7 +25,7 @@ $avatar = '';
 $imageUrls = '';
 $editing = false;
 $imagesCount = 0;
-$maxFileSize = 2000000;
+$maxFileSize = 2 * 1024 * 1024;
 
 // Check if we're editing an existing post
 if ($postId != -1) {
@@ -87,7 +87,7 @@ if ($postId != -1) {
                     <input type="hidden" name="postId" value="<?php echo $postId ?>">
                     <input type="hidden" name="isEdit" value="<?php echo $editing ?>">
                     <!-- <input type="hidden" name="upload"> -->
-                    <input type="hidden" name="MAX_FILE_SIZE" value="$maxFileSize">
+                    <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $maxFileSize ?>">
                     <div class="contact__form-field">
                         <label class="contact__form-label" for="title">Title</label>
                         <input required type="text" class="contact__form-input" name="title" id="title" placeholder="Title" value="<?php echo $title ?>" />
@@ -152,29 +152,6 @@ if ($postId != -1) {
     </div>
 
     <?php include "includes/footer.php"; ?>
-    <script>
-        const avatarInput = document.getElementById('avatar');
-        const imageInputs = document.querySelectorAll('input[name="image[]"]');
-        const maxFileSize = <?php echo $maxFileSize ?>;
-
-        $('#avatra').on('change', function() {
-            const size =
-                (this.files[0].size / 1024 / 1024).toFixed(2);
-
-            if (size > 4) {
-                alert("Image must be less than 2MB");
-            }
-        });
-        $('#image[0]').on('change', function() {
-            const size =
-                (this.files[0].size / 1024 / 1024).toFixed(2);
-
-            if (size > 4) {
-                alert("Image must be less than 2MB");
-            }
-        });
-    </script>
-
     <?php include 'includes/scripts.php'; ?>
 </body>
 

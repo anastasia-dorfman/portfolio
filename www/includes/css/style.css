@@ -44,7 +44,7 @@ html {
   }
 }
 
-body {
+body, p {
   box-sizing: border-box;
   position: relative;
   line-height: 1.5;
@@ -687,7 +687,7 @@ textarea {
   margin: 0 0 7rem 0;
 }
 
-.project-details__desc-para {
+.project-details__desc-para, p {
   font-size: 1.8rem;
   line-height: 1.7;
   color: grey;

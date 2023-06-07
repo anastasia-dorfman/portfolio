@@ -100,7 +100,7 @@ function uploadFile($postId, $fileType, $prefix, $lastSavedImageIndex = null,  $
                 $pathinfo = pathinfo($file);
                 $extension = $pathinfo['extension'];
                 $basenameIndex = $fileType == 'avatar' ? null : $i + $lastSavedImageIndex + 1;
-                $basenameNoExtension = "project" . $postId . "_" . $prefix . $basenameIndex ?? '';
+                $basenameNoExtension = "post" . $postId . "_" . $prefix . $basenameIndex ?? '';
                 $basename = $basenameNoExtension . "." . $extension;
 
                 $imginfo_array = getimagesize($tempFile);

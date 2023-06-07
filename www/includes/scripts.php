@@ -117,3 +117,35 @@
     container.appendChild(div);
   });
 </script>
+
+<script>
+  const maxFileSize = <?php echo $maxFileSize ?>;
+
+  document.getElementById('avatar').addEventListener('change', function(event) {
+    const size = event.target.files[0].size;
+
+    if (size > maxFileSize) {
+      event.preventDefault();
+      Swal.fire({
+        title: 'Avatar image must be less than 2MB.',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+      this.value = ''; // Clear the file input
+    }
+  });
+
+  document.getElementById('image').addEventListener('change', function(event) {
+    const size = event.target.files[0].size;
+
+    if (size > maxFileSize) {
+      event.preventDefault();
+      Swal.fire({
+        title: 'Image must be less than 2MB.',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+      this.value = ''; // Clear the file input
+    }
+  });
+</script>
