@@ -1,5 +1,4 @@
-CREATE DATABASE  IF NOT EXISTS `anastasia_dorfman_portfolio` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `anastasia_dorfman_portfolio`;
+USE `anastbj9_anastasia_dorfman_portfolio`;
 -- MySQL dump 10.13  Distrib 8.0.31, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: anastasia_dorfman_portfolio
@@ -156,7 +155,7 @@ CREATE TABLE `project_skills` (
 
 LOCK TABLES `project_skills` WRITE;
 /*!40000 ALTER TABLE `project_skills` DISABLE KEYS */;
-INSERT INTO `project_skills` VALUES (7,'.NET 6.0'),(9,'Bootstrap'),(7,'C#'),(9,'CSS'),(10,'CSS'),(11,'CSS'),(8,'HTML'),(9,'HTML'),(10,'HTML'),(11,'HTML'),(8,'Java'),(11,'JavaScript'),(7,'MSSMS'),(8,'MySQL'),(9,'MySQL'),(10,'MySQL'),(9,'PHP'),(10,'PHP'),(8,'Spring Boot'),(7,'T-SQL'),(8,'Thymeleaf');
+INSERT INTO `project_skills` VALUES (7,'.NET 6.0'),(9,'Bootstrap'),(7,'C#'),(9,'CSS'),(10,'CSS'),(11,'CSS'),(8,'HTML'),(9,'HTML'),(10,'HTML'),(11,'HTML'),(8,'Java'),(11,'JavaScript'),(7,'MSSMS'),(8,'MySQL'),(9,'MySQL'),(10,'MySQL'),(9,'PHP'),(10,'PHP'),(7,'T-SQL'),(8,'Thymeleaf');
 /*!40000 ALTER TABLE `project_skills` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -208,7 +207,7 @@ CREATE TABLE `skills` (
 
 LOCK TABLES `skills` WRITE;
 /*!40000 ALTER TABLE `skills` DISABLE KEYS */;
-INSERT INTO `skills` VALUES ('.NET 6.0','Framework'),('Angular','Framework'),('ASP.Net MVC 5','Framework'),('Bootstrap','Framework'),('C#','Language'),('CSS','Language'),('Flutter','Language'),('HTML','Language'),('Java','Language'),('JavaScript','Language'),('MSSMS','Database'),('MySQL','Database'),('PHP','Language'),('React','JS Library'),('Spring Boot','Framework'),('SQL Server','Database'),('T-SQL','Database'),('Thymeleaf','Template engine'),('TypeScript','Language');
+INSERT INTO `skills` VALUES ('.NET 6.0','Framework'),('Angular','Framework'),('ASP.Net MVC 5','Framework'),('Bootstrap','Framework'),('C#','Language'),('CSS','Language'),('Flutter','Language'),('HTML','Language'),('Java','Language'),('JavaScript','Language'),('MSSMS','Database'),('MySQL','Database'),('PHP','Language'),('React','JS Library'),('SQL Server','Database'),('T-SQL','Database'),('Thymeleaf','Template engine'),('TypeScript','Language');
 /*!40000 ALTER TABLE `skills` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -301,4 +300,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-08 18:41:52
+-- Dump completed on 2023-06-08 11:33:27

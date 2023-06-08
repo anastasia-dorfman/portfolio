@@ -1,9 +1,7 @@
-<script src="includes/js/jquery.min.js"></script>
-<!-- SweetAlert library -->
-<script src="includes/swal/sweetalert2.all.js"></script>
+<script src="includes/swal/sweetalert2.all.js"></script> <!-- SweetAlert library -->
 <script src="includes/magnific-popup/jquery.magnific-popup.js"></script>
-<link rel="stylesheet" href="includes/swal/sweetalert2.css">
-<link rel="stylesheet" href="includes/magnific-popup/magnific-popup.css">
+<link rel="stylesheet" href="includes/swal/sweetalert2.css" />
+<link rel="stylesheet" href="includes/magnific-popup/magnific-popup.css" />
 
 <script>
   $(document).ready(function() {
@@ -15,6 +13,7 @@
     });
   });
 </script>
+
 
 <!-- // Showing SweetAlert
        // Checking message and icon for the SweetAlert -->
@@ -62,7 +61,6 @@
   ///////////////////////////////////////////////////////////////////////////////////
   ////////////////// Making selects' width equal to the widest select //////////////
   /////////////////////////////////////////////////////////////////////////////////
-
   window.addEventListener('load', function() {
     if (window.matchMedia('(max-width: 37.5em)').matches) {
       const selects = document.querySelectorAll('.select-width');
@@ -81,7 +79,6 @@
   ///////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////// Textarea validation //////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////
-
   const form = document.querySelector(".contact__form");
   const textareaId = document.getElementById("overview") ? "overview" : "content";
 
@@ -101,7 +98,7 @@
   });
 
   const addImageButton = document.getElementById("addImage");
-  let imageIndex = <?php echo $imagesCount ?>;
+  let imageIndex = <?php echo $imagesCount ?>; //line 362
   let shift = imageIndex == 0 ? 2 : 1;
 
   addImageButton.addEventListener("click", function() {
@@ -127,11 +124,9 @@
   ///////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////// Image size validation //////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////
-  const maxFileSize = <?php echo $maxFileSize ?>;
-
+  const maxFileSize = <?php echo $maxFileSize; ?>;
   document.getElementById('avatar').addEventListener('change', function(event) {
     const size = event.target.files[0].size;
-
     if (size > maxFileSize) {
       event.preventDefault();
       Swal.fire({

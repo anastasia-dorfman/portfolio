@@ -32,11 +32,15 @@ $metaContent = "Case study page of Project";
 
 <head>
   <?php include "includes/head.php"; ?>
+  <link rel="stylesheet" href="includes/css/animate.css" />
+  <link rel="stylesheet" href="includes/owlcarousel/owl.carousel.css" />
+  <link rel="stylesheet" href="includes/owlcarousel/owl.theme.default.css" />
+  <script src="includes/owlcarousel/owl.carousel.js"></script>
 </head>
 
 <body>
   <?php include "includes/header.php"; ?>
-  
+
   <section class="project-cs-hero">
     <div class="project-cs-hero__content">
       <h1 class="heading-primary"><?php echo $name ?></h1>
@@ -73,12 +77,16 @@ $metaContent = "Case study page of Project";
           <h3 class="project-details__content-title">Project Overview</h3>
           <p class="project-details__desc-para"><?php echo $overview ?></p>
         </div>
-        <div class="post__row">
-          <?php foreach ($images as $i) { ?>
-            <a href="<?php echo $i ?>" class="lightbox-link">
-              <img src="<?php echo $i ?>" alt="Project Image" class="project-details__showcase-img post__img" />
-            </a>
-          <?php } ?>
+        <div>
+          <div class="custom1 owl-carousel owl-theme" id="image-carousel">
+            <?php foreach ($images as $i) { ?>
+              <div class="item">
+                <a href="<?php echo $i ?>">
+                  <img src="<?php echo $i ?>" alt="Project Image" class="project-details__showcase-img post__img" />
+                </a>
+              </div>
+            <?php } ?>
+          </div>
         </div>
         <div class="project-details__tools-used">
           <h3 class="project-details__content-title">Tools Used</h3>
@@ -97,10 +105,48 @@ $metaContent = "Case study page of Project";
     </div>
   </section>
   <?php include "includes/footer.php"; ?>
-
-
 </body>
 
 </html>
-
 <?php include_once 'includes/scripts.php'; ?>
+
+<script>
+  $(document).ready(function() {
+    $("#image-carousel").owlCarousel({
+      dots: true,
+      loop: true,
+      autoplay: true,
+      autoplayTimeout: 1200,
+      autoplayHoverPause: true,
+      items: 1,
+      margin: 0,
+      stagePadding: 0,
+      smartSpeed: 450,
+      animateOut: "flipOuX",
+      animateIn: "flipInX",
+      // animateOut: 'fadeOut',
+      // animateIn: 'fadeIn',
+      // animateIn: 'flipInX',
+    });
+  });
+
+  // var owl = $('.custom1').owlCarousel({
+  //   animateOut: 'slideOutDown',
+  //   animateIn: 'flipInX',
+  //   items: 1,
+  //   margin: 30,
+  //   stagePadding: 30,
+  //   smartSpeed: 450,
+  //   loop: true,
+  //   dots: true,
+  //   autoplay: true,
+  // });
+
+  // owl.on('change.owl.carousel', function(event) {
+  //   var el = event.target;
+  //   $('h4', el).addClass('slideInRight animated')
+  //     .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+  //       $('h4', el).removeClass('slideInRight animated');
+  //     });
+  // });
+</script>
