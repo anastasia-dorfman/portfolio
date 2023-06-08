@@ -9,26 +9,15 @@ $_SESSION["REFERER"] = "index.php";
 
 $projects = Project::getProjects();
 
+$headTitle = "Anastasia Dorfman";
+$metaContent = "Anastasia Dorfman's portfolio website, full stack developer";
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Anastasia Dorfman</title>
-  <meta name="description" content="Anastasia Dorfman - Portfolio" />
-
-  <link rel="stylesheet" href="includes/css/style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700;900&display=swap" rel="stylesheet" />
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon_io/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon_io/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon_io/favicon-16x16.png">
-  <link rel="manifest" href="/site.webmanifest">
+  <?php include "includes/head.php"; ?>
 </head>
 
 <body>
@@ -97,9 +86,9 @@ $projects = Project::getProjects();
           <div class="about__content-main">
             <h3 class="about__content-title">My Skills</h3>
             <div class="about__content-details">
-            <div class="about__content-details-para">
-              <?php getSkills(); ?>
-            </div>
+              <div class="about__content-details-para">
+                <?php getSkills(); ?>
+              </div>
             </div>
             <a href="assets/docs/Resume_AnastasiaDorfman.pdf" class="btn btn--med btn--theme dynamicBgClr">Get the Resume</a>
           </div>

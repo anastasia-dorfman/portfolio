@@ -44,13 +44,18 @@ html {
   }
 }
 
-body, p {
+body {
   box-sizing: border-box;
   position: relative;
   line-height: 1.5;
   font-family: sans-serif;
   overflow-x: hidden;
   overflow-y: scroll;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+p {
+  font-family: sans-serif;
   font-family: 'Source Sans Pro', sans-serif;
 }
 
@@ -687,7 +692,8 @@ textarea {
   margin: 0 0 7rem 0;
 }
 
-.project-details__desc-para, p {
+.project-details__desc-para,
+p {
   font-size: 1.8rem;
   line-height: 1.7;
   color: grey;
@@ -1557,8 +1563,10 @@ textarea {
 
 @media (max-width: 37.5em) {
   .select-width {
-    width: auto; /* Reset width to allow natural sizing */
-    max-width: 100%; /* Ensure select elements don't exceed container width */
+    width: auto;
+    /* Reset width to allow natural sizing */
+    max-width: 100%;
+    /* Ensure select elements don't exceed container width */
   }
 }
 
